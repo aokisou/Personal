@@ -9,9 +9,6 @@ private:
 
 	bool m_bkeyFlg;
 
-	KdTexture m_playertex;
-	KdTexture m_enemytex;
-
 public:
 
 	// ‰Šúİ’è

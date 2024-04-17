@@ -79,6 +79,9 @@
     <Filter Include="Src\Application\scene\title">
       <UniqueIdentifier>{854bd3a9-e851-4aaf-ad9a-331865fd4243}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\object\enemy\Pattern">
+      <UniqueIdentifier>{cdd350d1-00b6-4425-a6a6-f80ab2116d8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -222,6 +225,18 @@
     <ClInclude Include="Src\Application\map\MapHit.h">
       <Filter>Src\Application\map</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\object\enemy\pattern\Death.h">
+      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\enemy\pattern\Jump.h">
+      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\enemy\pattern\Pattern.h">
+      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\enemy\pattern\Run.h">
+      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -331,6 +346,18 @@
     </ClCompile>
     <ClCompile Include="Src\Application\map\MapHit.cpp">
       <Filter>Src\Application\map</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\enemy\pattern\Death.cpp">
+      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\enemy\pattern\Jump.cpp">
+      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\enemy\pattern\Pattern.cpp">
+      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\enemy\pattern\Run.cpp">
+      <Filter>Src\Application\object\enemy\Pattern</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

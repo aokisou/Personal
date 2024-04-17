@@ -165,6 +165,10 @@
     <ClInclude Include="Src\Application\object\BaseObject.h" />
     <ClInclude Include="Src\Application\object\bullet\Bullet.h" />
     <ClInclude Include="Src\Application\object\enemy\BaseEnemy.h" />
+    <ClInclude Include="Src\Application\object\enemy\pattern\Death.h" />
+    <ClInclude Include="Src\Application\object\enemy\pattern\Jump.h" />
+    <ClInclude Include="Src\Application\object\enemy\pattern\Pattern.h" />
+    <ClInclude Include="Src\Application\object\enemy\pattern\Run.h" />
     <ClInclude Include="Src\Application\object\player\pattern\Death.h" />
     <ClInclude Include="Src\Application\object\player\pattern\Jump.h" />
     <ClInclude Include="Src\Application\object\player\pattern\Pattern.h" />
@@ -206,6 +210,10 @@
     <ClCompile Include="Src\Application\object\BaseObject.cpp" />
     <ClCompile Include="Src\Application\object\bullet\Bullet.cpp" />
     <ClCompile Include="Src\Application\object\enemy\BaseEnemy.cpp" />
+    <ClCompile Include="Src\Application\object\enemy\pattern\Death.cpp" />
+    <ClCompile Include="Src\Application\object\enemy\pattern\Jump.cpp" />
+    <ClCompile Include="Src\Application\object\enemy\pattern\Pattern.cpp" />
+    <ClCompile Include="Src\Application\object\enemy\pattern\Run.cpp" />
     <ClCompile Include="Src\Application\object\player\pattern\Death.cpp" />
     <ClCompile Include="Src\Application\object\player\pattern\Jump.cpp" />
     <ClCompile Include="Src\Application\object\player\pattern\Pattern.cpp" />

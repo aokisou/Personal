@@ -23,6 +23,7 @@ void Title::Draw()
 
 void Title::Init()
 {
+	m_titleTex.Load("Texture/enemy.png");
 }
 
 void Title::Release()

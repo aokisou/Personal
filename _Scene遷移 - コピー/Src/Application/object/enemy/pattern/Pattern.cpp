@@ -3,14 +3,14 @@
 #define MaxCoolCnt 5	//1‰æ‘œƒAƒjƒŽžŠÔ
 #define AnimeNum 4		//‰æ‘œ”
 
-void PlayerPattern::Init(Player* a_player)
+void EnemyPattern::Init(BaseEnemy* _enemy)
 {
-	m_player = a_player;
+	m_enemy = _enemy;
 	m_AnimeCnt = 0;
 	m_CoolCnt = 0;
 }
 
-void PlayerPattern::Update()
+void EnemyPattern::Update()
 {
 	m_CoolCnt++;
 	if (m_CoolCnt > MaxCoolCnt)

@@ -11,7 +11,8 @@
 #define PlyStartPos -210	//プレイヤーの開始Y座標
 #define PlyStartHP 5		//プレイヤーの開始HP
 #define PlyMaxDmgEfcCnt 20	//赤く光る時間
-#define PlyBltCR 6			//弾の出る位置を銃まで補正
+#define PlyBltCRX 30		//弾の出る位置を銃まで補正X座標
+#define PlyBltCRY 6			//弾の出る位置を銃まで補正Y座標
 
 #define BltSpeed 7			//弾の速度
 

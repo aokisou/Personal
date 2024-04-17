@@ -22,8 +22,8 @@ void Player::Init()
 	m_shotinterval = 0;
 	m_bDmg = false;
 	m_DmgEfcCnt = 0;
-	m_State = new Pattern;
-	m_State->Init(this);
+	m_pState = new PlayerPattern;
+	m_pState->Init(this);
 }
 
 void Player::Action()
@@ -38,17 +38,14 @@ void Player::Action()
 		if (m_pos.x + (m_Size / Half * m_Scale) + PlySpeed > (SCREEN::width / Half))
 		{
 			m_pos.x = SCREEN::width / Half - (m_Size / Half * m_Scale);
-			m_State = new Pattern;
-			m_State->Init(this);
-			bAct = true;
+			SetStandState();
 		}
 		else
 		{
 			m_move.x = PlySpeed;
-			if (m_State->GetStateType() != run)
+			if (m_pState->GetStateType() != run)
 			{
-				m_State = new Run;
-				m_State->Init(this);
+				SetRunState();
 			}
 			bAct = true;
 		}
@@ -59,17 +56,14 @@ void Player::Action()
 		if (m_pos.x - (m_Size / Half * m_Scale) - PlySpeed < -(SCREEN::width / Half))
 		{
 			m_pos.x = -SCREEN::width / Half + (m_Size / Half * m_Scale);
-			m_State = new Pattern;
-			m_State->Init(this);
-			bAct = true;
+			SetStandState();
 		}
 		else
 		{
 			m_move.x = -PlySpeed;
-			if (m_State->GetStateType() != run)
+			if (m_pState->GetStateType() != run)
 			{
-				m_State = new Run;
-				m_State->Init(this);
+				SetRunState();
 			}
 			bAct = true;
 		}
@@ -80,8 +74,7 @@ void Player::Action()
 		if (!m_bJump)
 		{
 			m_move.y += PlyJumpPow;
-			m_State = new Jump;
-			m_State->Init(this);
+			SetJumpState();
 			m_bJump = true;
 			bAct = true;
 		}
@@ -96,9 +89,10 @@ void Player::Action()
 
 	if (!bAct)
 	{
-		delete m_State;
-		m_State = new Pattern;
-		m_State->Init(this);
+		if (m_pState->GetStateType() != stand && !m_bJump)
+		{
+			SetStandState();
+		}
 	}
 }
 
@@ -116,19 +110,19 @@ void Player::Update()
 			if (m_hp <= 0) 
 			{ 
 				m_bDmg = false;
-				m_State = new Death;
-				m_State->Init(this);
+				SetDeadState();
 			}
 		}
 	}
 
-	m_State->Update();
+	m_pState->Update();
 
 	BulletActivate();
 
 	m_pos += m_move;
 
 	m_mat = Math::Matrix::CreateScale(m_Scale * m_dir, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+	if (m_pState->GetStateType() == run) { m_shadowMat = Math::Matrix::CreateScale(m_Scale, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y - 30, 0); }
 }
 
 void Player::Draw()
@@ -144,8 +138,42 @@ void Player::Draw()
 	if (m_bDmg)col = { 1,0,0,1 };
 
 	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex(m_tex, 0,0,
-		&Math::Rectangle(m_Size * m_State->GetAnimeCnt(), m_Size * m_State->GetStateType(), m_Size, m_Size), &col);
+	SHADER.m_spriteShader.DrawTex(m_pTex, 0,0,
+		&Math::Rectangle(m_Size * m_pState->GetAnimeCnt(), m_Size * m_pState->GetStateType(), m_Size, m_Size), &col);
+
+	if (m_bJump) { col = { 1,1,1,1 - (abs(m_move.y) / PlyJumpPow) }; }
+	else{ col = { 1,1,1,1 }; }
+
+	SHADER.m_spriteShader.SetMatrix(m_shadowMat);
+	SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(288, 0, 16, 16),&col);
+}
+
+void Player::SetStandState()
+{
+	delete m_pState;
+	m_pState = new PlayerPattern;
+	m_pState->Init(this);
+}
+
+void Player::SetJumpState()
+{
+	delete m_pState;
+	m_pState = new PlayerJump;
+	m_pState->Init(this);
+}
+
+void Player::SetRunState()
+{
+	delete m_pState;
+	m_pState = new PlayerRun;
+	m_pState->Init(this);
+}
+
+void Player::SetDeadState()
+{
+	delete m_pState;
+	m_pState = new PlayerDeath;
+	m_pState->Init(this);
 }
 
 void Player::MapHitY(float _posY, float _moveY, bool _b)
@@ -166,8 +194,9 @@ void Player::BulletShot()
 			Bullet* tmpbullet = new Bullet;
 
 			tmpbullet->Init();
-			tmpbullet->SetPos({ m_pos.x, m_pos.y + PlyBltCR});
-			tmpbullet->SetTexture(m_tex);
+			tmpbullet->SetPos({ m_pos.x + PlyBltCRX * m_dir, m_pos.y + PlyBltCRY});
+			tmpbullet->SetDir(m_dir);
+			tmpbullet->SetTexture(m_pTex);
 
 			m_bullet.push_back(tmpbullet);
 		}

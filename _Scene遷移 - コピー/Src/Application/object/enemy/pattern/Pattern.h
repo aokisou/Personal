@@ -2,25 +2,25 @@
 
 #include "../../../utility/utility.h"
 
-class Player;
+class BaseEnemy;
 
 //デフォルトはスタンド状態にする(エラーが起きても立っている状態にするため)
-class PlayerPattern
+class EnemyPattern
 {
 public:
-	PlayerPattern() { m_player = 0; m_AnimeCnt = 0; m_CoolCnt = 0; }
-	~PlayerPattern() { Release(); }
+	EnemyPattern() { m_enemy = 0; m_AnimeCnt = 0; m_CoolCnt = 0; }
+	~EnemyPattern() { Release(); }
 
-	void Init(Player* a_player);
+	virtual void Init(BaseEnemy* _enemy)final;
 	virtual void Update();
 
-	void Release() { m_player = nullptr; }
+	void Release() { m_enemy = nullptr; }
 
 	virtual int GetAnimeCnt() { return m_AnimeCnt; }
 	virtual int GetStateType() { return stand; }
 
 protected:
-	Player* m_player;
+	BaseEnemy* m_enemy;
 
 	int m_AnimeCnt;
 	int m_CoolCnt;

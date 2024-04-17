@@ -1,13 +1,16 @@
 #include "Jump.h"
 
-void Jump::Update()
+#define MaxCoolCnt 20	//1‰æ‘œƒAƒjƒŽžŠÔ
+#define AnimeNum 2		//‰æ‘œ”
+
+void PlayerJump::Update()
 {
 	m_CoolCnt++;
-	if (m_CoolCnt > 10)
+	if (m_CoolCnt > MaxCoolCnt)
 	{
-		m_CoolCnt -= 10;
+		m_CoolCnt -= MaxCoolCnt;
 		m_AnimeCnt++;
-		if (m_AnimeCnt > 1)
+		if (m_AnimeCnt > AnimeNum)
 		{
 			m_AnimeCnt = 0;
 		}

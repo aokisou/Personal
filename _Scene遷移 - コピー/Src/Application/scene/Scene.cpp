@@ -41,14 +41,10 @@ void Scene::Init()
 	m_bkeyFlg = false;
 
 	ChangeTitle();
-
-	bLoad = m_playertex.Load("Texture/player.png");
-	_ASSERT_EXPR(bLoad, L"プレイヤー画像読み込みエラー");
 }
 
 void Scene::Release()
 {
-	m_playertex.Release();
 }
 
 void Scene::ImGuiUpdate()
@@ -72,7 +68,6 @@ void Scene::ChangeTitle()
 {
 	delete m_nowScene;
 	m_nowScene = new Title(APP.m_maxFps);
-	m_nowScene->SetTexture(&m_playertex);
 	m_nowScene->Init();
 	m_nowScene->GetOwner(this);
 }
@@ -81,7 +76,6 @@ void Scene::ChangeGame()
 {
 	delete m_nowScene;
 	m_nowScene = new Game(APP.m_maxFps);
-	m_nowScene->SetTexture(&m_playertex);
 	m_nowScene->Init();
 	m_nowScene->GetOwner(this);
 }
@@ -90,7 +84,6 @@ void Scene::ChangeResult()
 {
 	delete m_nowScene;
 	m_nowScene = new Result(APP.m_maxFps);
-	m_nowScene->SetTexture(&m_playertex);
 	m_nowScene->Init();
 	m_nowScene->GetOwner(this);
 }

@@ -38,6 +38,17 @@ void Game::Draw()
 
 void Game::Init()
 {
+	bool bLoad = false;
+
+	bLoad = m_playerTex.Load("Texture/player.png");
+	_ASSERT_EXPR(bLoad, L"プレイヤー画像読み込みエラー");
+
+	bLoad = m_enemyTex.Load("Texture/enemy.png");
+	_ASSERT_EXPR(bLoad, L"エネミー画像読み込みエラー");
+
+	bLoad = m_mapTex.Load("Texture/enemy.png");
+	_ASSERT_EXPR(bLoad, L"マップ画像読み込みエラー");
+
 	m_player = new Player;
 	m_enemy = new BaseEnemy;
 	m_hit = new Hit;
@@ -49,10 +60,10 @@ void Game::Init()
 	m_hit->Init();
 
 	m_map->SetMapData(m_mapNme[0]);
-	m_map->SetTexture(m_pTex);
+	m_map->SetTexture(&m_playerTex);
 
-	m_player->SetTexture(m_pTex);
-	m_enemy->SetTexture(m_pTex);
+	m_player->SetTexture(&m_playerTex);
+	m_enemy->SetTexture(&m_enemyTex);
 
 	m_player->SetOwner(this);
 	m_hit->SetOwner(this);

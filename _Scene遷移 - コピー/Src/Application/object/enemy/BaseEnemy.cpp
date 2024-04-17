@@ -1,4 +1,8 @@
 #include "BaseEnemy.h"
+#include "pattern/Pattern.h"
+#include "pattern/Death.h"
+#include "pattern/Jump.h"
+#include "pattern/Run.h"
 #include "../../utility/utility.h"
 
 void BaseEnemy::Init()
@@ -63,5 +67,5 @@ void BaseEnemy::Draw()
 	Math::Color col = { 1,1,1,1 };
 	if (m_bDmg)col = { 1,0,0,1 };
 	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex(m_tex, 0, 0, &Math::Rectangle(0, 0, m_Size, m_Size), &col);
+	SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(0, 0, m_Size, m_Size), &col);
 }

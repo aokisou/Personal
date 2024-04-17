@@ -5,12 +5,14 @@
 class Title: public BaseScene
 {
 public:
-	Title(int _fps) { m_maxFps = _fps; m_pTex = nullptr; }
+	Title(int _fps) { m_maxFps = _fps; }
 	~Title(){}
 
-	int Update();
-	void Draw();
-	void Init();
+	int Update()override;
+	void Draw()override;
+	void Init()override;
 private:
-	void Release();
+	void Release()override;
+
+	KdTexture m_titleTex;
 };

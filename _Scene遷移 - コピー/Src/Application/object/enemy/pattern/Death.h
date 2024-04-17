@@ -2,11 +2,11 @@
 
 #include "Pattern.h"
 
-class PlayerDeath :public PlayerPattern
+class EnemyDeath :public EnemyPattern
 {
 public:
-	PlayerDeath() {}
-	~PlayerDeath() { Release(); }
+	EnemyDeath() {}
+	~EnemyDeath() { Release(); }
 
 	void Update()override;
 

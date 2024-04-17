@@ -2,13 +2,13 @@
 
 #include "Pattern.h"
 
-class Player;
+class Enemy;
 
-class PlayerRun :public PlayerPattern
+class EnemyRun :public EnemyPattern
 {
 public:
-	PlayerRun() {}
-	~PlayerRun(){ Release(); }
+	EnemyRun() {}
+	~EnemyRun(){ Release(); }
 
 	void Update()override;
 

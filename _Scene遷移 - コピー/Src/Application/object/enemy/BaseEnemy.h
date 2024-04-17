@@ -2,10 +2,12 @@
 
 #include "../BaseObject.h"
 
+class EnemyPattern;
+
 class BaseEnemy :public BaseObject
 {
 public:
-	BaseEnemy(){ m_tex = nullptr; }
+	BaseEnemy(){}
 	~BaseEnemy(){}
 
 	void Init()override;
@@ -24,4 +26,6 @@ private:
 
 	bool m_bDmg;
 	int DmgEfcCnt;
+
+	EnemyPattern* m_pState;
 };

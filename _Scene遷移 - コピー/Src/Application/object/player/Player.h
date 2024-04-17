@@ -3,14 +3,14 @@
 #include "../BaseObject.h"
 
 class Bullet;
-class Pattern;
+class PlayerPattern;
 
 class Game;
 
 class Player:public BaseObject
 {
 public:
-	Player() { m_tex = nullptr; m_State = nullptr; m_pOwner = nullptr; }
+	Player() { m_pState = nullptr; m_pOwner = nullptr; }
 	~Player() { Release(); }
 
 	void Init()override;
@@ -21,6 +21,11 @@ public:
 	void SetOwner(Game* a_pOwner) { m_pOwner = a_pOwner; }
 
 	bool GetbDmg() { return m_bDmg; }
+
+	void SetStandState();
+	void SetJumpState();
+	void SetRunState();
+	void SetDeadState();
 
 	//ìñÇΩÇËîªíËóp
 	void ApplyDamage() { m_bDmg = true; m_hp--; }
@@ -41,6 +46,8 @@ private://ä÷êî
 
 	void Release()override;
 
+	Math::Matrix m_shadowMat;
+
 	int m_hp;
 
 	bool m_bJump;
@@ -52,7 +59,7 @@ private://ä÷êî
 	bool m_bDmg;
 	int m_DmgEfcCnt;
 
-	Pattern* m_State;
+	PlayerPattern* m_pState;
 
 	Game* m_pOwner;
 };

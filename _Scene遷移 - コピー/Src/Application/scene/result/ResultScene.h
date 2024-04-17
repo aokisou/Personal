@@ -5,13 +5,13 @@
 class Result :public BaseScene
 {
 public:
-	Result(int _fps) { m_maxFps = _fps; m_pTex = nullptr;}
-	~Result(){}
+	Result(int _fps) { m_maxFps = _fps;}
+	~Result() { Release(); }
 
-	int Update();
-	void Draw();
-	void Init();
-	void Release();
+	int Update()override;
+	void Draw()override;
+	void Init()override;
 
 private:
+	void Release()override;
 };

@@ -2,11 +2,11 @@
 
 #include "Pattern.h"
 
-class PlayerJump :public PlayerPattern
+class EnemyJump :public EnemyPattern
 {
 public:
-	PlayerJump() {}
-	~PlayerJump(){ Release(); }
+	EnemyJump() {}
+	~EnemyJump(){ Release(); }
 
 	void Update()override;
 

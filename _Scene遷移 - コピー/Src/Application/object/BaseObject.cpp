@@ -25,7 +25,7 @@ void BaseObject::Draw()
 	if (!m_bAlive) { return; }
 	//override‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚çŽž‹@•\Ž¦
 	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex(m_tex, Math::Rectangle(1, 1, 30, 30));
+	SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(1, 1, 30, 30));
 }
 
 int BaseObject::GetHalfSize()
