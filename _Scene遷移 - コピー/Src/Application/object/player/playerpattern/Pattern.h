@@ -11,10 +11,10 @@ public:
 	PlayerPattern() { m_player = 0; m_AnimeCnt = 0; m_CoolCnt = 0; }
 	~PlayerPattern() { Release(); }
 
-	void Init(Player* a_player);
+	virtual void Init(Player* a_player)final;
 	virtual void Update();
 
-	void Release() { m_player = nullptr; }
+	virtual void Release() { m_player = nullptr; }
 
 	virtual int GetAnimeCnt() { return m_AnimeCnt; }
 	virtual int GetStateType() { return stand; }

@@ -2,8 +2,6 @@
 
 #include "Pattern.h"
 
-class Enemy;
-
 class EnemyRun :public EnemyPattern
 {
 public:

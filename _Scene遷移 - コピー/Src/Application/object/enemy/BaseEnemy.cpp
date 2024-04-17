@@ -1,8 +1,7 @@
 #include "BaseEnemy.h"
-#include "pattern/Pattern.h"
-#include "pattern/Death.h"
-#include "pattern/Jump.h"
-#include "pattern/Run.h"
+#include "enemypattern/Pattern.h"
+#include "enemypattern/Death.h"
+#include "enemypattern/Run.h"
 #include "../../utility/utility.h"
 
 void BaseEnemy::Init()

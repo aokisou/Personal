@@ -55,9 +55,6 @@
     <Filter Include="Src\Application\hit">
       <UniqueIdentifier>{56f6322a-5c91-431d-90a9-f1639d8a4ed9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\object\player\pattern">
-      <UniqueIdentifier>{23dc6be3-7ca5-45c2-a160-d517ed11c488}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Src\Application\map">
       <UniqueIdentifier>{6a499978-fdb7-4c37-9294-f034763999e4}</UniqueIdentifier>
     </Filter>
@@ -79,7 +76,10 @@
     <Filter Include="Src\Application\scene\title">
       <UniqueIdentifier>{854bd3a9-e851-4aaf-ad9a-331865fd4243}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\object\enemy\Pattern">
+    <Filter Include="Src\Application\object\player\playerpattern">
+      <UniqueIdentifier>{23dc6be3-7ca5-45c2-a160-d517ed11c488}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\object\enemy\enemypattern">
       <UniqueIdentifier>{cdd350d1-00b6-4425-a6a6-f80ab2116d8b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -183,18 +183,6 @@
     <ClInclude Include="Src\Application\hit\Hit.h">
       <Filter>Src\Application\hit</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\object\player\pattern\Run.h">
-      <Filter>Src\Application\object\player\pattern</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\object\player\pattern\Pattern.h">
-      <Filter>Src\Application\object\player\pattern</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\object\player\pattern\Death.h">
-      <Filter>Src\Application\object\player\pattern</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\object\player\pattern\Jump.h">
-      <Filter>Src\Application\object\player\pattern</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\map\Map.h">
       <Filter>Src\Application\map</Filter>
     </ClInclude>
@@ -225,17 +213,26 @@
     <ClInclude Include="Src\Application\map\MapHit.h">
       <Filter>Src\Application\map</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\object\enemy\pattern\Death.h">
-      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    <ClInclude Include="Src\Application\object\player\playerpattern\Death.h">
+      <Filter>Src\Application\object\player\playerpattern</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\object\enemy\pattern\Jump.h">
-      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    <ClInclude Include="Src\Application\object\player\playerpattern\Jump.h">
+      <Filter>Src\Application\object\player\playerpattern</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\object\enemy\pattern\Pattern.h">
-      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    <ClInclude Include="Src\Application\object\player\playerpattern\Pattern.h">
+      <Filter>Src\Application\object\player\playerpattern</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\object\enemy\pattern\Run.h">
-      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    <ClInclude Include="Src\Application\object\enemy\enemypattern\Death.h">
+      <Filter>Src\Application\object\enemy\enemypattern</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\enemy\enemypattern\Pattern.h">
+      <Filter>Src\Application\object\enemy\enemypattern</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\enemy\enemypattern\Run.h">
+      <Filter>Src\Application\object\enemy\enemypattern</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\player\playerpattern\Run.h">
+      <Filter>Src\Application\object\player\playerpattern</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -308,18 +305,6 @@
     <ClCompile Include="Src\Application\hit\Hit.cpp">
       <Filter>Src\Application\hit</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\object\player\pattern\Run.cpp">
-      <Filter>Src\Application\object\player\pattern</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\object\player\pattern\Pattern.cpp">
-      <Filter>Src\Application\object\player\pattern</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\object\player\pattern\Death.cpp">
-      <Filter>Src\Application\object\player\pattern</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\object\player\pattern\Jump.cpp">
-      <Filter>Src\Application\object\player\pattern</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\map\Map.cpp">
       <Filter>Src\Application\map</Filter>
     </ClCompile>
@@ -347,17 +332,26 @@
     <ClCompile Include="Src\Application\map\MapHit.cpp">
       <Filter>Src\Application\map</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\object\enemy\pattern\Death.cpp">
-      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    <ClCompile Include="Src\Application\object\player\playerpattern\Death.cpp">
+      <Filter>Src\Application\object\player\playerpattern</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\object\enemy\pattern\Jump.cpp">
-      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    <ClCompile Include="Src\Application\object\player\playerpattern\Jump.cpp">
+      <Filter>Src\Application\object\player\playerpattern</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\object\enemy\pattern\Pattern.cpp">
-      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    <ClCompile Include="Src\Application\object\player\playerpattern\Pattern.cpp">
+      <Filter>Src\Application\object\player\playerpattern</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\object\enemy\pattern\Run.cpp">
-      <Filter>Src\Application\object\enemy\Pattern</Filter>
+    <ClCompile Include="Src\Application\object\player\playerpattern\Run.cpp">
+      <Filter>Src\Application\object\player\playerpattern</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\enemy\enemypattern\Death.cpp">
+      <Filter>Src\Application\object\enemy\enemypattern</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\enemy\enemypattern\Pattern.cpp">
+      <Filter>Src\Application\object\enemy\enemypattern</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\enemy\enemypattern\Run.cpp">
+      <Filter>Src\Application\object\enemy\enemypattern</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

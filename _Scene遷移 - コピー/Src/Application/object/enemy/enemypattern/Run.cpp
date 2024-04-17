@@ -1,7 +1,7 @@
 #include "Run.h"
 
 #define MaxCoolCnt 5	//1‰æ‘œƒAƒjƒŠÔ
-#define AnimeNum 5		//‰æ‘œ”
+#define AnimeNum 4		//‰æ‘œ”
 
 void EnemyRun::Update()
 {

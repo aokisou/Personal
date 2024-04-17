@@ -1,9 +1,9 @@
 #include "player.h"
 #include "../../scene/game/GameScene.h"
 #include "../bullet/Bullet.h"
-#include "pattern/Run.h"
-#include "pattern/Death.h"
-#include "pattern/Jump.h"
+#include "playerpattern/Run.h"
+#include "playerpattern/Death.h"
+#include "playerpattern/Jump.h"
 #include "../../utility/utility.h"
 
 void Player::Init()
@@ -33,41 +33,25 @@ void Player::Action()
 
 	m_move = { 0,-Gravity };
 
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-	{
-		if (m_pos.x + (m_Size / Half * m_Scale) + PlySpeed > (SCREEN::width / Half))
-		{
-			m_pos.x = SCREEN::width / Half - (m_Size / Half * m_Scale);
-			SetStandState();
-		}
-		else
-		{
-			m_move.x = PlySpeed;
-			if (m_pState->GetStateType() != run)
-			{
-				SetRunState();
-			}
-			bAct = true;
-		}
-		m_dir = DefaultDir;
-	}
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 	{
-		if (m_pos.x - (m_Size / Half * m_Scale) - PlySpeed < -(SCREEN::width / Half))
-		{
-			m_pos.x = -SCREEN::width / Half + (m_Size / Half * m_Scale);
-			SetStandState();
-		}
-		else
-		{
-			m_move.x = -PlySpeed;
-			if (m_pState->GetStateType() != run)
-			{
-				SetRunState();
-			}
-			bAct = true;
-		}
+		m_move.x = -PlySpeed;
 		m_dir = -DefaultDir;
+		if (m_pState->GetStateType() != run)
+		{
+			SetRunState();
+		}
+		bAct = true;
+	}
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	{
+		m_move.x = PlySpeed;
+		m_dir = DefaultDir;
+		if (m_pState->GetStateType() != run)
+		{
+			SetRunState();
+		}
+		bAct = true;
 	}
 	if (GetAsyncKeyState(VK_UP) & 0x8000)
 	{
@@ -115,6 +99,17 @@ void Player::Update()
 		}
 	}
 
+	if (m_pos.x - (m_Size / Half * m_Scale) + m_move.x < -(SCREEN::width / Half))
+	{
+		m_pos.x = -SCREEN::width / Half + (m_Size / Half * m_Scale);
+		m_move.x = 0;
+	}
+	if (m_pos.x + (m_Size / Half * m_Scale) + m_move.x > (SCREEN::width / Half))
+	{
+		m_pos.x = SCREEN::width / Half - (m_Size / Half * m_Scale);
+		m_move.x = 0;
+	}
+
 	m_pState->Update();
 
 	BulletActivate();
@@ -122,7 +117,7 @@ void Player::Update()
 	m_pos += m_move;
 
 	m_mat = Math::Matrix::CreateScale(m_Scale * m_dir, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
-	if (m_pState->GetStateType() == run) { m_shadowMat = Math::Matrix::CreateScale(m_Scale, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y - 30, 0); }
+	m_shadowMat = Math::Matrix::CreateScale(m_Scale, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y - 30, 0);
 }
 
 void Player::Draw()

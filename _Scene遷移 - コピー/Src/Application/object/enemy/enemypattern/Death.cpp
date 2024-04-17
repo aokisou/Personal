@@ -2,7 +2,7 @@
 #include "../BaseEnemy.h"
 
 #define MaxCoolCnt 5	//1‰æ‘œƒAƒjƒŠÔ
-#define AnimeNum 7		//‰æ‘œ”
+#define AnimeNum 8		//‰æ‘œ”
 
 void EnemyDeath::Update()
 {
