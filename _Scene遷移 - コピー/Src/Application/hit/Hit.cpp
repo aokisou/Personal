@@ -14,9 +14,7 @@ void Hit::PlyEmyHit()
 	Player* ply = (Player*)m_pOwner->GetPlayer();
 	BaseEnemy* emy = (BaseEnemy*)m_pOwner->GetEnemy();
 
-	if (ply->GetbDmg()) { return; }
-
-	if (!ply->GetbAlive() || !emy->GetbDead()) { return; }
+	if (!ply->GetbDmg() || !ply->GetbAlive() || !emy->GetbDead() || !emy->GetbAlive()) { return; }
 	//空白スペースあるから少し少なくとる
 	const float plyRight	= ply->GetPos().x + ply->GetHalfSize() / Half;
 	const float plyLeft	= ply->GetPos().x - ply->GetHalfSize() / Half;

@@ -12,7 +12,7 @@
 
 void Player::Init()
 {
-	m_pos = { 0,PlyStartPos };
+	m_pos = { PlyStartPosX,PlyStartPosY };
 	m_move = { 0 };
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
@@ -84,7 +84,7 @@ void Player::Action()
 	}
 }
 
-void Player::Update()
+void Player::Update(float _scrollX)
 {
 	if (!m_bAlive) { return; }
 
@@ -103,26 +103,20 @@ void Player::Update()
 		}
 	}
 
-	if (m_pos.x - (m_Size / Half * m_Scale) + m_move.x < -(SCREEN::width / Half))
-	{
-		m_pos.x = -SCREEN::width / Half + (m_Size / Half * m_Scale);
-		m_move.x = 0;
-	}
-	if (m_pos.x + (m_Size / Half * m_Scale) + m_move.x > (SCREEN::width / Half))
-	{
-		m_pos.x = SCREEN::width / Half - (m_Size / Half * m_Scale);
-		m_move.x = 0;
-	}
-
 	m_pState->Update();
 
-	BulletActivate();
+	BulletActivate(_scrollX);
 
 	m_pos += m_move;
 
-	m_mat = Math::Matrix::CreateScale(m_Scale * m_dir, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+	if (m_pos.y - (m_Size / Half * m_Scale) < -(SCREEN::height / Half))
+	{
+		m_bAlive = false;
+	}
+
+	m_mat = Math::Matrix::CreateScale(m_Scale * m_dir, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 	int s = 30;	//プレイヤースタンド状態の影の位置
-	m_shadowMat = Math::Matrix::CreateScale(m_Scale, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y - s, 0);
+	m_shadowMat = Math::Matrix::CreateScale(m_Scale, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y - s, 0);
 }
 
 void Player::Draw()
@@ -183,6 +177,16 @@ void Player::MapHitY(float _posY, float _moveY, bool _b)
 	m_bJump = _b;
 }
 
+int Player::GetSpaceWidthImg()
+{
+	return 30;
+}
+
+int Player::GetSpaceHeightImg()
+{
+	return 15;
+}
+
 void Player::BulletShot()
 {
 	if (m_bshot) { m_shotinterval++; }
@@ -209,11 +213,11 @@ void Player::BulletShot()
 	}
 }
 
-void Player::BulletActivate()
+void Player::BulletActivate(float _scrollX)
 {
 	for (Bullet* i : m_bullet)
 	{
-		i->Update();
+		i->Update(_scrollX);
 	}
 
 	std::vector<Bullet*>::iterator it = m_bullet.begin();

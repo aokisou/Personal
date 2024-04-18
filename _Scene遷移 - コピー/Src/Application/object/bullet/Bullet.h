@@ -9,11 +9,13 @@ public:
 	~Bullet(){}
 
 	void Action()override;
-	void Update()override;
+	void Update(float _scrollX)override;
 	void Draw()override;
 
 	void SetPos(Math::Vector2 a_pos) { m_pos = a_pos; }
 	void SetDir(int _dir) { m_dir = _dir; }//ƒvƒŒƒCƒ„[‚ÌŒü‚«‚É”ò‚Ô‚æ‚¤‚É‚·‚é
+
+	bool GetContent()override { return true; }
 private:
 	void Init()override;
 

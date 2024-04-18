@@ -11,12 +11,14 @@ public:
 	~BaseEnemy(){}
 
 	void Action()override;
-	void Update()override;
+	void Update(float _scrollX)override;
 	void Draw()override;
 
 	void SetStandState();
 	void SetRunState();
 	void SetDeathState();
+
+	int GetSpaceWidthImg();
 
 	void ApplyDamage() { m_bDmg = true; m_hp--; }
 

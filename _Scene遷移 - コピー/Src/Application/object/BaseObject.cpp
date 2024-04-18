@@ -13,11 +13,11 @@ void BaseObject::Action()
 	if (!m_bAlive) { return; }
 }
 
-void BaseObject::Update()
+void BaseObject::Update(float _scrollX)
 {
 	if (!m_bAlive) { return; }
 	m_pos += m_move;
-	m_mat = Math::Matrix::CreateScale(2, 2, 0) * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+	m_mat = Math::Matrix::CreateScale(2, 2, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }
 
 void BaseObject::Draw()

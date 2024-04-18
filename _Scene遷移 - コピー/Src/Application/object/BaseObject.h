@@ -8,7 +8,7 @@ public:
 
 	virtual void Init() = 0;
 	virtual void Action() = 0;
-	virtual void Update() = 0;
+	virtual void Update(float _scrollX) = 0;
 	virtual void Draw() = 0;
 	virtual void Release();
 
@@ -18,7 +18,11 @@ public:
 	virtual Math::Vector2 GetPos() { return m_pos; }
 	virtual Math::Vector2 GetFuturePos() { return m_pos + m_move; }
 	virtual Math::Matrix GetMat() { return m_mat; }
-	virtual int GetHalfSize();
+	virtual int GetHalfSize()final;
+
+	//画像のスペース
+	virtual int GetSpaceWidthImg() { return 0; }
+	virtual int GetSpaceHeightImg() { return 0; }
 
 	virtual void MapHitX(float _posX, float _moveX);
 	virtual void MapHitY(float _posY, float _moveY, bool _b);
@@ -26,6 +30,9 @@ public:
 	//生存フラグ
 	virtual void DisableAlive() { m_bAlive = false; }
 	virtual bool GetbAlive()final { return m_bAlive; }
+
+	//当たり判定の時に弾がマップと当たったら壊れる
+	virtual bool GetContent() { return false; }
 
 protected:
 

@@ -40,7 +40,7 @@ void BaseEnemy::Action()
 	}
 }
 
-void BaseEnemy::Update()
+void BaseEnemy::Update(float _scrollX)
 {
 	if (!m_bAlive) { return; }
 	if (m_bDmg)
@@ -63,7 +63,7 @@ void BaseEnemy::Update()
 	if (m_pos.y < -SCREEN::height / Half)m_pos.y = 0;
 
 	m_pos += m_move;
-	m_mat = Math::Matrix::CreateScale(m_Scale, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+	m_mat = Math::Matrix::CreateScale(m_Scale, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }
 
 void BaseEnemy::Draw()
@@ -94,4 +94,9 @@ void BaseEnemy::SetDeathState()
 	delete m_pState;
 	m_pState = new EnemyDeath;
 	m_pState->Init(this);
+}
+
+int BaseEnemy::GetSpaceWidthImg()
+{
+	return 22;
 }

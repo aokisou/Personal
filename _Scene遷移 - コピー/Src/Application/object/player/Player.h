@@ -14,7 +14,7 @@ public:
 	~Player() { Release(); }
 
 	void Action()override;
-	void Update()override;
+	void Update(float _scrollX)override;
 	void Draw()override;
 
 	void SetOwner(GameScene* a_pOwner) { m_pOwner = a_pOwner; }
@@ -25,6 +25,9 @@ public:
 	void SetJumpState();
 	void SetRunState();
 	void SetDeathState();
+
+	int GetSpaceWidthImg();
+	int GetSpaceHeightImg();
 
 	//当たり判定用
 	void ApplyDamage() { m_bDmg = true; m_hp--; }
@@ -42,7 +45,7 @@ private:
 	//発射
 	void BulletShot();
 	//更新と有効判定
-	void BulletActivate();
+	void BulletActivate(float _scrollX);
 
 	void Release()override;
 

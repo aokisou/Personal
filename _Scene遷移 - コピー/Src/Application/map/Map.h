@@ -6,7 +6,7 @@ public:
 	Map(){}
 	~Map() { Release(); }
 
-	void Update();
+	void Update(float _scrollX);
 	void Draw();
 
 	//“Ç‚İ‚İŒã‰Šú‰»(©“®Às)
@@ -14,8 +14,8 @@ public:
 
 	void SetTexture(KdTexture* _pTex) { m_pTex = _pTex; }
 
-	int GetWidth() { return m_data.size(); }
-	int GetHeight() { return m_data[0].size(); }
+	int GetMaxHeight() { return m_data.size(); }
+	int GetMaxWidth() { return m_data[0].size(); }
 
 	Math::Vector2 GetPos(int _w, int _h) { return m_pos[_w][_h]; }
 	int GetHalfSize();

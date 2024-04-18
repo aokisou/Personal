@@ -1,50 +1,59 @@
 #include "MapHit.h"
 #include "Map.h"
 #include "../object/BaseObject.h"
+#include "../utility/utility.h"
 
 void MapHit::MapObjHit(Map* m_map, BaseObject* _obj)
 {
-	const float objRight = _obj->GetPos().x + _obj->GetHalfSize();
-	const float objLeft = _obj->GetPos().x - _obj->GetHalfSize();
-	const float objTop = _obj->GetPos().y + _obj->GetHalfSize();
-	const float objBottom = _obj->GetPos().y - _obj->GetHalfSize();
+	const float objRight	= _obj->GetPos().x + _obj->GetHalfSize() - _obj->GetSpaceWidthImg();
+	const float objLeft		= _obj->GetPos().x - _obj->GetHalfSize() + _obj->GetSpaceWidthImg();
+	const float objTop		= _obj->GetPos().y + _obj->GetHalfSize() - _obj->GetSpaceHeightImg();
+	const float objBottom	= _obj->GetPos().y - _obj->GetHalfSize() + _obj->GetSpaceHeightImg();
 
-	const float objNextRight = _obj->GetFuturePos().x + _obj->GetHalfSize();
-	const float objNextLeft = _obj->GetFuturePos().x - _obj->GetHalfSize();
-	const float objNextTop = _obj->GetFuturePos().y + _obj->GetHalfSize();
-	const float objNextBottom = _obj->GetFuturePos().y - _obj->GetHalfSize();
+	const float objNextRight	= _obj->GetFuturePos().x + _obj->GetHalfSize() - _obj->GetSpaceWidthImg();
+	const float objNextLeft		= _obj->GetFuturePos().x - _obj->GetHalfSize() + _obj->GetSpaceWidthImg();
+	const float objNextTop		= _obj->GetFuturePos().y + _obj->GetHalfSize() - _obj->GetSpaceHeightImg();
+	const float objNextBottom	= _obj->GetFuturePos().y - _obj->GetHalfSize() + _obj->GetSpaceHeightImg();
 	
-	for (int i = 0; i < m_map->GetWidth(); i++)
+	for (int i = 0; i < m_map->GetMaxHeight(); i++)
 	{
-		for (int j = 0; j < m_map->GetHeight(); j++)
+		for (int j = 0; j < m_map->GetMaxWidth(); j++)
 		{
-			if (!m_map->GetMapData(i, j)) { break; }
+			int md;
+			if ((md = m_map->GetMapData(i, j)) == none) { continue; }
 
-			const float mapRight = m_map->GetPos(i,j).x + m_map->GetHalfSize();
-			const float mapLeft = m_map->GetPos(i,j).x - m_map->GetHalfSize();
-			const float mapTop = m_map->GetPos(i,j).y + m_map->GetHalfSize();
-			const float mapBottom = m_map->GetPos(i,j).y - m_map->GetHalfSize();
+			if (md < HalfBlock8)
+			{
+				md = Block0;
+			}
+
+			const float mapRight	= m_map->GetPos(i,j).x + m_map->GetHalfSize();
+			const float mapLeft		= m_map->GetPos(i,j).x - m_map->GetHalfSize();
+			const float mapTop		= m_map->GetPos(i,j).y + m_map->GetHalfSize();
+			const float mapBottom	= m_map->GetPos(i,j).y - m_map->GetHalfSize();
 
 			if (objRight > mapLeft && objLeft < mapRight)
 			{
 				if (objNextBottom < mapTop && objNextTop > mapTop)//未来座標当たり判定(上)
 				{
-					_obj->MapHitY(mapTop + _obj->GetHalfSize(), 0,false);
+					_obj->MapHitY(mapTop + _obj->GetHalfSize() - _obj->GetSpaceHeightImg(), 0.f, false);
 				}
 				else if (objNextTop > mapBottom && objNextBottom < mapBottom)//未来座標当たり判定(下)
 				{
-					_obj->MapHitY(mapBottom - _obj->GetHalfSize(), 0,true);
+					_obj->MapHitY(mapBottom - _obj->GetHalfSize() + _obj->GetSpaceHeightImg(), 0.f,true);
 				}
 			}
 			else if (objTop > mapBottom && objBottom < mapTop)
 			{
 				if (objNextLeft < mapRight && objNextRight > mapRight)//未来座標当たり判定(右)
 				{
-					_obj->MapHitX(mapBottom + _obj->GetHalfSize(), 0);
+					if (_obj->GetContent()) { _obj->DisableAlive(); }
+					_obj->MapHitX(mapRight + _obj->GetHalfSize() - _obj->GetSpaceWidthImg(), 0.f);
 				}
 				else if (objNextRight > mapLeft && objNextLeft < mapLeft)//未来座標当たり判定(左)
 				{
-					_obj->MapHitX(mapBottom - _obj->GetHalfSize(), 0);
+					if (_obj->GetContent()) { _obj->DisableAlive(); }
+					_obj->MapHitX(mapLeft - _obj->GetHalfSize() + _obj->GetSpaceWidthImg(), 0.f);
 				}
 			}
 		}

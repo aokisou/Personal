@@ -19,13 +19,13 @@ void Map::Init()
 	m_Size = MapSize;
 }
 
-void Map::Update()
+void Map::Update(float _scrollX)
 {
 	for (int i = 0; i < m_pos.size(); i++)
 	{
 		for (int j = 0; j < m_pos[i].size(); j++)
 		{
-			m_mat[i][j] = Math::Matrix::CreateTranslation(m_pos[i][j].x, m_pos[i][j].y, 0);
+			m_mat[i][j] = Math::Matrix::CreateTranslation(m_pos[i][j].x - _scrollX, m_pos[i][j].y, 0);
 		}
 	}
 }
@@ -38,13 +38,80 @@ void Map::Draw()
 		{
 			switch (m_data[i][j])
 			{
-			case 0:
+			case Block0:
 				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
 				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(0, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
 				break;
-			case 1:
+			case Block1:
 				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
-				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(0, 0, m_Size, m_Size), &Math::Color(1, 0, 0, 1));
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(m_Size * Block1, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case Block2:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(m_Size * Block2, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case Block3:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(m_Size * Block3, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case Block4:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(m_Size * Block4, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case Block5:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(m_Size * Block5, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case Block6:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(m_Size * Block6, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case Block7:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(m_Size * Block7, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case HalfBlock8:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(m_Size * HalfBlock8, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case HalfBlock9:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(m_Size * HalfBlock9, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+
+			case HalfBlock10:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(0, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case HalfBlock11:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(0, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case HalfBlock12:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(0, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case HalfBlock13:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(0, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case HalfBlock14:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(0, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case Fence15:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(0, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case Fence16:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(0, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			case Fence17:
+				SHADER.m_spriteShader.SetMatrix(m_mat[i][j]);
+				SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(0, 0, m_Size, m_Size), &Math::Color(1, 1, 1, 1));
+				break;
+			default:
 				break;
 			}
 		}

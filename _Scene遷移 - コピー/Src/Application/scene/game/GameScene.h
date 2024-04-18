@@ -23,7 +23,11 @@ private:
 	void Init()override;
 	void Release()override;
 
-	std::string m_mapNme[1] = { "map/map.csv" };
+	float m_scrollX = 0.f;
+	float m_minScrollX = 0.f;
+	float m_maxScrollX = 0.f;
+
+	std::string m_mapNme[1] = { "map/stage1.csv" };
 
 	BaseObject* m_player;
 	BaseObject* m_enemy;

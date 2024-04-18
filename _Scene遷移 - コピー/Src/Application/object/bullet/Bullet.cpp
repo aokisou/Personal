@@ -6,8 +6,8 @@
 
 void Bullet::Init()
 {
-	m_pos = { };
-	m_move = { };
+	m_pos = {  };
+	m_move = {  };
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
 	m_Size = BltSize;
@@ -20,12 +20,12 @@ void Bullet::Action()
 	m_move.x = BltSpeed * m_dir;
 }
 
-void Bullet::Update()
+void Bullet::Update(float _scrollX)
 {
 	if (!m_bAlive) { return; }
 	m_pos += m_move;
 	if (m_pos.y - m_Size * m_Scale > (SCREEN::height / Half))m_bAlive = false;
-	m_mat = Math::Matrix::CreateScale(m_Scale * m_dir, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
+	m_mat = Math::Matrix::CreateScale(m_Scale * m_dir, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }
 
 void Bullet::Draw()
