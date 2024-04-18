@@ -2,32 +2,31 @@
 
 #include "../BaseScene.h"
 
-class Player;
-class BaseEnemy;
+class BaseObject;
 class Hit;
 class Map;
 class MapHit;
 
-class Game:public BaseScene
+class GameScene:public BaseScene
 {
 public:
-	Game(int _fps) { m_maxFps = _fps; }
-	~Game() { Release(); }
+	GameScene(int* _fps) { m_maxFps = _fps; Init(); }
+	~GameScene() { Release(); }
 
 	int Update()override;
 	void Draw()override;
-	void Init()override;
 
 	//クラスアドレス
-	Player* GetPlayer() { return m_player; }
-	BaseEnemy* GetEnemy() { return m_enemy; }
+	BaseObject* GetPlayer() { return m_player; }
+	BaseObject* GetEnemy() { return m_enemy; }
 private:
+	void Init()override;
 	void Release()override;
 
 	std::string m_mapNme[1] = { "map/map.csv" };
 
-	Player* m_player;
-	BaseEnemy* m_enemy;
+	BaseObject* m_player;
+	BaseObject* m_enemy;
 
 	Hit* m_hit;
 

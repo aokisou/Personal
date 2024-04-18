@@ -49,7 +49,7 @@ void Scene::Release()
 
 void Scene::ImGuiUpdate()
 {
-	//return;
+	return;
 
 	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_Once);
@@ -67,23 +67,20 @@ void Scene::ImGuiUpdate()
 void Scene::ChangeTitle()
 {
 	delete m_nowScene;
-	m_nowScene = new Title(APP.m_maxFps);
-	m_nowScene->Init();
+	m_nowScene = new TitleScene(&APP.m_maxFps);
 	m_nowScene->GetOwner(this);
 }
 
 void Scene::ChangeGame()
 {
 	delete m_nowScene;
-	m_nowScene = new Game(APP.m_maxFps);
-	m_nowScene->Init();
+	m_nowScene = new GameScene(&APP.m_maxFps);
 	m_nowScene->GetOwner(this);
 }
 
 void Scene::ChangeResult()
 {
 	delete m_nowScene;
-	m_nowScene = new Result(APP.m_maxFps);
-	m_nowScene->Init();
+	m_nowScene = new ResultScene(&APP.m_maxFps);
 	m_nowScene->GetOwner(this);
 }

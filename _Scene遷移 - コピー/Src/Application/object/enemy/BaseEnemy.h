@@ -7,18 +7,23 @@ class EnemyPattern;
 class BaseEnemy :public BaseObject
 {
 public:
-	BaseEnemy(){}
+	BaseEnemy() { Init(); }
 	~BaseEnemy(){}
 
-	void Init()override;
 	void Action()override;
 	void Update()override;
 	void Draw()override;
+
+	void SetStandState();
+	void SetRunState();
+	void SetDeathState();
 
 	void ApplyDamage() { m_bDmg = true; m_hp--; }
 
 	bool GetbDead() { return m_bDead; }
 private:
+	void Init()override;
+
 	int m_hp;
 	bool m_bDead;
 	int m_ExpNum;

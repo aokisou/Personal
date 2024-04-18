@@ -2,16 +2,16 @@
 
 #include "../BaseScene.h"
 
-class Result :public BaseScene
+class ResultScene :public BaseScene
 {
 public:
-	Result(int _fps) { m_maxFps = _fps;}
-	~Result() { Release(); }
+	ResultScene(int* _fps) { m_maxFps = _fps; Init(); }
+	~ResultScene() { Release(); }
 
 	int Update()override;
 	void Draw()override;
-	void Init()override;
 
 private:
+	void Init()override;
 	void Release()override;
 };

@@ -1,6 +1,9 @@
 #include "bullet.h"
 #include "../../utility/utility.h"
 
+#define BltSize 3			//’e‰æ‘œƒTƒCƒY
+#define BltScale 4			//’eŠg‘å—¦
+
 void Bullet::Init()
 {
 	m_pos = { };

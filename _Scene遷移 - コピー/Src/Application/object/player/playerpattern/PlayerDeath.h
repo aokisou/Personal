@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Pattern.h"
+#include "PlayerPattern.h"
 
 class PlayerDeath :public PlayerPattern
 {
@@ -10,5 +10,5 @@ public:
 
 	void Update()override;
 
-	int GetStateType() override{ return death; }
+	int GetStateType() override{ return playerDeath; }
 };

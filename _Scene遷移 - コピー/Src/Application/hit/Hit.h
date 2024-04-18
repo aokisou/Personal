@@ -1,6 +1,6 @@
 #pragma once
 
-class Game;
+class GameScene;
 
 class Hit
 {
@@ -13,7 +13,7 @@ public:
 	void PlyEmyHit();
 	void BltEmyHit();
 
-	void SetOwner(Game* a_pOwner) { m_pOwner = a_pOwner; }
+	void SetOwner(GameScene* a_pOwner) { m_pOwner = a_pOwner; }
 private:
-	Game* m_pOwner;
+	GameScene* m_pOwner;
 };

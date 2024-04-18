@@ -2,7 +2,7 @@
 #include "../Scene.h"
 #include "../../utility/utility.h"
 
-int Result::Update()
+int ResultScene::Update()
 {
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
@@ -17,14 +17,14 @@ int Result::Update()
 	return ChangeScene::no;
 }
 
-void Result::Draw()
+void ResultScene::Draw()
 {
 }
 
-void Result::Init()
+void ResultScene::Init()
 {
 }
 
-void Result::Release()
+void ResultScene::Release()
 {
 }

@@ -4,6 +4,8 @@
 #include<sstream>
 #include "../utility/utility.h"
 
+#define MapSize 64			//マップサイズ
+
 void Map::Init()
 {
 	for (int i = 0; i < m_pos.size(); i++)

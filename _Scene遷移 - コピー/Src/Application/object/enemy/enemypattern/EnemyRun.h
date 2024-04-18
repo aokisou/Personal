@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Pattern.h"
+#include "EnemyPattern.h"
 
 class EnemyRun :public EnemyPattern
 {
@@ -10,5 +10,5 @@ public:
 
 	void Update()override;
 
-	int GetStateType()override { return run; }
+	int GetStateType()override { return enemyRun; }
 };

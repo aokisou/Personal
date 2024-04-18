@@ -11,12 +11,12 @@ void Hit::Init()
 
 void Hit::PlyEmyHit()
 {
-	Player* ply = m_pOwner->GetPlayer();
-	BaseEnemy* emy = m_pOwner->GetEnemy();
+	Player* ply = (Player*)m_pOwner->GetPlayer();
+	BaseEnemy* emy = (BaseEnemy*)m_pOwner->GetEnemy();
 
 	if (ply->GetbDmg()) { return; }
 
-	if (!ply->GetbAlive() || !emy->GetbAlive()) { return; }
+	if (!ply->GetbAlive() || !emy->GetbDead()) { return; }
 	//空白スペースあるから少し少なくとる
 	const float plyRight	= ply->GetPos().x + ply->GetHalfSize() / Half;
 	const float plyLeft	= ply->GetPos().x - ply->GetHalfSize() / Half;
@@ -65,17 +65,17 @@ void Hit::PlyEmyHit()
 void Hit::BltEmyHit()
 {
 	std::vector<Bullet*>* pBlt;
-	pBlt = m_pOwner->GetPlayer()->GetBullet();
+	pBlt = ((Player*)m_pOwner->GetPlayer())->GetBullet();
 	std::vector<Bullet*>::iterator it = pBlt->begin();
 	while (it != pBlt->end())
 	{
-		BaseEnemy* emy = m_pOwner->GetEnemy();
+		BaseEnemy* emy = (BaseEnemy*)m_pOwner->GetEnemy();
 		if (!emy->GetbAlive() || emy->GetbDead()) { break; }
 		float a, b, c;
-		a = (*it)->GetFuturePos().x - emy->GetFuturePos().x;
-		b = (*it)->GetFuturePos().y - emy->GetFuturePos().y;
+		a = (*it)->GetFuturePos().x - emy->GetFuturePos().x - 22;
+		b = (*it)->GetFuturePos().y - emy->GetFuturePos().y - 22;
 		c = sqrt(a * a + b * b);
-		float Dist = emy->GetHalfSize() - (*it)->GetHalfSize();
+		float Dist = emy->GetHalfSize() + (*it)->GetHalfSize() - 22;
 
 		if (c < Dist)
 		{

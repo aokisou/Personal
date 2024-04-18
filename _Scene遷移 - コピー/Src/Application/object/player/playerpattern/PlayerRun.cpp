@@ -1,20 +1,18 @@
-#include "Death.h"
-#include "../BaseEnemy.h"
+#include "PlayerRun.h"
 
 #define MaxCoolCnt 5	//1‰æ‘œƒAƒjƒŽžŠÔ
-#define AnimeNum 8		//‰æ‘œ”
+#define AnimeNum 5		//‰æ‘œ”
 
-void EnemyDeath::Update()
+void PlayerRun::Update()
 {
 	m_CoolCnt++;
 	if (m_CoolCnt > MaxCoolCnt)
 	{
 		m_CoolCnt -= MaxCoolCnt;
 		m_AnimeCnt++;
-		if (m_AnimeCnt > AnimeNum)
+		if (m_AnimeCnt >= AnimeNum)
 		{
 			m_AnimeCnt = 0;
-			m_enemy->DisableAlive();
 		}
 	}
 }

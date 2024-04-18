@@ -8,20 +8,20 @@ class Player;
 class PlayerPattern
 {
 public:
-	PlayerPattern() { m_player = 0; m_AnimeCnt = 0; m_CoolCnt = 0; }
-	~PlayerPattern() { Release(); }
+	PlayerPattern() { }
+	virtual ~PlayerPattern() { Release(); }
 
 	virtual void Init(Player* a_player)final;
 	virtual void Update();
 
 	virtual void Release() { m_player = nullptr; }
 
-	virtual int GetAnimeCnt() { return m_AnimeCnt; }
-	virtual int GetStateType() { return stand; }
+	virtual int GetAnimeCnt()final { return m_AnimeCnt; }
+	virtual int GetStateType() { return playerStand; }
 
 protected:
-	Player* m_player;
+	Player* m_player = nullptr;
 
-	int m_AnimeCnt;
-	int m_CoolCnt;
+	int m_AnimeCnt = 0;
+	int m_CoolCnt = 0;
 };

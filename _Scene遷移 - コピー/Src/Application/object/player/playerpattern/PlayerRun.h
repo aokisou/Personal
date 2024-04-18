@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Pattern.h"
+#include "PlayerPattern.h"
 
 class Player;
 
@@ -12,5 +12,5 @@ public:
 
 	void Update()override;
 
-	int GetStateType()override { return run; }
+	int GetStateType()override { return playerRun; }
 };

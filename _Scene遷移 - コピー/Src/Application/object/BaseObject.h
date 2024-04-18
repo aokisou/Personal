@@ -29,19 +29,19 @@ public:
 
 protected:
 
-	Math::Vector2 m_pos;
-	Math::Vector2 m_move;
-	Math::Matrix m_mat;
+	Math::Vector2 m_pos = {};
+	Math::Vector2 m_move = {};
+	Math::Matrix m_mat = {};
 	
-	int m_dir;
+	int m_dir = 0;
 
 	//‰æ‘œƒTƒCƒY
-	int m_Size;
+	int m_Size = 0;
 	//‰æ‘œŠg‘å—¦
-	int m_Scale;
+	int m_Scale = 0;
 
-	bool m_bAlive;
+	bool m_bAlive = false;
 
-	KdTexture* m_pTex;
+	KdTexture* m_pTex = nullptr;
 private:
 };

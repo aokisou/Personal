@@ -2,7 +2,7 @@
 #include "../Scene.h"
 #include "../../utility/utility.h"
 
-int Title::Update()
+int TitleScene::Update()
 {
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
@@ -17,15 +17,15 @@ int Title::Update()
 	return ChangeScene::no;
 }
 
-void Title::Draw()
+void TitleScene::Draw()
 {
 }
 
-void Title::Init()
+void TitleScene::Init()
 {
 	m_titleTex.Load("Texture/enemy.png");
 }
 
-void Title::Release()
+void TitleScene::Release()
 {
 }

@@ -7,7 +7,7 @@
 #include<vector>
 #include "../../utility/utility.h"
 
-int Game::Update()
+int GameScene::Update()
 {
 	m_player->Action();
 	m_enemy->Action();
@@ -29,14 +29,14 @@ int Game::Update()
 	return ChangeScene::no;
 }
 
-void Game::Draw()
+void GameScene::Draw()
 {
 	m_map->Draw();
 	m_enemy->Draw();
 	m_player->Draw();
 }
 
-void Game::Init()
+void GameScene::Init()
 {
 	bool bLoad = false;
 
@@ -65,11 +65,11 @@ void Game::Init()
 	m_player->SetTexture(&m_playerTex);
 	m_enemy->SetTexture(&m_enemyTex);
 
-	m_player->SetOwner(this);
+	((Player*)m_player)->SetOwner(this);
 	m_hit->SetOwner(this);
 }
 
-void Game::Release()
+void GameScene::Release()
 {
 	delete m_player;
 	delete m_enemy;

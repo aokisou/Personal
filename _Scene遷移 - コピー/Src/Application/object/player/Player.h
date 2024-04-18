@@ -5,27 +5,26 @@
 class Bullet;
 class PlayerPattern;
 
-class Game;
+class GameScene;
 
 class Player:public BaseObject
 {
 public:
-	Player() { m_pState = nullptr; m_pOwner = nullptr; }
+	Player() { Init(); }
 	~Player() { Release(); }
 
-	void Init()override;
 	void Action()override;
 	void Update()override;
 	void Draw()override;
 
-	void SetOwner(Game* a_pOwner) { m_pOwner = a_pOwner; }
+	void SetOwner(GameScene* a_pOwner) { m_pOwner = a_pOwner; }
 
 	bool GetbDmg() { return m_bDmg; }
 
 	void SetStandState();
 	void SetJumpState();
 	void SetRunState();
-	void SetDeadState();
+	void SetDeathState();
 
 	//ìñÇΩÇËîªíËóp
 	void ApplyDamage() { m_bDmg = true; m_hp--; }
@@ -37,7 +36,8 @@ public:
 	int GetBulletNum() { return m_bullet.size(); }
 	int GetHP() { return m_hp; }
 
-private://ä÷êî
+private:
+	void Init()override;
 	//íe
 	//î≠éÀ
 	void BulletShot();
@@ -61,5 +61,6 @@ private://ä÷êî
 
 	PlayerPattern* m_pState;
 
-	Game* m_pOwner;
+	GameScene* m_pOwner;
+
 };

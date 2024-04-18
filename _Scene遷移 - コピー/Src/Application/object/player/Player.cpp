@@ -1,10 +1,14 @@
 #include "player.h"
 #include "../../scene/game/GameScene.h"
 #include "../bullet/Bullet.h"
-#include "playerpattern/Run.h"
-#include "playerpattern/Death.h"
-#include "playerpattern/Jump.h"
+#include "playerpattern/PlayerPattern.h"
+#include "playerpattern/PlayerRun.h"
+#include "playerpattern/PlayerDeath.h"
+#include "playerpattern/PlayerJump.h"
 #include "../../utility/utility.h"
+
+#define ImgSize 48		//キャラ画像サイズ
+#define Scale 2			//キャラ拡大率
 
 void Player::Init()
 {
@@ -14,8 +18,8 @@ void Player::Init()
 	m_bAlive = true;
 	m_shotinterval = 0;
 	m_dir = DefaultDir;
-	m_Size = ChrImgSize;
-	m_Scale = ChrScale;
+	m_Size = ImgSize;
+	m_Scale = Scale;
 	m_hp = PlyStartHP;
 	m_bJump = false;
 	m_bshot = false;
@@ -31,13 +35,13 @@ void Player::Action()
 	if (!m_bAlive) { return; }
 	bool bAct = false;
 
-	m_move = { 0,-Gravity };
+	m_move = { 0,m_move.y - Gravity };
 
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 	{
 		m_move.x = -PlySpeed;
 		m_dir = -DefaultDir;
-		if (m_pState->GetStateType() != run)
+		if (m_pState->GetStateType() != playerRun)
 		{
 			SetRunState();
 		}
@@ -47,7 +51,7 @@ void Player::Action()
 	{
 		m_move.x = PlySpeed;
 		m_dir = DefaultDir;
-		if (m_pState->GetStateType() != run)
+		if (m_pState->GetStateType() != playerRun)
 		{
 			SetRunState();
 		}
@@ -73,7 +77,7 @@ void Player::Action()
 
 	if (!bAct)
 	{
-		if (m_pState->GetStateType() != stand && !m_bJump)
+		if (m_pState->GetStateType() != playerStand && !m_bJump)
 		{
 			SetStandState();
 		}
@@ -94,7 +98,7 @@ void Player::Update()
 			if (m_hp <= 0) 
 			{ 
 				m_bDmg = false;
-				SetDeadState();
+				SetDeathState();
 			}
 		}
 	}
@@ -117,7 +121,8 @@ void Player::Update()
 	m_pos += m_move;
 
 	m_mat = Math::Matrix::CreateScale(m_Scale * m_dir, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y, 0);
-	m_shadowMat = Math::Matrix::CreateScale(m_Scale, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y - 30, 0);
+	int s = 30;	//プレイヤースタンド状態の影の位置
+	m_shadowMat = Math::Matrix::CreateScale(m_Scale, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x, m_pos.y - s, 0);
 }
 
 void Player::Draw()
@@ -164,7 +169,7 @@ void Player::SetRunState()
 	m_pState->Init(this);
 }
 
-void Player::SetDeadState()
+void Player::SetDeathState()
 {
 	delete m_pState;
 	m_pState = new PlayerDeath;
@@ -188,7 +193,6 @@ void Player::BulletShot()
 		{
 			Bullet* tmpbullet = new Bullet;
 
-			tmpbullet->Init();
 			tmpbullet->SetPos({ m_pos.x + PlyBltCRX * m_dir, m_pos.y + PlyBltCRY});
 			tmpbullet->SetDir(m_dir);
 			tmpbullet->SetTexture(m_pTex);
@@ -198,10 +202,10 @@ void Player::BulletShot()
 		m_bshot = true;
 	}
 
-	if ((m_pOwner->GetMAXfps() / PlyShotInterval) < m_shotinterval)
+	if ((*m_pOwner->GetMAXfps() / PlyShotInterval) < m_shotinterval)
 	{
 		m_bshot = false;
-		m_shotinterval -= (m_pOwner->GetMAXfps() / PlyShotInterval);
+		m_shotinterval -= (*m_pOwner->GetMAXfps() / PlyShotInterval);
 	}
 }
 
