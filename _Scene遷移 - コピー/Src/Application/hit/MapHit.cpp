@@ -1,5 +1,5 @@
 #include "MapHit.h"
-#include "Map.h"
+#include "../map/Map.h"
 #include "../object/BaseObject.h"
 #include "../utility/utility.h"
 
@@ -22,11 +22,6 @@ void MapHit::MapObjHit(Map* m_map, BaseObject* _obj)
 			int md;
 			if ((md = m_map->GetMapData(i, j)) == none) { continue; }
 
-			if (md < HalfBlock8)
-			{
-				md = Block0;
-			}
-
 			const float mapRight	= m_map->GetPos(i,j).x + m_map->GetHalfSize();
 			const float mapLeft		= m_map->GetPos(i,j).x - m_map->GetHalfSize();
 			const float mapTop		= m_map->GetPos(i,j).y + m_map->GetHalfSize();
@@ -36,6 +31,7 @@ void MapHit::MapObjHit(Map* m_map, BaseObject* _obj)
 			{
 				if (objNextBottom < mapTop && objNextTop > mapTop)//–¢—ˆÀ•W“–‚½‚è”»’è(ã)
 				{
+					if (_obj->GetContent()) { _obj->DisableAlive(); }
 					_obj->MapHitY(mapTop + _obj->GetHalfSize() - _obj->GetSpaceHeightImg(), 0.f, false);
 				}
 				else if (objNextTop > mapBottom && objNextBottom < mapBottom)//–¢—ˆÀ•W“–‚½‚è”»’è(‰º)

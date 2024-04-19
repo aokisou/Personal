@@ -2,7 +2,7 @@
 #include "../scene/game/GameScene.h"
 #include "../object/player/player.h"
 #include "../object/enemy/BaseEnemy.h"
-#include "../object/bullet/Bullet.h"
+#include "../object/arrow/Arrow.h"
 #include "../utility/utility.h"
 
 void Hit::Init()
@@ -14,27 +14,27 @@ void Hit::PlyEmyHit()
 	Player* ply = (Player*)m_pOwner->GetPlayer();
 	BaseEnemy* emy = (BaseEnemy*)m_pOwner->GetEnemy();
 
-	if (!ply->GetbDmg() || !ply->GetbAlive() || !emy->GetbDead() || !emy->GetbAlive()) { return; }
-	//空白スペースあるから少し少なくとる
-	const float plyRight	= ply->GetPos().x + ply->GetHalfSize() / Half;
-	const float plyLeft	= ply->GetPos().x - ply->GetHalfSize() / Half;
-	const float plyTop	= ply->GetPos().y + ply->GetHalfSize() / Half;
-	const float plyBottom = ply->GetPos().y - ply->GetHalfSize() / Half;
+	if (ply->GetbDmg() || !ply->GetbAlive() || emy->GetbDead() || !emy->GetbAlive()) { return; }
 
-	const float plyNextRight	= ply->GetFuturePos().x + ply->GetHalfSize() / Half;
-	const float plyNextLeft	= ply->GetFuturePos().x - ply->GetHalfSize() / Half;
-	const float plyNextTop	= ply->GetFuturePos().y + ply->GetHalfSize() / Half;
-	const float plyNextBottom = ply->GetFuturePos().y - ply->GetHalfSize() / Half;
+	const float plyRight	= ply->GetPos().x + ply->GetHalfSize() - ply->GetSpaceWidthImg();
+	const float plyLeft		= ply->GetPos().x - ply->GetHalfSize() + ply->GetSpaceWidthImg();
+	const float plyTop		= ply->GetPos().y + ply->GetHalfSize() - ply->GetSpaceHeightImg();
+	const float plyBottom	= ply->GetPos().y - ply->GetHalfSize() + ply->GetSpaceHeightImg();
 
-	const float emyRight	= emy->GetPos().x + emy->GetHalfSize() / Half;
-	const float emyLeft	= emy->GetPos().x - emy->GetHalfSize() / Half;
-	const float emyTop	= emy->GetPos().y + emy->GetHalfSize() / Half;
-	const float emyBottom = emy->GetPos().y - emy->GetHalfSize() / Half;
+	const float plyNextRight	= ply->GetFuturePos().x + ply->GetHalfSize() - ply->GetSpaceWidthImg();
+	const float plyNextLeft		= ply->GetFuturePos().x - ply->GetHalfSize() + ply->GetSpaceWidthImg();
+	const float plyNextTop		= ply->GetFuturePos().y + ply->GetHalfSize() - ply->GetSpaceHeightImg();
+	const float plyNextBottom	= ply->GetFuturePos().y - ply->GetHalfSize() + ply->GetSpaceHeightImg();
 
-	const float emyNextRight	= emy->GetFuturePos().x + emy->GetHalfSize() / Half;
-	const float emyNextLeft	= emy->GetFuturePos().x - emy->GetHalfSize() / Half;
-	const float emyNextTop	= emy->GetFuturePos().y + emy->GetHalfSize() / Half;
-	const float emyNextBottom = emy->GetFuturePos().y - emy->GetHalfSize() / Half;
+	const float emyRight	= emy->GetPos().x + emy->GetHalfSize() - emy->GetSpaceWidthImg();
+	const float emyLeft		= emy->GetPos().x - emy->GetHalfSize() + emy->GetSpaceWidthImg();
+	const float emyTop		= emy->GetPos().y + emy->GetHalfSize();
+	const float emyBottom	= emy->GetPos().y - emy->GetHalfSize() + emy->GetSpaceHeightImg();
+
+	const float emyNextRight	= emy->GetFuturePos().x + emy->GetHalfSize() - emy->GetSpaceWidthImg();
+	const float emyNextLeft		= emy->GetFuturePos().x - emy->GetHalfSize() + emy->GetSpaceWidthImg();
+	const float emyNextTop		= emy->GetFuturePos().y + emy->GetHalfSize();
+	const float emyNextBottom	= emy->GetFuturePos().y - emy->GetHalfSize() + emy->GetSpaceHeightImg();
 
 	if (plyTop > emyBottom && plyTop < emyTop)
 	{
@@ -60,24 +60,23 @@ void Hit::PlyEmyHit()
 	}
 }
 
-void Hit::BltEmyHit()
+void Hit::ArrEmyHit()
 {
-	std::vector<Bullet*>* pBlt;
-	pBlt = ((Player*)m_pOwner->GetPlayer())->GetBullet();
-	std::vector<Bullet*>::iterator it = pBlt->begin();
-	while (it != pBlt->end())
+	std::vector<Arrow*>* pArr = m_pOwner->GetPlayer()->GetArrow();
+	std::vector<Arrow*>::iterator it = pArr->begin();
+	while (it != pArr->end())
 	{
 		BaseEnemy* emy = (BaseEnemy*)m_pOwner->GetEnemy();
 		if (!emy->GetbAlive() || emy->GetbDead()) { break; }
 		float a, b, c;
-		a = (*it)->GetFuturePos().x - emy->GetFuturePos().x - 22;
-		b = (*it)->GetFuturePos().y - emy->GetFuturePos().y - 22;
+		a = (*it)->GetFuturePos().x - emy->GetFuturePos().x;
+		b = (*it)->GetFuturePos().y - emy->GetFuturePos().y;
 		c = sqrt(a * a + b * b);
-		float Dist = emy->GetHalfSize() + (*it)->GetHalfSize() - 22;
+		float Dist = (emy->GetHalfSize() - emy->GetSpaceWidthImg()) + ((*it)->GetHalfSize() - (*it)->GetSpaceWidthImg());
 
 		if (c < Dist)
 		{
-			emy->ApplyDamage();
+			emy->ApplyDamage((*it)->GetDmg());
 			(*it)->DisableAlive();
 		}
 		it++;

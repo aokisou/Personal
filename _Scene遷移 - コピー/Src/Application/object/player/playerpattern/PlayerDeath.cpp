@@ -1,11 +1,11 @@
 #include "PlayerDeath.h"
 #include "../Player.h"
 
-#define MaxCoolCnt 5	//1画像アニメ時間
-#define AnimeNum 7		//画像数
-
 void PlayerDeath::Update()
 {
+	const int MaxCoolCnt = 5;	//1画像アニメ時間
+	const int AnimeNum = 10;	//画像数
+
 	m_CoolCnt++;
 	if (m_CoolCnt > MaxCoolCnt)
 	{

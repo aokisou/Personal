@@ -11,7 +11,7 @@ public:
 	EnemyPattern() { }
 	virtual ~EnemyPattern() { Release(); }
 
-	virtual void Init(BaseEnemy* _enemy)final;
+	virtual void Init(BaseEnemy* _enemy,std::string _fileName)final;
 	virtual void Update();
 
 	void Release() { m_enemy = nullptr; }
@@ -19,9 +19,13 @@ public:
 	virtual int GetAnimeCnt() { return m_AnimeCnt; }
 	virtual int GetStateType() { return enemyStand; }
 
+	KdTexture* GetTex() { return &m_tex; }
+
 protected:
 	BaseEnemy* m_enemy;
 
 	int m_AnimeCnt;
 	int m_CoolCnt;
+
+	KdTexture m_tex;
 };

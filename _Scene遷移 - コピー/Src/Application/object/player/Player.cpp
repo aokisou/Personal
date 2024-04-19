@@ -1,14 +1,26 @@
 #include "player.h"
 #include "../../scene/game/GameScene.h"
-#include "../bullet/Bullet.h"
+#include "../arrow/Arrow.h"
 #include "playerpattern/PlayerPattern.h"
 #include "playerpattern/PlayerRun.h"
 #include "playerpattern/PlayerDeath.h"
 #include "playerpattern/PlayerJump.h"
+#include "playerpattern/PlayerAttack.h"
 #include "../../utility/utility.h"
 
-#define ImgSize 48		//キャラ画像サイズ
-#define Scale 2			//キャラ拡大率
+//プレイヤー
+#define PlySpeed 5			//プレイヤー速度
+#define PlyJumpPow 15		//プレイヤーのジャンプ力
+#define PlyShotInterval 6	//プレイヤーの弾を打つ感覚(Maxfps/この数値)
+#define PlyMoveRange -150	//プレイヤーの移動範囲
+#define PlyStartPosX -600	//プレイヤーの開始X座標
+#define PlyStartPosY 0	//プレイヤーの開始Y座標
+#define PlyStartHP 5		//プレイヤーの開始HP
+#define PlyMaxDmgEfcCnt 20	//赤く光る時間
+#define PlyBltCRX 30		//弾の出る位置を銃まで補正X座標
+#define PlyBltCRY 6			//弾の出る位置を銃まで補正Y座標
+#define ImgSize 100		//キャラ画像サイズ
+#define Scale 1			//キャラ拡大率
 
 void Player::Init()
 {
@@ -16,18 +28,17 @@ void Player::Init()
 	m_move = { 0 };
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
-	m_shotinterval = 0;
 	m_dir = DefaultDir;
 	m_Size = ImgSize;
 	m_Scale = Scale;
 	m_hp = PlyStartHP;
 	m_bJump = false;
-	m_bshot = false;
-	m_shotinterval = 0;
+	m_bShot = false;
+	m_shotInterval = 0;
 	m_bDmg = false;
 	m_DmgEfcCnt = 0;
 	m_pState = new PlayerPattern;
-	m_pState->Init(this);
+	m_pState->Init(this, "Texture/player/Idle.png");
 }
 
 void Player::Action()
@@ -37,47 +48,52 @@ void Player::Action()
 
 	m_move = { 0,m_move.y - Gravity };
 
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	//ジャンプしてたらスタンドにならないように
+	bAct = m_bJump;
+	bAct = ArrowShot();
+
+	if (m_pState->GetStateType() != playerAttack)//攻撃時は移動できない
 	{
-		m_move.x = -PlySpeed;
-		m_dir = -DefaultDir;
-		if (m_pState->GetStateType() != playerRun)
+		if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 		{
-			SetRunState();
-		}
-		bAct = true;
-	}
-	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-	{
-		m_move.x = PlySpeed;
-		m_dir = DefaultDir;
-		if (m_pState->GetStateType() != playerRun)
-		{
-			SetRunState();
-		}
-		bAct = true;
-	}
-	if (GetAsyncKeyState(VK_UP) & 0x8000)
-	{
-		if (!m_bJump)
-		{
-			m_move.y += PlyJumpPow;
-			SetJumpState();
-			m_bJump = true;
+			m_move.x = -PlySpeed;
+			m_dir = -DefaultDir;
+			if (m_pState->GetStateType() != playerRun)
+			{
+				SetRunState();
+			}
 			bAct = true;
 		}
+		if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+		{
+			m_move.x = PlySpeed;
+			m_dir = DefaultDir;
+			if (m_pState->GetStateType() != playerRun)
+			{
+				SetRunState();
+			}
+			bAct = true;
+		}
+		if (GetAsyncKeyState(VK_UP) & 0x8000)
+		{
+			if (!m_bJump)
+			{
+				m_move.y += PlyJumpPow;
+				SetJumpState();
+				m_bJump = true;
+				bAct = true;
+			}
+		}
 	}
 
-	BulletShot();
-
-	for (Bullet* i : m_bullet)
+	for (Arrow* i : m_arrow)
 	{
 		i->Action();
 	}
 
 	if (!bAct)
 	{
-		if (m_pState->GetStateType() != playerStand && !m_bJump)
+		if (m_pState->GetStateType() != playerStand)
 		{
 			SetStandState();
 		}
@@ -105,7 +121,7 @@ void Player::Update(float _scrollX)
 
 	m_pState->Update();
 
-	BulletActivate(_scrollX);
+	ArrowActivate(_scrollX);
 
 	m_pos += m_move;
 
@@ -115,15 +131,13 @@ void Player::Update(float _scrollX)
 	}
 
 	m_mat = Math::Matrix::CreateScale(m_Scale * m_dir, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
-	int s = 30;	//プレイヤースタンド状態の影の位置
-	m_shadowMat = Math::Matrix::CreateScale(m_Scale, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y - s, 0);
 }
 
 void Player::Draw()
 {
 	if (!m_bAlive) { return; }
 
-	for (Bullet* i : m_bullet)
+	for (Arrow* i : m_arrow)
 	{
 		i->Draw();
 	}
@@ -132,42 +146,43 @@ void Player::Draw()
 	if (m_bDmg)col = { 1,0,0,1 };
 
 	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex(m_pTex, 0,0,
-		&Math::Rectangle(m_Size * m_pState->GetAnimeCnt(), m_Size * m_pState->GetStateType(), m_Size, m_Size), &col);
-
-	if (m_bJump) { col = { 1,1,1,1 - (abs(m_move.y) / PlyJumpPow) }; }
-	else{ col = { 1,1,1,1 }; }
-
-	SHADER.m_spriteShader.SetMatrix(m_shadowMat);
-	SHADER.m_spriteShader.DrawTex(m_pTex, 0, 0, &Math::Rectangle(288, 0, 16, 16),&col);
+	SHADER.m_spriteShader.DrawTex(m_pState->GetTex(), 0, 0,
+		&Math::Rectangle(m_Size * m_pState->GetAnimeCnt(), 0, m_Size, m_Size), &col);
 }
 
 void Player::SetStandState()
 {
 	delete m_pState;
 	m_pState = new PlayerPattern;
-	m_pState->Init(this);
+	m_pState->Init(this, "Texture/player/Idle.png");
 }
 
 void Player::SetJumpState()
 {
 	delete m_pState;
 	m_pState = new PlayerJump;
-	m_pState->Init(this);
+	m_pState->Init(this, "Texture/player/Jump.png");
 }
 
 void Player::SetRunState()
 {
 	delete m_pState;
 	m_pState = new PlayerRun;
-	m_pState->Init(this);
+	m_pState->Init(this, "Texture/player/Run.png");
 }
 
 void Player::SetDeathState()
 {
 	delete m_pState;
 	m_pState = new PlayerDeath;
-	m_pState->Init(this);
+	m_pState->Init(this, "Texture/player/Death.png");
+}
+
+void Player::SetAttackState()
+{
+	delete m_pState;
+	m_pState = new PlayerAttack;
+	m_pState->Init(this, "Texture/player/Attack.png");
 }
 
 void Player::MapHitY(float _posY, float _moveY, bool _b)
@@ -177,56 +192,55 @@ void Player::MapHitY(float _posY, float _moveY, bool _b)
 	m_bJump = _b;
 }
 
-int Player::GetSpaceWidthImg()
+bool Player::ArrowShot()
 {
-	return 30;
-}
-
-int Player::GetSpaceHeightImg()
-{
-	return 15;
-}
-
-void Player::BulletShot()
-{
-	if (m_bshot) { m_shotinterval++; }
+	bool a = false;			//アクションしているか
+	static bool b = false;	//矢を1フレームだけ放つ
 
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
 	{
-		if (!m_bshot)
+		const int c = 4;//矢を打つアニメーションのタイミング
+
+		if (!m_bShot)
 		{
-			Bullet* tmpbullet = new Bullet;
-
-			tmpbullet->SetPos({ m_pos.x + PlyBltCRX * m_dir, m_pos.y + PlyBltCRY});
-			tmpbullet->SetDir(m_dir);
-			tmpbullet->SetTexture(m_pTex);
-
-			m_bullet.push_back(tmpbullet);
+			SetAttackState();
 		}
-		m_bshot = true;
+		m_bShot = true;
+		a = true;
+		if (m_pState->GetAnimeCnt() == c && !b)
+		{
+			Arrow* tmpArrow = new Arrow;
+
+			tmpArrow->SetPos({ m_pos.x + PlyBltCRX * m_dir, m_pos.y + PlyBltCRY });
+			tmpArrow->SetDir(m_dir);
+
+			m_arrow.push_back(tmpArrow);
+			b = true;
+		}
+	}
+	else
+	{
+		m_bShot = false;
+		b = false;
 	}
 
-	if ((*m_pOwner->GetMAXfps() / PlyShotInterval) < m_shotinterval)
-	{
-		m_bshot = false;
-		m_shotinterval -= (*m_pOwner->GetMAXfps() / PlyShotInterval);
-	}
+	return a;
 }
 
-void Player::BulletActivate(float _scrollX)
+void Player::ArrowActivate(float _scrollX)
 {
-	for (Bullet* i : m_bullet)
+	for (Arrow* i : m_arrow)
 	{
 		i->Update(_scrollX);
 	}
 
-	std::vector<Bullet*>::iterator it = m_bullet.begin();
-	while (it != m_bullet.end())
+	std::vector<Arrow*>::iterator it = m_arrow.begin();
+	while (it != m_arrow.end())
 	{
 		if (!(*it)->GetbAlive())
 		{
 			delete* it;
-			it = m_bullet.erase(it);
+			it = m_arrow.erase(it);
 		}
 		else { it++; }
 	}
@@ -235,10 +249,11 @@ void Player::BulletActivate(float _scrollX)
 void Player::Release()
 {
 	//実行終了時
-	std::vector<Bullet*>::iterator it = m_bullet.begin();
-	while (it != m_bullet.end())
+	std::vector<Arrow*>::iterator it = m_arrow.begin();
+	while (it != m_arrow.end())
 	{
 		delete* it;
-		it = m_bullet.erase(it);
+		it = m_arrow.erase(it);
 	}
+	delete m_pState;
 }

@@ -8,28 +8,31 @@ class BaseEnemy :public BaseObject
 {
 public:
 	BaseEnemy() { Init(); }
-	~BaseEnemy(){}
+	virtual ~BaseEnemy() {}
 
-	void Action()override;
-	void Update(float _scrollX)override;
-	void Draw()override;
+	virtual void Init()override = 0;
+	virtual void Action()override = 0;
+	virtual void Update(float _scrollX)override = 0;
+	virtual void Draw()override = 0;
+	virtual void Release()override = 0 {}
 
-	void SetStandState();
-	void SetRunState();
-	void SetDeathState();
+	virtual void SetStandState(){}
+	virtual void SetRunState(){}
+	virtual void SetDeathState(){}
+	virtual void SetAttackState(){}
 
-	int GetSpaceWidthImg();
+	virtual int GetSpaceWidthImg() { return 40; }
+	virtual int GetSpaceHeightImg() { return 20; }
 
-	void ApplyDamage() { m_bDmg = true; m_hp--; }
+	void ApplyDamage(float _dmg) { m_bDmg = true; m_hp -= _dmg; }
 
 	bool GetbDead() { return m_bDead; }
-private:
-	void Init()override;
 
-	int m_hp;
+	virtual float GetHP() { return m_hp; }
+protected:
+
+	float m_hp;
 	bool m_bDead;
-	int m_ExpNum;
-	int m_ExpCnt;
 
 	bool m_bDmg;
 	int DmgEfcCnt;

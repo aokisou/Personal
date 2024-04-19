@@ -2,22 +2,34 @@
 
 #include "../BaseObject.h"
 
-class Bullet:public BaseObject
+class Arrow:public BaseObject
 {
 public:
-	Bullet() { Init(); }
-	~Bullet(){}
+	Arrow() { Init(); }
+	~Arrow() { Release(); }
 
 	void Action()override;
 	void Update(float _scrollX)override;
 	void Draw()override;
+	void Release()override {}
 
 	void SetPos(Math::Vector2 a_pos) { m_pos = a_pos; }
 	void SetDir(int _dir) { m_dir = _dir; }//ƒvƒŒƒCƒ„[‚ÌŒü‚«‚É”ò‚Ô‚æ‚¤‚É‚·‚é
 
 	bool GetContent()override { return true; }
+
+	float GetDmg() { return abs(m_move.x); }
+
+	int GetSpaceWidthImg(){ return 3; }
+	int GetSpaceHeightImg(){ return 3; }
 private:
 	void Init()override;
 
 	int m_dir;
+
+	float m_angle;
+
+	float m_accelerlation;
+
+	KdTexture m_tex;
 };

@@ -1,10 +1,10 @@
 #include "PlayerRun.h"
 
-#define MaxCoolCnt 5	//1画像アニメ時間
-#define AnimeNum 5		//画像数
-
 void PlayerRun::Update()
 {
+	const int MaxCoolCnt = 5;	//1画像アニメ時間
+	const int AnimeNum = 7;		//画像数
+
 	m_CoolCnt++;
 	if (m_CoolCnt > MaxCoolCnt)
 	{

@@ -1,10 +1,10 @@
 #include "PlayerJump.h"
 
-#define MaxCoolCnt 20	//1画像アニメ時間
-#define AnimeNum 2		//画像数
-
 void PlayerJump::Update()
 {
+	const int MaxCoolCnt = 20;	//1画像アニメ時間
+	const int AnimeNum = 2;		//画像数
+
 	m_CoolCnt++;
 	if (m_CoolCnt > MaxCoolCnt)
 	{

@@ -11,7 +11,7 @@ public:
 	void Init();
 
 	void PlyEmyHit();
-	void BltEmyHit();
+	void ArrEmyHit();
 
 	void SetOwner(GameScene* a_pOwner) { m_pOwner = a_pOwner; }
 private:

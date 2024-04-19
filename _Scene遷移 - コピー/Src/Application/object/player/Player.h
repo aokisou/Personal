@@ -2,7 +2,7 @@
 
 #include "../BaseObject.h"
 
-class Bullet;
+class Arrow;
 class PlayerPattern;
 
 class GameScene;
@@ -25,39 +25,38 @@ public:
 	void SetJumpState();
 	void SetRunState();
 	void SetDeathState();
+	void SetAttackState();
 
-	int GetSpaceWidthImg();
-	int GetSpaceHeightImg();
+	int GetSpaceWidthImg() { return 30; }
+	int GetSpaceHeightImg(){ return 32; }
 
 	//当たり判定用
 	void ApplyDamage() { m_bDmg = true; m_hp--; }
-	std::vector<Bullet*>* GetBullet() { return &m_bullet; }
+	std::vector<Arrow*>* GetArrow() { return &m_arrow; }
 
 	void MapHitY(float _posY, float _moveY, bool _b);
 
 	//確認用
-	int GetBulletNum() { return m_bullet.size(); }
+	int GetArrowNum() { return m_arrow.size(); }
 	int GetHP() { return m_hp; }
 
 private:
 	void Init()override;
 	//弾
 	//発射
-	void BulletShot();
+	bool ArrowShot();
 	//更新と有効判定
-	void BulletActivate(float _scrollX);
+	void ArrowActivate(float _scrollX);
 
 	void Release()override;
 
-	Math::Matrix m_shadowMat;
-
-	int m_hp;
+	float m_hp;
 
 	bool m_bJump;
 
-	std::vector<Bullet*> m_bullet;
-	bool m_bshot;
-	int m_shotinterval;
+	std::vector<Arrow*> m_arrow;
+	bool m_bShot;
+	int m_shotInterval;
 
 	bool m_bDmg;
 	int m_DmgEfcCnt;
@@ -66,4 +65,5 @@ private:
 
 	GameScene* m_pOwner;
 
+public:
 };

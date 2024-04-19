@@ -17,3 +17,8 @@ void BaseScene::Init()
 void BaseScene::Release()
 {
 }
+
+float BaseScene::GetHp()
+{
+	return 0.0f;
+}

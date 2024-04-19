@@ -15,6 +15,8 @@ public:
 	virtual int* GetMAXfps() { return m_maxFps; }
 
 	void GetOwner(Scene* _pOwner) { m_pOwner = _pOwner; }
+
+	virtual float GetHp();
 protected:
 	int* m_maxFps;
 

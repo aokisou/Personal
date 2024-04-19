@@ -2,7 +2,8 @@
 
 #include "../BaseScene.h"
 
-class BaseObject;
+class Player;
+class BaseEnemy;
 class Hit;
 class Map;
 class MapHit;
@@ -17,8 +18,10 @@ public:
 	void Draw()override;
 
 	//クラスアドレス
-	BaseObject* GetPlayer() { return m_player; }
-	BaseObject* GetEnemy() { return m_enemy; }
+	Player* GetPlayer() { return m_player; }
+	BaseEnemy* GetEnemy() { return m_enemy; }
+
+	float GetHp()override;
 private:
 	void Init()override;
 	void Release()override;
@@ -29,8 +32,8 @@ private:
 
 	std::string m_mapNme[1] = { "map/stage1.csv" };
 
-	BaseObject* m_player;
-	BaseObject* m_enemy;
+	Player* m_player;
+	BaseEnemy* m_enemy;
 
 	Hit* m_hit;
 

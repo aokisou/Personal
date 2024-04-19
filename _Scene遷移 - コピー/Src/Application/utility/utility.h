@@ -3,19 +3,6 @@
 //定義
 #define Gravity 1			//重力
 #define DefaultDir 1
-//プレイヤー
-#define PlySpeed 5			//プレイヤー速度
-#define PlyJumpPow 20		//プレイヤーのジャンプ力
-#define PlyShotInterval 6	//プレイヤーの弾を打つ感覚(Maxfps/この数値)
-#define PlyMoveRange -150	//プレイヤーの移動範囲
-#define PlyStartPosX -600	//プレイヤーの開始X座標
-#define PlyStartPosY -210	//プレイヤーの開始Y座標
-#define PlyStartHP 5		//プレイヤーの開始HP
-#define PlyMaxDmgEfcCnt 20	//赤く光る時間
-#define PlyBltCRX 30		//弾の出る位置を銃まで補正X座標
-#define PlyBltCRY 6			//弾の出る位置を銃まで補正Y座標
-
-#define BltSpeed 7			//弾の速度
 
 #define Half 2				//半分にしたいとき使う
 #define Reverse -1			//反転
@@ -30,10 +17,11 @@ enum ChangeScene
 
 enum StateType
 {
-	playerRun,
 	playerStand,
 	playerDeath,
 	playerJump,
+	playerRun,
+	playerAttack,
 	enemyStand = 0,
 	enemyRun,
 	enemyShot,
@@ -51,16 +39,16 @@ enum MapTile//IDと合わせる
 	Block5,
 	Block6,
 	Block7,
-	HalfBlock8,
-	HalfBlock9,
-	HalfBlock10,
-	HalfBlock11,
-	HalfBlock12,
-	HalfBlock13,
-	HalfBlock14,
-	Fence15,
-	Fence16,
-	Fence17,
+	Block8,
+	Block9,
+	Block10,
+	Block11,
+	Block12,
+	Block13,
+	Block14,
+	Block15,
+	Block16,
+	Block17,
 };
 
 namespace SCREEN

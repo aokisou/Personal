@@ -3,16 +3,14 @@
 class BaseObject
 {
 public:
-	BaseObject() { m_pTex = nullptr; }
+	BaseObject() {}
 	virtual ~BaseObject() {}
 
 	virtual void Init() = 0;
 	virtual void Action() = 0;
 	virtual void Update(float _scrollX) = 0;
 	virtual void Draw() = 0;
-	virtual void Release();
-
-	void SetTexture(KdTexture* a_tex) { m_pTex = a_tex; }
+	virtual void Release() = 0;
 
 	//êîíl
 	virtual Math::Vector2 GetPos() { return m_pos; }
@@ -48,7 +46,5 @@ protected:
 	int m_Scale = 0;
 
 	bool m_bAlive = false;
-
-	KdTexture* m_pTex = nullptr;
 private:
 };

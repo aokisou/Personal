@@ -1,18 +1,21 @@
 #include "PlayerPattern.h"
 #include "../../BaseObject.h"
 
-#define MaxCoolCnt 5	//1画像アニメ時間
-#define AnimeNum 4		//画像数
-
-void PlayerPattern::Init(Player* _player)
+void PlayerPattern::Init(Player* _player,std::string _filename)
 {
+	bool bLoad = false;
 	m_player = _player;
 	m_AnimeCnt = 0;
 	m_CoolCnt = 0;
+	bLoad = m_tex.Load(_filename);
+	_ASSERT_EXPR(bLoad, _filename);
 }
 
 void PlayerPattern::Update()
 {
+	const int MaxCoolCnt = 5;	//1画像アニメ時間
+	const int AnimeNum = 4;		//画像数
+
 	m_CoolCnt++;
 	if (m_CoolCnt > MaxCoolCnt)
 	{

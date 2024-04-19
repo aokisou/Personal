@@ -1,17 +1,20 @@
 #include "EnemyPattern.h"
 
-#define MaxCoolCnt 5	//1画像アニメ時間
-#define AnimeNum 4		//画像数
-
-void EnemyPattern::Init(BaseEnemy* _enemy)
+void EnemyPattern::Init(BaseEnemy* _enemy,std::string _filename)
 {
+	bool bLoad;
 	m_enemy = _enemy;
 	m_AnimeCnt = 0;
 	m_CoolCnt = 0;
+	bLoad = m_tex.Load(_filename);
+	_ASSERT_EXPR(bLoad, _filename);
 }
 
 void EnemyPattern::Update()
 {
+	const int MaxCoolCnt = 5;	//1画像アニメ時間
+	const int AnimeNum = 6;		//画像数
+
 	m_CoolCnt++;
 	if (m_CoolCnt > MaxCoolCnt)
 	{

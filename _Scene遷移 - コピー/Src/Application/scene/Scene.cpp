@@ -49,7 +49,7 @@ void Scene::Release()
 
 void Scene::ImGuiUpdate()
 {
-	return;
+	//return;
 
 	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_Once);
@@ -58,8 +58,7 @@ void Scene::ImGuiUpdate()
 	if (ImGui::Begin("Debug Window"))
 	{
 		ImGui::Text("FPS : %d", APP.m_fps);
-	/*	ImGui::Text("%d", m_player->GetBulletNum());
-		ImGui::Text("%d", m_player->GetHP());*/
+		ImGui::Text("%f", m_nowScene->GetHp());
 	}
 	ImGui::End();
 }

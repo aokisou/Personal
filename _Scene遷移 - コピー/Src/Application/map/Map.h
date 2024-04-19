@@ -9,10 +9,10 @@ public:
 	void Update(float _scrollX);
 	void Draw();
 
+	void MapSrc(int _i);
+
 	//“Ç‚İ‚İŒã‰Šú‰»(©“®Às)
 	void SetMapData(std::string a_FileNme);
-
-	void SetTexture(KdTexture* _pTex) { m_pTex = _pTex; }
 
 	int GetMaxHeight() { return m_data.size(); }
 	int GetMaxWidth() { return m_data[0].size(); }
@@ -31,5 +31,5 @@ private:
 	std::vector<std::vector<Math::Vector2>> m_pos;
 	std::vector<std::vector<Math::Matrix>> m_mat;
 
-	KdTexture* m_pTex;
+	KdTexture m_tex;
 };

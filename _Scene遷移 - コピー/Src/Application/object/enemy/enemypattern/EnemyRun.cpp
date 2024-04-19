@@ -1,10 +1,10 @@
 #include "EnemyRun.h"
 
-#define MaxCoolCnt 5	//1画像アニメ時間
-#define AnimeNum 4		//画像数
-
 void EnemyRun::Update()
 {
+	const int MaxCoolCnt = 5;	//1画像アニメ時間
+	const int AnimeNum = 4;		//画像数
+
 	m_CoolCnt++;
 	if (m_CoolCnt > MaxCoolCnt)
 	{
