@@ -1,87 +1,119 @@
 #include "Slime.h"
+#include "../../../scene/game/GameScene.h"
+#include "../../player/Player.h"
 #include "../enemypattern/EnemyPattern.h"
-#include "../enemypattern/EnemyDeath.h"
-#include "../enemypattern/EnemyRun.h"
-#include "../enemypattern/EnemyAttack.h"
+#include "../enemypattern/death/EnemyDeath.h"
+#include "../enemypattern/run/EnemyRun.h"
+#include "../enemypattern/attack/EnemyAttack.h"
 #include "../../../utility/utility.h"
+
+#define SlimeSpeed 3
 
 void Slime::Init()
 {
 	m_pos = { 0 };
-	m_move = { 0,-3 };
+	m_move = { 0 };
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
 	m_Size = ImgSize;
 	m_Scale = Scale;
-	m_hp = 5;
+	m_dir = DefaultDir;
+	m_hp = 15;
 	m_bDead = false;
 	m_bDmg = false;
 	DmgEfcCnt = 0;
+	m_moveRange = 100;
+	m_attackRange = m_moveRange * 2;
+	m_bAttack = false;
 	m_pState = new EnemyRun;
-	m_pState->Init(this, "Texture/enemy/1/S_Walk.png");
+	m_pState->Init(this, m_fileName[enemyRun]);
+
+	m_startPos = m_pos;
 }
 
 void Slime::Action()
 {
-	if (m_bDead || !m_bAlive) { return; }
-	bool bAct = false;
+	if (!m_bAlive || m_pState->GetStateType() == enemyDeath) { return; }
 
-	if (bAct)
-	{
-		if (m_pState->GetStateType() != enemyStand)
-		{
-			SetStandState();
-		}
-	}
+	m_move = { 0,m_move.y - Gravity };
+
+	Attack();
+
+	if (m_bAttack)return;
+	m_move.x = SlimeSpeed * m_dir;
+
+	if (m_pos.x > m_startPos.x + m_moveRange && m_move.x > 0) { m_dir *= Reverse; }
+	if (m_pos.x < m_startPos.x - m_moveRange && m_move.x < 0) { m_dir *= Reverse; }
 }
 
 void Slime::Update(float _scrollX)
 {
 	if (!m_bAlive) { return; }
-	if (m_bDmg)
+
+	if (m_pState->GetStateType() != enemyDeath)
 	{
-		DmgEfcCnt++;
-		if (DmgEfcCnt > EmyMaxDmgEfcCnt)
+		if (m_bDmg)
 		{
-			m_bDmg = false;
-			DmgEfcCnt = 0;
-			if (m_hp <= 0)
+			DmgEfcCnt++;
+			if (DmgEfcCnt > EmyMaxDmgEfcCnt)
 			{
-				m_bDead = true;
-				SetDeathState();
+				m_bDmg = false;
+				DmgEfcCnt = 0;
+				if (m_hp <= 0)
+				{
+					m_hp = 0.f;
+					SetDeathState();
+				}
 			}
 		}
+
+		m_pos += m_move;
 	}
 
 	m_pState->Update();
-
-	if (m_pos.y < -SCREEN::height / Half)m_pos.y = 0;
-
-	m_pos += m_move;
-	m_mat = Math::Matrix::CreateScale(m_Scale, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
+	
+	m_mat = Math::Matrix::CreateScale(m_Scale * m_dir, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
+	return;
 }
 
-void Slime::Draw()
+void Slime::Attack()
 {
-	if (!m_bAlive) { return; }
-	Math::Color col = { 1,1,1,1 };
-	if (m_bDmg)col = { 1,0,0,1 };
-	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex(m_pState->GetTex(), 0, 0, &Math::Rectangle(m_pState->GetAnimeCnt() * m_Size, m_pState->GetStateType() * m_Size, m_Size, m_Size), &col);
+	Player* ply = m_pOwner->GetPlayer();
+
+	const float plyTop		= ply->GetPos().y + ply->GetHalfSize() - ply->GetSpaceHeightImg();
+	const float plyBottom	= ply->GetPos().y - ply->GetHalfSize() + ply->GetSpaceHeightImg();
+
+	const float emyTop		= GetPos().y + GetHalfSize();
+	const float emyBottom	= GetPos().y - GetHalfSize() + GetSpaceHeightImg();
+
+	if (plyTop > emyBottom && plyTop < emyTop)
+	{
+		if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_attackRange)
+		{
+			float a = GetAngleDeg(GetPos(), ply->GetPos());
+			m_move = { cos(DirectX::XMConvertToRadians(a)) * SlimeSpeed,sin(DirectX::XMConvertToRadians(a)) };
+			if (m_move.x > 0) { m_dir = DefaultDir; }
+			else { m_dir = DefaultDir * Reverse; }
+			m_bAttack = true;
+			return;
+		}
+	}
+	m_bAttack = false;
+	return;
 }
 
 void Slime::SetRunState()
 {
 	delete m_pState;
 	m_pState = new EnemyRun;
-	m_pState->Init(this,"Texture/enemy/1/S_Walk.png");
+	m_pState->Init(this,m_fileName[enemyRun]);
 }
 
 void Slime::SetDeathState()
 {
 	delete m_pState;
 	m_pState = new EnemyDeath;
-	m_pState->Init(this,"Texture/enemy/1/S_Death.png");
+	m_pState->Init(this,m_fileName[enemyDeath]);
 }
 
 void Slime::Release()

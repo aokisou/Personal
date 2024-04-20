@@ -93,7 +93,7 @@ void GameScene::Init()
 	m_minScrollX = m_map->GetPos(0, 0).x + SCREEN::width / Half;
 	m_maxScrollX = m_map->GetPos(0,(m_map->GetMaxWidth() - 1)).x - SCREEN::width / Half;
 
-	((Player*)m_player)->SetOwner(this);
+	m_enemy->SetOwner(this);
 	m_hit->SetOwner(this);
 }
 

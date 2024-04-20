@@ -85,6 +85,36 @@
     <Filter Include="Src\Application\object\enemy\slime">
       <UniqueIdentifier>{02ac390e-0813-4c15-96b2-9d99c53baa88}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\object\player\playerpattern\attack">
+      <UniqueIdentifier>{d87be608-4bf8-4e4f-a6a7-7df950bd637c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\object\player\playerpattern\run">
+      <UniqueIdentifier>{d025907d-d5ce-4ec6-9e2d-596b93a928e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\object\player\playerpattern\jump">
+      <UniqueIdentifier>{2800f65d-3e2a-4a55-b08c-7b191fd11197}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\object\player\playerpattern\death">
+      <UniqueIdentifier>{b3e48b95-cc66-4f90-a500-1bfed3c977ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\object\player\playerpattern\stand">
+      <UniqueIdentifier>{5b13e488-a19a-41b3-8b36-9cfa451a83a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\object\player\playerpattern\gethit">
+      <UniqueIdentifier>{8c50c60c-ef08-4714-aa1a-bd87b17fdbdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\object\player\playerpattern\fall">
+      <UniqueIdentifier>{05a02d77-c18f-4cf8-a574-4ec77507d1fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\object\enemy\enemypattern\run">
+      <UniqueIdentifier>{b288df41-22ed-4f5a-8d5a-3fc2e4c611e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\object\enemy\enemypattern\death">
+      <UniqueIdentifier>{91a162b2-3fa2-4f9c-8e70-b89b355edde0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\object\enemy\enemypattern\attack">
+      <UniqueIdentifier>{d2c7f051-354a-4e60-a140-be1c676af69d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -210,26 +240,11 @@
     <ClInclude Include="Src\Application\scene\Scene.h">
       <Filter>Src\Application\scene</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\object\player\playerpattern\PlayerDeath.h">
-      <Filter>Src\Application\object\player\playerpattern</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\object\player\playerpattern\PlayerJump.h">
-      <Filter>Src\Application\object\player\playerpattern</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\object\player\playerpattern\PlayerPattern.h">
       <Filter>Src\Application\object\player\playerpattern</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\object\enemy\enemypattern\EnemyDeath.h">
-      <Filter>Src\Application\object\enemy\enemypattern</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\object\enemy\enemypattern\EnemyPattern.h">
       <Filter>Src\Application\object\enemy\enemypattern</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\object\enemy\enemypattern\EnemyRun.h">
-      <Filter>Src\Application\object\enemy\enemypattern</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Application\object\player\playerpattern\PlayerRun.h">
-      <Filter>Src\Application\object\player\playerpattern</Filter>
     </ClInclude>
     <ClInclude Include="Src\Application\hit\MapHit.h">
       <Filter>Src\Application\hit</Filter>
@@ -237,14 +252,38 @@
     <ClInclude Include="Src\Application\object\arrow\Arrow.h">
       <Filter>Src\Application\object\arrow</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\object\player\playerpattern\PlayerAttack.h">
-      <Filter>Src\Application\object\player\playerpattern</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Application\object\enemy\slime\Slime.h">
       <Filter>Src\Application\object\enemy\slime</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\object\enemy\enemypattern\EnemyAttack.h">
-      <Filter>Src\Application\object\enemy\enemypattern</Filter>
+    <ClInclude Include="Src\Application\object\player\playerpattern\attack\PlayerAttack.h">
+      <Filter>Src\Application\object\player\playerpattern\attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\player\playerpattern\death\PlayerDeath.h">
+      <Filter>Src\Application\object\player\playerpattern\death</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\player\playerpattern\jump\PlayerJump.h">
+      <Filter>Src\Application\object\player\playerpattern\jump</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\player\playerpattern\run\PlayerRun.h">
+      <Filter>Src\Application\object\player\playerpattern\run</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\player\playerpattern\gethit\PlayerGetHit.h">
+      <Filter>Src\Application\object\player\playerpattern\gethit</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\player\playerpattern\stand\PlayerStand.h">
+      <Filter>Src\Application\object\player\playerpattern\stand</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\player\playerpattern\fall\PlayerFall.h">
+      <Filter>Src\Application\object\player\playerpattern\fall</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\enemy\enemypattern\death\EnemyDeath.h">
+      <Filter>Src\Application\object\enemy\enemypattern\death</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\enemy\enemypattern\run\EnemyRun.h">
+      <Filter>Src\Application\object\enemy\enemypattern\run</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\object\enemy\enemypattern\attack\EnemyAttack.h">
+      <Filter>Src\Application\object\enemy\enemypattern\attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -338,22 +377,10 @@
     <ClCompile Include="Src\Application\scene\Scene.cpp">
       <Filter>Src\Application\scene</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\object\player\playerpattern\PlayerDeath.cpp">
-      <Filter>Src\Application\object\player\playerpattern</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\object\player\playerpattern\PlayerJump.cpp">
-      <Filter>Src\Application\object\player\playerpattern</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\object\player\playerpattern\PlayerPattern.cpp">
       <Filter>Src\Application\object\player\playerpattern</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\object\enemy\enemypattern\EnemyDeath.cpp">
-      <Filter>Src\Application\object\enemy\enemypattern</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\object\enemy\enemypattern\EnemyPattern.cpp">
-      <Filter>Src\Application\object\enemy\enemypattern</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Application\object\enemy\enemypattern\EnemyRun.cpp">
       <Filter>Src\Application\object\enemy\enemypattern</Filter>
     </ClCompile>
     <ClCompile Include="Src\Application\hit\MapHit.cpp">
@@ -362,17 +389,38 @@
     <ClCompile Include="Src\Application\object\arrow\Arrow.cpp">
       <Filter>Src\Application\object\arrow</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\object\player\playerpattern\PlayerAttack.cpp">
-      <Filter>Src\Application\object\player\playerpattern</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Application\object\enemy\slime\Slime.cpp">
       <Filter>Src\Application\object\enemy\slime</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\object\enemy\enemypattern\EnemyAttack.cpp">
-      <Filter>Src\Application\object\enemy\enemypattern</Filter>
+    <ClCompile Include="Src\Application\object\player\playerpattern\attack\PlayerAttack.cpp">
+      <Filter>Src\Application\object\player\playerpattern\attack</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\object\player\playerpattern\PlayerRun.cpp">
-      <Filter>Src\Application\object\player\playerpattern</Filter>
+    <ClCompile Include="Src\Application\object\player\playerpattern\death\PlayerDeath.cpp">
+      <Filter>Src\Application\object\player\playerpattern\death</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\player\playerpattern\jump\PlayerJump.cpp">
+      <Filter>Src\Application\object\player\playerpattern\jump</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\player\playerpattern\run\PlayerRun.cpp">
+      <Filter>Src\Application\object\player\playerpattern\run</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\player\playerpattern\gethit\PlayerGetHit.cpp">
+      <Filter>Src\Application\object\player\playerpattern\gethit</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\player\playerpattern\stand\PlayerStand.cpp">
+      <Filter>Src\Application\object\player\playerpattern\stand</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\player\playerpattern\fall\PlayerFall.cpp">
+      <Filter>Src\Application\object\player\playerpattern\fall</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\enemy\enemypattern\death\EnemyDeath.cpp">
+      <Filter>Src\Application\object\enemy\enemypattern\death</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\enemy\enemypattern\run\EnemyRun.cpp">
+      <Filter>Src\Application\object\enemy\enemypattern\run</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\object\enemy\enemypattern\attack\EnemyAttack.cpp">
+      <Filter>Src\Application\object\enemy\enemypattern\attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

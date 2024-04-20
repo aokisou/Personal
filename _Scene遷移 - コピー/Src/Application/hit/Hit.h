@@ -13,7 +13,7 @@ public:
 	void PlyEmyHit();
 	void ArrEmyHit();
 
-	void SetOwner(GameScene* a_pOwner) { m_pOwner = a_pOwner; }
+	void SetOwner(GameScene* _pOwner) { m_pOwner = _pOwner; }
 private:
 	GameScene* m_pOwner;
 };

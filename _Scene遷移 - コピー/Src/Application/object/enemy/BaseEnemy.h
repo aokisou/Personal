@@ -3,6 +3,7 @@
 #include "../BaseObject.h"
 
 class EnemyPattern;
+class GameScene;
 
 class BaseEnemy :public BaseObject
 {
@@ -13,8 +14,12 @@ public:
 	virtual void Init()override = 0;
 	virtual void Action()override = 0;
 	virtual void Update(float _scrollX)override = 0;
-	virtual void Draw()override = 0;
+	virtual void Draw()override;
 	virtual void Release()override = 0 {}
+
+	virtual void Attack() = 0{}
+
+	virtual void SetOwner(GameScene* _pOwner)final { m_pOwner = _pOwner; }
 
 	virtual void SetStandState(){}
 	virtual void SetRunState(){}
@@ -28,14 +33,22 @@ public:
 
 	bool GetbDead() { return m_bDead; }
 
+	virtual float GetAngleDeg(Math::Vector2 src, Math::Vector2 dest)final;
+
 	virtual float GetHP() { return m_hp; }
 protected:
+	Math::Vector2 m_startPos = {};
 
-	float m_hp;
-	bool m_bDead;
+	int m_moveRange = 0;
+	int m_attackRange = 0;
 
-	bool m_bDmg;
-	int DmgEfcCnt;
+	float m_hp = 0;
+	bool m_bDead = false;
 
-	EnemyPattern* m_pState;
+	bool m_bDmg = false;
+	int DmgEfcCnt = 0;
+
+	EnemyPattern* m_pState = nullptr;
+
+	GameScene* m_pOwner = nullptr;
 };

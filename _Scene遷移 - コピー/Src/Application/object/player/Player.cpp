@@ -1,11 +1,13 @@
 #include "player.h"
 #include "../../scene/game/GameScene.h"
 #include "../arrow/Arrow.h"
-#include "playerpattern/PlayerPattern.h"
-#include "playerpattern/PlayerRun.h"
-#include "playerpattern/PlayerDeath.h"
-#include "playerpattern/PlayerJump.h"
-#include "playerpattern/PlayerAttack.h"
+#include "playerpattern/run/PlayerRun.h"
+#include "playerpattern/death/PlayerDeath.h"
+#include "playerpattern/jump/PlayerJump.h"
+#include "playerpattern/attack/PlayerAttack.h"
+#include "playerpattern/gethit/PlayerGetHit.h"
+#include "playerpattern/stand/PlayerStand.h"
+#include "playerpattern/fall/PlayerFall.h"
 #include "../../utility/utility.h"
 
 //プレイヤー
@@ -33,11 +35,9 @@ void Player::Init()
 	m_Scale = Scale;
 	m_hp = PlyStartHP;
 	m_bJump = false;
-	m_bShot = false;
-	m_shotInterval = 0;
 	m_bDmg = false;
 	m_DmgEfcCnt = 0;
-	m_pState = new PlayerPattern;
+	m_pState = new PlayerStand;
 	m_pState->Init(this, "Texture/player/Idle.png");
 }
 
@@ -45,11 +45,10 @@ void Player::Action()
 {
 	if (!m_bAlive) { return; }
 	bool bAct = false;
+	const float a = -3.f;//この値まで行ったらFall状態にする
 
-	m_move = { 0,m_move.y - Gravity };
+	m_move = { 0,m_move.y - Gravity };//リセットと重力をかける
 
-	//ジャンプしてたらスタンドにならないように
-	bAct = m_bJump;
 	bAct = ArrowShot();
 
 	if (m_pState->GetStateType() != playerAttack)//攻撃時は移動できない
@@ -74,16 +73,29 @@ void Player::Action()
 			}
 			bAct = true;
 		}
-		if (GetAsyncKeyState(VK_UP) & 0x8000)
+	}
+
+	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	{
+		if (!m_bJump)
 		{
-			if (!m_bJump)
+			m_move.y += PlyJumpPow;
+			if (m_pState->GetStateType() != playerAttack)
 			{
-				m_move.y += PlyJumpPow;
 				SetJumpState();
-				m_bJump = true;
-				bAct = true;
 			}
+			m_bJump = true;
+			bAct = true;
 		}
+	}
+
+	if (m_bJump && m_move.y < a)
+	{
+		if (m_pState->GetStateType() < playerAttack)
+		{
+			SetFallState();
+		}
+		bAct = true;
 	}
 
 	for (Arrow* i : m_arrow)
@@ -113,6 +125,7 @@ void Player::Update(float _scrollX)
 			m_DmgEfcCnt = 0;
 			if (m_hp <= 0) 
 			{ 
+				m_hp = 0;
 				m_bDmg = false;
 				SetDeathState();
 			}
@@ -147,42 +160,56 @@ void Player::Draw()
 
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(m_pState->GetTex(), 0, 0,
-		&Math::Rectangle(m_Size * m_pState->GetAnimeCnt(), 0, m_Size, m_Size), &col);
+		&Math::Rectangle(m_Size * m_pState->GetAnimeNum(), 0, m_Size, m_Size), &col);
 }
 
 void Player::SetStandState()
 {
 	delete m_pState;
-	m_pState = new PlayerPattern;
-	m_pState->Init(this, "Texture/player/Idle.png");
+	m_pState = new PlayerStand;
+	m_pState->Init(this,m_fileName[playerStand]);
 }
 
 void Player::SetJumpState()
 {
 	delete m_pState;
 	m_pState = new PlayerJump;
-	m_pState->Init(this, "Texture/player/Jump.png");
+	m_pState->Init(this, m_fileName[playerJump]);
 }
 
 void Player::SetRunState()
 {
 	delete m_pState;
 	m_pState = new PlayerRun;
-	m_pState->Init(this, "Texture/player/Run.png");
+	m_pState->Init(this, m_fileName[playerRun]);
 }
 
 void Player::SetDeathState()
 {
 	delete m_pState;
 	m_pState = new PlayerDeath;
-	m_pState->Init(this, "Texture/player/Death.png");
+	m_pState->Init(this, m_fileName[playerDeath]);
 }
 
 void Player::SetAttackState()
 {
 	delete m_pState;
 	m_pState = new PlayerAttack;
-	m_pState->Init(this, "Texture/player/Attack.png");
+	m_pState->Init(this, m_fileName[playerAttack]);
+}
+
+void Player::SetFallState()
+{
+	delete m_pState;
+	m_pState = new PlayerFall;
+	m_pState->Init(this, m_fileName[playerFall]);
+}
+
+void Player::SetGetHitState()
+{
+	delete m_pState;
+	m_pState = new PlayerGetHit;
+	m_pState->Init(this, m_fileName[playerGetHit]);
 }
 
 void Player::MapHitY(float _posY, float _moveY, bool _b)
@@ -201,13 +228,12 @@ bool Player::ArrowShot()
 	{
 		const int c = 4;//矢を打つアニメーションのタイミング
 
-		if (!m_bShot)
+		if (m_pState->GetStateType() != playerAttack)
 		{
 			SetAttackState();
 		}
-		m_bShot = true;
 		a = true;
-		if (m_pState->GetAnimeCnt() == c && !b)
+		if (m_pState->GetAnimeNum() == c && !b)
 		{
 			Arrow* tmpArrow = new Arrow;
 
@@ -220,9 +246,10 @@ bool Player::ArrowShot()
 	}
 	else
 	{
-		m_bShot = false;
 		b = false;
 	}
+
+	if (m_pState->GetAnimeNum() == 5) { a = false; }
 
 	return a;
 }

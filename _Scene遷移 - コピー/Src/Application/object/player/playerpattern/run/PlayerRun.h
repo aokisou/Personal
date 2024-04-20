@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PlayerPattern.h"
+#include "../PlayerPattern.h"
 
 class Player;
 

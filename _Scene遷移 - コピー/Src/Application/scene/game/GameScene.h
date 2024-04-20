@@ -22,6 +22,7 @@ public:
 	BaseEnemy* GetEnemy() { return m_enemy; }
 
 	float GetHp()override;
+
 private:
 	void Init()override;
 	void Release()override;

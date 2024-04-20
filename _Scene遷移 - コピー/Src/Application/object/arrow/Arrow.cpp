@@ -1,7 +1,7 @@
 #include "Arrow.h"
 #include "../../utility/utility.h"
 
-#define ArrowSpeed 10			//’e‚Ì‘¬“x
+#define ArrowSpeed 16			//’e‚Ì‘¬“x
 #define ArrowSize 24			//’e‰æ‘œƒTƒCƒY
 #define ArrowScale 1			//’eŠg‘å—¦
 #define ArrowAccelelation 0.99	//Œ¸‘¬—¦
@@ -15,7 +15,7 @@ void Arrow::Init()
 	m_bAlive = true;
 	m_Size = ArrowSize;
 	m_Scale = ArrowScale;
-	m_accelerlation = 1.0f;
+	m_accelerlation = 1.f;
 	m_angle = 0;
 	m_tex.Load("Texture/Arrow/Move.png");
 }
@@ -23,12 +23,13 @@ void Arrow::Init()
 void Arrow::Action()
 {
 	if (!m_bAlive) { return; }
+
 	m_move.x = ArrowSpeed * m_accelerlation * m_dir;
 
 	m_accelerlation *= ArrowAccelelation;
 	if (m_accelerlation < ArrowDown)
 	{
-		m_move.y = -cos(m_accelerlation);
+		m_move.y = -cos(m_accelerlation) * 1.5f;
 		m_angle-= .01f;
 		if (m_angle < -1.f)
 		{

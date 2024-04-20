@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EnemyPattern.h"
+#include "../EnemyPattern.h"
 
 class EnemyDeath :public EnemyPattern
 {

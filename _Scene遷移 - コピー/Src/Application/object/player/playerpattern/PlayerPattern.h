@@ -16,7 +16,7 @@ public:
 
 	virtual void Release() { m_player = nullptr; }
 
-	virtual int GetAnimeCnt()final { return m_AnimeCnt; }
+	virtual int GetAnimeNum()final { return m_animeNum; }
 	virtual int GetStateType() { return playerStand; }
 
 	KdTexture* GetTex() { return &m_tex; }
@@ -24,8 +24,8 @@ public:
 protected:
 	Player* m_player = nullptr;
 
-	int m_AnimeCnt = 0;
-	int m_CoolCnt = 0;
+	int m_animeNum = 0;
+	int m_coolCnt = 0;
 
 	KdTexture m_tex;
 };

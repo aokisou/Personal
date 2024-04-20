@@ -1,11 +1,11 @@
 #pragma once
 
 //定義
-#define Gravity 1			//重力
-#define DefaultDir 1
+#define Gravity 1		//重力
+#define DefaultDir 1	//通常の向き
 
-#define Half 2				//半分にしたいとき使う
-#define Reverse -1			//反転
+#define Half 2			//半分にしたいとき使う
+#define Reverse -1		//反転
 
 enum ChangeScene
 {
@@ -21,11 +21,12 @@ enum StateType
 	playerDeath,
 	playerJump,
 	playerRun,
+	playerGetHit,
 	playerAttack,
-	enemyStand = 0,
-	enemyRun,
-	enemyShot,
-	enemyDeath
+	playerFall,
+	enemyRun = 0,
+	enemyDeath,
+	enemyAttack,
 };
 
 enum MapTile//IDと合わせる

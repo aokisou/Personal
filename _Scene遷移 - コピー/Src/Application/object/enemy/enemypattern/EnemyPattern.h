@@ -16,16 +16,16 @@ public:
 
 	void Release() { m_enemy = nullptr; }
 
-	virtual int GetAnimeCnt() { return m_AnimeCnt; }
-	virtual int GetStateType() { return enemyStand; }
+	virtual int GetAnimeCnt() { return m_animeNum; }
+	virtual int GetStateType() = 0{}
 
 	KdTexture* GetTex() { return &m_tex; }
 
 protected:
 	BaseEnemy* m_enemy;
 
-	int m_AnimeCnt;
-	int m_CoolCnt;
+	int m_animeNum;
+	int m_coolCnt;
 
 	KdTexture m_tex;
 };

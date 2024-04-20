@@ -67,19 +67,19 @@ void Scene::ChangeTitle()
 {
 	delete m_nowScene;
 	m_nowScene = new TitleScene(&APP.m_maxFps);
-	m_nowScene->GetOwner(this);
+	m_nowScene->SetOwner(this);
 }
 
 void Scene::ChangeGame()
 {
 	delete m_nowScene;
 	m_nowScene = new GameScene(&APP.m_maxFps);
-	m_nowScene->GetOwner(this);
+	m_nowScene->SetOwner(this);
 }
 
 void Scene::ChangeResult()
 {
 	delete m_nowScene;
 	m_nowScene = new ResultScene(&APP.m_maxFps);
-	m_nowScene->GetOwner(this);
+	m_nowScene->SetOwner(this);
 }

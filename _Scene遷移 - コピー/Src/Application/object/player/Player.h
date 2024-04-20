@@ -5,8 +5,6 @@
 class Arrow;
 class PlayerPattern;
 
-class GameScene;
-
 class Player:public BaseObject
 {
 public:
@@ -17,8 +15,6 @@ public:
 	void Update(float _scrollX)override;
 	void Draw()override;
 
-	void SetOwner(GameScene* a_pOwner) { m_pOwner = a_pOwner; }
-
 	bool GetbDmg() { return m_bDmg; }
 
 	void SetStandState();
@@ -26,6 +22,8 @@ public:
 	void SetRunState();
 	void SetDeathState();
 	void SetAttackState();
+	void SetFallState();
+	void SetGetHitState();
 
 	int GetSpaceWidthImg() { return 30; }
 	int GetSpaceHeightImg(){ return 32; }
@@ -55,15 +53,13 @@ private:
 	bool m_bJump;
 
 	std::vector<Arrow*> m_arrow;
-	bool m_bShot;
-	int m_shotInterval;
 
 	bool m_bDmg;
 	int m_DmgEfcCnt;
 
 	PlayerPattern* m_pState;
 
-	GameScene* m_pOwner;
-
+	const std::string m_fileName[7] = {  "Texture/player/Idle.png","Texture/player/Death.png","Texture/player/Jump.png","Texture/player/Run.png",
+										 "Texture/player/GetHit.png","Texture/player/Attack.png","Texture/player/Fall.png" };
 public:
 };
