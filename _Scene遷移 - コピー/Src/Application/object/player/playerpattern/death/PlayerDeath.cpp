@@ -14,7 +14,7 @@ void PlayerDeath::Update()
 		if (m_animeNum >= AnimeNum)
 		{
 			m_animeNum = 0;
-			m_player->DisableAlive();
+			m_player->SetFalseAlive();
 		}
 	}
 }

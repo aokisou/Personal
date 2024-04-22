@@ -8,10 +8,10 @@ class Player;
 class PlayerPattern
 {
 public:
-	PlayerPattern() { }
+	PlayerPattern() { m_player = nullptr; }
 	virtual ~PlayerPattern() { Release(); }
 
-	virtual void Init(Player* a_player,std::string _filename)final;
+	virtual void Init(Player* a_player,std::string _file)final;
 	virtual void Update();
 
 	virtual void Release() { m_player = nullptr; }

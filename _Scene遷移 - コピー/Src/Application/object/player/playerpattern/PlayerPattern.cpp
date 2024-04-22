@@ -1,14 +1,14 @@
 #include "PlayerPattern.h"
 #include "../../BaseObject.h"
 
-void PlayerPattern::Init(Player* _player,std::string _filename)
+void PlayerPattern::Init(Player* _player,std::string _file)
 {
 	bool bLoad = false;
 	m_player = _player;
 	m_animeNum = 0;
 	m_coolCnt = 0;
-	bLoad = m_tex.Load(_filename);
-	_ASSERT_EXPR(bLoad, _filename);
+	bLoad = m_tex.Load(_file);
+	_ASSERT_EXPR(bLoad, "プレイヤーパターン画像読み取りエラー");
 }
 
 void PlayerPattern::Update()

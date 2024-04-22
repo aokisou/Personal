@@ -6,12 +6,12 @@ class Hit
 {
 public:
 	Hit(){ m_pOwner = nullptr; }
-	~Hit(){}
+	~Hit(){ m_pOwner = nullptr; }
 
 	void PlyEmyHit();
 	void ArrEmyHit();
 
 	void SetOwner(GameScene* _pOwner) { m_pOwner = _pOwner; }
 private:
-	GameScene* m_pOwner;
+	GameScene* m_pOwner = nullptr;
 };

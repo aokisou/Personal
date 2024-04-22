@@ -13,7 +13,7 @@ void EnemyDeath::Update()
 		if (m_animeNum >= AnimeNum)
 		{
 			m_animeNum = 0;
-			m_enemy->DisableAlive();
+			m_enemy->SetFalseAlive();
 		}
 	}
 }

@@ -107,14 +107,14 @@ void Slime::SetRunState()
 {
 	delete m_pState;
 	m_pState = new EnemyRun;
-	m_pState->Init(this,m_fileName[enemyRun]);
+	m_pState->Init(this, m_fileName[enemyRun]);
 }
 
 void Slime::SetDeathState()
 {
 	delete m_pState;
 	m_pState = new EnemyDeath;
-	m_pState->Init(this,m_fileName[enemyDeath]);
+	m_pState->Init(this, m_fileName[enemyDeath]);
 }
 
 void Slime::Release()

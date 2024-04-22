@@ -21,6 +21,10 @@ void ResultScene::Draw()
 {
 }
 
+void ResultScene::DynamicDraw2D()
+{
+}
+
 void ResultScene::Init()
 {
 }

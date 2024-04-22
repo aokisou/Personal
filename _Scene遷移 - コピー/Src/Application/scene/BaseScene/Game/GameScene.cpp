@@ -7,18 +7,26 @@
 #include<vector>
 #include "../../../Utility/utility.h"
 
-#define backSize 2.3f
+#define BackSize 2.3f
 
 int GameScene::Update()
 {
 	m_player->Action();
-	m_enemy->Action();
+
+	for (auto& i : m_enemy)
+	{
+		i->Action();
+	}
 
 	m_hit->ArrEmyHit();	//弾の当たり判定からする
 	m_hit->PlyEmyHit();
 
 	m_mapHit->MapObjHit(m_map, m_player);
-	m_mapHit->MapObjHit(m_map, m_enemy);
+	for (auto& i : m_enemy)
+	{
+		m_mapHit->MapObjHit(m_map, i);
+	}
+
 	std::vector<Arrow*>* b = m_player->GetArrow();
 	if (b->size() > 0)
 	{
@@ -31,11 +39,11 @@ int GameScene::Update()
 	}
 
 	m_player->Update(m_scrollX);
-	if (!m_player->GetbAlive())
+
+	for (auto& i : m_enemy)
 	{
-		return ChangeScene::result;
+		i->Update(m_scrollX);
 	}
-	m_enemy->Update(m_scrollX);
 	m_map->Update(m_scrollX);
 
 	m_scrollX = m_player->GetPos().x;
@@ -59,7 +67,7 @@ int GameScene::Update()
 
 	UpdateBack();
 
-	if (m_player->GetbAlive())
+	if (m_player->GetAlive())
 	{
 		return ChangeScene::no;
 	}
@@ -71,9 +79,23 @@ int GameScene::Update()
 
 void GameScene::Draw()
 {
-	DrawBack();
+	for (int i = 0; i < backNum; i++)
+	{
+		Math::Rectangle src = { 0,0,576,324 };
+		SHADER.m_spriteShader.SetMatrix(m_backMat[i]);
+		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src);
+		SHADER.m_spriteShader.SetMatrix(m_2ndBackMat[i]);
+		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src);
+	}
+}
+
+void GameScene::DynamicDraw2D()
+{
 	m_map->Draw();
-	m_enemy->Draw();
+	for (auto& i : m_enemy)
+	{
+		i->Draw();
+	}
 	m_player->Draw();
 }
 
@@ -81,30 +103,30 @@ void GameScene::UpdateBack()
 {
 	for (int i = 0; i < backNum; i++)
 	{
-		m_backPos[i].x = m_scrollX * (float)i / backNum;
-		m_nextBackPos[i].x = m_backPos[i].x - (576 * backSize);
-		m_backMat[i] = Math::Matrix::CreateScale(backSize, backSize, 1) * Math::Matrix::CreateTranslation(m_backPos[i].x, m_backPos[i].y, 0);
-		m_nextBackMat[i] = Math::Matrix::CreateScale(backSize, backSize, 1) * Math::Matrix::CreateTranslation(m_nextBackPos[i].x, m_nextBackPos[i].y, 0);
-	}
-}
-
-void GameScene::DrawBack()
-{
-	for (int i = 0; i < backNum; i++)
-	{
-		SHADER.m_spriteShader.SetMatrix(m_backMat[i]);
-		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &Math::Rectangle(0, 0, 576, 324));
-	}
-	for (int i = 0; i < backNum; i++)
-	{
-		SHADER.m_spriteShader.SetMatrix(m_nextBackMat[i]);
-		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &Math::Rectangle(0, 0, 576, 324));
+		//m_backPos[i].x = -(m_scrollX * (float)i / backNum);
+		//if (m_backPos[i].x - 288 * BackSize < -576 * BackSize)
+		//{
+		//	while (m_backPos[i].x + 288 * BackSize < SCREEN::width + 288 * BackSize)
+		//	{
+		//		m_backPos[i].x += 576 * BackSize;
+		//	}
+		//}
+		//m_2ndBackPos[i].x = -(m_scrollX * (float)i / backNum) + (576 * BackSize);
+		//if (m_2ndBackPos[i].x - 288 * BackSize < -576 * BackSize)
+		//{
+		//	while (m_2ndBackPos[i].x + 288 * BackSize < m_backPos[i].x - 288 * BackSize)
+		//	{
+		//		m_2ndBackPos[i].x += 576 * BackSize;
+		//	}
+		//}
+		m_backMat[i] = Math::Matrix::CreateScale(BackSize, BackSize, 1) * Math::Matrix::CreateTranslation(m_backPos[i].x, m_backPos[i].y, 0);
+		m_2ndBackMat[i] = Math::Matrix::CreateScale(BackSize, BackSize, 1) * Math::Matrix::CreateTranslation(m_2ndBackPos[i].x, m_2ndBackPos[i].y, 0);
 	}
 }
 
 float GameScene::GetHp()
 {
-	return m_enemy->GetHP();
+	return m_enemy[0]->GetHP();
 }
 
 void GameScene::Init()
@@ -112,7 +134,7 @@ void GameScene::Init()
 	bool bLoad = false;
 
 	m_player = new Player;
-	m_enemy = new Slime;
+	CreateSlime();
 	m_hit = new Hit;
 	m_map = new Map;
 	m_mapHit = new MapHit;
@@ -124,21 +146,41 @@ void GameScene::Init()
 	for (int i = 0; i < backNum; i++)
 	{
 		m_backPos[i] = {};
-		m_nextBackPos[i] = {};
+		m_2ndBackPos[i] = {};
 		m_backMat[i] = Math::Matrix::Identity;
-		m_nextBackMat[i] = Math::Matrix::Identity;
+		m_2ndBackMat[i] = Math::Matrix::Identity;
 		bLoad = m_backTex[i].Load(m_backName[i]);
 		_ASSERT_EXPR(bLoad, "ファイル読み取りエラー");
 	}
 
-	m_enemy->SetOwner(this);
 	m_hit->SetOwner(this);
 }
 
 void GameScene::Release()
 {
 	delete m_player;
-	delete m_enemy;
+	std::vector<BaseEnemy*>::iterator it = m_enemy.begin();
+	while (it != m_enemy.end())
+	{
+		delete *it;
+		it = m_enemy.erase(it);
+	}
 	delete m_hit;
 	delete m_map;
+	delete m_mapHit;
+}
+
+void GameScene::CreateSlime()
+{
+	Slime* s = new Slime;
+	s->SetOwner(this);
+	m_enemy.push_back(s);
+}
+
+void GameScene::CreateWolf()
+{
+}
+
+void GameScene::CreateOrc()
+{
 }

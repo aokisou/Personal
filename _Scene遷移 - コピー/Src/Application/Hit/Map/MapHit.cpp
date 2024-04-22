@@ -31,7 +31,7 @@ void MapHit::MapObjHit(Map* m_map, BaseObject* _obj)
 			{
 				if (objNextBottom < mapTop && objNextTop > mapTop)//未来座標当たり判定(上)
 				{
-					if (_obj->GetContent()) { _obj->DisableAlive(); }
+					if (_obj->GetContent()) { _obj->SetFalseAlive(); }
 					_obj->MapHitY(mapTop + _obj->GetHalfSize() - _obj->GetSpaceHeightImg(), 0.f, false);
 				}
 				else if (objNextTop > mapBottom && objNextBottom < mapBottom)//未来座標当たり判定(下)
@@ -43,12 +43,12 @@ void MapHit::MapObjHit(Map* m_map, BaseObject* _obj)
 			{
 				if (objNextLeft < mapRight && objNextRight > mapRight)//未来座標当たり判定(右)
 				{
-					if (_obj->GetContent()) { _obj->DisableAlive(); }
+					if (_obj->GetContent()) { _obj->SetFalseAlive(); }
 					_obj->MapHitX(mapRight + _obj->GetHalfSize() - _obj->GetSpaceWidthImg(), 0.f);
 				}
 				else if (objNextRight > mapLeft && objNextLeft < mapLeft)//未来座標当たり判定(左)
 				{
-					if (_obj->GetContent()) { _obj->DisableAlive(); }
+					if (_obj->GetContent()) { _obj->SetFalseAlive(); }
 					_obj->MapHitX(mapLeft - _obj->GetHalfSize() + _obj->GetSpaceWidthImg(), 0.f);
 				}
 			}

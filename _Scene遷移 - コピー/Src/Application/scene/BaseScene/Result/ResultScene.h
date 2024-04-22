@@ -10,6 +10,7 @@ public:
 
 	int Update()override;
 	void Draw()override;
+	void DynamicDraw2D()override;
 
 private:
 	void Init()override;

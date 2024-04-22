@@ -1,13 +1,13 @@
 #include "EnemyPattern.h"
 
-void EnemyPattern::Init(BaseEnemy* _enemy,std::string _filename)
+void EnemyPattern::Init(BaseEnemy* _enemy, std::string _file)
 {
 	bool bLoad;
 	m_enemy = _enemy;
 	m_animeNum = 0;
 	m_coolCnt = 0;
-	bLoad = m_tex.Load(_filename);
-	_ASSERT_EXPR(bLoad, _filename);
+	bLoad = m_tex.Load(_file);
+	_ASSERT_EXPR(bLoad, "エネミーパターン画像読み取りエラー");
 }
 
 void EnemyPattern::Update()

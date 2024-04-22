@@ -29,9 +29,9 @@ public:
 	virtual int GetSpaceWidthImg() { return 40; }
 	virtual int GetSpaceHeightImg() { return 20; }
 
-	void ApplyDamage(float _dmg) { m_bDmg = true; m_hp -= _dmg; }
+	void SetDamage(float _dmg) { m_bDmg = true; m_hp -= _dmg; }
 
-	bool GetbDead() { return m_bDead; }
+	bool GetDead() { return m_bDead; }
 
 	virtual Math::Vector2 GetMovePow() { return m_move; }
 

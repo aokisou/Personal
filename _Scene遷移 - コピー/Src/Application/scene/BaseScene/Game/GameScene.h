@@ -18,14 +18,19 @@ public:
 
 	int Update()override;
 	void Draw()override;
+	void DynamicDraw2D()override;
 	void UpdateBack();
-	void DrawBack();
 
 	//クラスアドレス
 	Player* GetPlayer() { return m_player; }
-	BaseEnemy* GetEnemy() { return m_enemy; }
+	std::vector<BaseEnemy*> GetEnemy() { return m_enemy; }
 
 	float GetHp()override;
+
+	void CreateSlime();
+	void CreateWolf();
+	void CreateOrc();
+	//void Create();
 
 private:
 	void Init()override;
@@ -37,19 +42,19 @@ private:
 
 	std::string m_mapName[1] = { "map/stage1.csv" };
 
-	Player* m_player;
-	BaseEnemy* m_enemy;
+	Player* m_player = nullptr;
+	std::vector<BaseEnemy*> m_enemy;
 
-	Hit* m_hit;
+	Hit* m_hit = nullptr;
 
-	Map* m_map;
+	Map* m_map = nullptr;
 
-	MapHit* m_mapHit;
+	MapHit* m_mapHit = nullptr;
 
 	Math::Vector2 m_backPos[backNum];
-	Math::Vector2 m_nextBackPos[backNum];
+	Math::Vector2 m_2ndBackPos[backNum];
 	Math::Matrix m_backMat[backNum];
-	Math::Matrix m_nextBackMat[backNum];
+	Math::Matrix m_2ndBackMat[backNum];
 	KdTexture m_backTex[backNum];
 	std::string m_backName[backNum] = { "Texture/background/1.png","Texture/background/2.png","Texture/background/3.png","Texture/background/4.png",
 										"Texture/background/5.png" };

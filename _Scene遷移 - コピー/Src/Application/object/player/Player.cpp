@@ -40,6 +40,7 @@ void Player::Init()
 	m_bDead = false;
 	m_pState = new PlayerStand;
 	m_pState->Init(this, m_fileName[playerStand]);
+	m_arrowTex.Load("Texture/Arrow/static.png");
 }
 
 void Player::Action()
@@ -162,7 +163,7 @@ void Player::SetStandState()
 {
 	delete m_pState;
 	m_pState = new PlayerStand;
-	m_pState->Init(this,m_fileName[playerStand]);
+	m_pState->Init(this, m_fileName[playerStand]);
 }
 
 void Player::SetJumpState()
@@ -220,7 +221,7 @@ void Player::EndDamageEfc()
 	else { SetStandState(); }
 }
 
-void Player::ApplyDamage(float _enemyMove)
+void Player::SetDamage(float _enemyMove)
 {
 	m_bDmg = true;
 	m_hp--;
@@ -255,6 +256,7 @@ bool Player::ArrowShot()
 
 			tmpArrow->SetPos({ m_pos.x + BltCRX * m_dir, m_pos.y + BltCRY });
 			tmpArrow->SetDir(m_dir);
+			tmpArrow->SetTex(&m_arrowTex);
 
 			m_arrow.push_back(tmpArrow);
 			b = true;
@@ -279,7 +281,7 @@ void Player::ArrowActivate(float _scrollX)
 	std::vector<Arrow*>::iterator it = m_arrow.begin();
 	while (it != m_arrow.end())
 	{
-		if (!(*it)->GetbAlive())
+		if (!(*it)->GetAlive())
 		{
 			delete* it;
 			it = m_arrow.erase(it);

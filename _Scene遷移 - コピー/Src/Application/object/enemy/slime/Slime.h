@@ -30,5 +30,4 @@ private:
 	bool m_bAttack = false;
 
 	const std::string m_fileName[2] = { "Texture/enemy/1/S_Walk.png","Texture/enemy/1/S_Death.png" };
-
 };

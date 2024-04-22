@@ -25,8 +25,8 @@ public:
 	virtual void MapHitY(float _posY, float _moveY, bool _b);
 
 	//生存フラグ
-	virtual void DisableAlive() { m_bAlive = false; }
-	virtual bool GetbAlive()final { return m_bAlive; }
+	virtual void SetFalseAlive() { m_bAlive = false; }
+	virtual bool GetAlive()final { return m_bAlive; }
 
 	//当たり判定の時に弾がマップと当たったら壊れる
 	virtual bool GetContent() { return false; }

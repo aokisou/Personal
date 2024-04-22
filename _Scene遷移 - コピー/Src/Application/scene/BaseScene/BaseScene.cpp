@@ -1,5 +1,5 @@
 #include "BaseScene.h"
-#include "../utility/utility.h"
+#include "../../Utility/utility.h"
 
 int BaseScene::Update()
 {

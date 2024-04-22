@@ -5,10 +5,13 @@ class BaseScene;
 class Scene
 {
 private:
-	BaseScene* m_nowScene;
+	BaseScene* m_pNowScene = nullptr;
 
-	bool m_bkeyFlg;
+	bool m_bkeyFlg = false;
 
+	KdTexture m_tmpTex;
+
+	Math::Matrix m_mat = Math::Matrix::Identity;
 public:
 
 	// ‰Šúİ’è
@@ -22,6 +25,7 @@ public:
 
 	// •`‰æˆ—
 	void Draw2D();
+	void DynamicDraw2D();
 
 	// GUIˆ—
 	void ImGuiUpdate();

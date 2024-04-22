@@ -21,6 +21,10 @@ void TitleScene::Draw()
 {
 }
 
+void TitleScene::DynamicDraw2D()
+{
+}
+
 void TitleScene::Init()
 {
 	m_titleTex.Load("Texture/enemy.png");

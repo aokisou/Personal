@@ -15,6 +15,7 @@ public:
 
 	void SetPos(Math::Vector2 a_pos) { m_pos = a_pos; }
 	void SetDir(int _dir) { m_dir = _dir; }//ƒvƒŒƒCƒ„[‚ÌŒü‚«‚É”ò‚Ô‚æ‚¤‚É‚·‚é
+	void SetTex(KdTexture* _pTex) { m_pTex = _pTex; }
 
 	bool GetContent()override { return true; }
 
@@ -31,5 +32,5 @@ private:
 
 	float m_accelerlation;
 
-	KdTexture m_tex;
+	KdTexture* m_pTex;
 };
