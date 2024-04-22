@@ -1,10 +1,10 @@
 #include "../main.h"
 #include "Scene.h"
-#include "BaseScene.h"
-#include "title/TitleScene.h"
-#include "game/GameScene.h"
-#include "result/ResultScene.h"
-#include "../utility/utility.h"
+#include "BaseScene/BaseScene.h"
+#include "BaseScene/Title/TitleScene.h"
+#include "BaseScene/Game/GameScene.h"
+#include "BaseScene/Result/ResultScene.h"
+#include "../Utility/Utility.h"
 
 void Scene::Draw2D()
 {

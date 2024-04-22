@@ -1,13 +1,14 @@
 #include "Slime.h"
-#include "../../../scene/game/GameScene.h"
-#include "../../player/Player.h"
-#include "../enemypattern/EnemyPattern.h"
-#include "../enemypattern/death/EnemyDeath.h"
-#include "../enemypattern/run/EnemyRun.h"
-#include "../enemypattern/attack/EnemyAttack.h"
-#include "../../../utility/utility.h"
+#include "../../../Scene/BaseSCene/Game/GameScene.h"
+#include "../../Player/Player.h"
+#include "../EnemyPattern/EnemyPattern.h"
+#include "../EnemyPattern/Death/EnemyDeath.h"
+#include "../EnemyPattern/Run/EnemyRun.h"
+#include "../EnemyPattern/Attack/EnemyAttack.h"
+#include "../../../Utility/Utility.h"
 
-#define SlimeSpeed 3
+#define WalkSpeed 1	//•ú˜Q‚µ‚Ä‚é‚Æ‚«
+#define RunSpeed 2	//UŒ‚ó‘Ô‚ÌŽž
 
 void Slime::Init()
 {
@@ -40,7 +41,7 @@ void Slime::Action()
 	Attack();
 
 	if (m_bAttack)return;
-	m_move.x = SlimeSpeed * m_dir;
+	m_move.x = WalkSpeed * m_dir;
 
 	if (m_pos.x > m_startPos.x + m_moveRange && m_move.x > 0) { m_dir *= Reverse; }
 	if (m_pos.x < m_startPos.x - m_moveRange && m_move.x < 0) { m_dir *= Reverse; }
@@ -91,7 +92,7 @@ void Slime::Attack()
 		if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_attackRange)
 		{
 			float a = GetAngleDeg(GetPos(), ply->GetPos());
-			m_move = { cos(DirectX::XMConvertToRadians(a)) * SlimeSpeed,sin(DirectX::XMConvertToRadians(a)) };
+			m_move = { cos(DirectX::XMConvertToRadians(a)) * RunSpeed,sin(DirectX::XMConvertToRadians(a)) };
 			if (m_move.x > 0) { m_dir = DefaultDir; }
 			else { m_dir = DefaultDir * Reverse; }
 			m_bAttack = true;

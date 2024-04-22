@@ -1,20 +1,16 @@
 #include "hit.h"
-#include "../scene/game/GameScene.h"
-#include "../object/player/player.h"
-#include "../object/enemy/BaseEnemy.h"
-#include "../object/arrow/Arrow.h"
-#include "../utility/utility.h"
-
-void Hit::Init()
-{
-}
+#include "../../Scene/BaseScene/Game/GameScene.h"
+#include "../../Object/Player/player.h"
+#include "../../Object/Enemy/BaseEnemy.h"
+#include "../../Object/Arrow/Arrow.h"
+#include "../../Utility/utility.h"
 
 void Hit::PlyEmyHit()
 {
 	Player* ply = (Player*)m_pOwner->GetPlayer();
 	BaseEnemy* emy = (BaseEnemy*)m_pOwner->GetEnemy();
 
-	if (ply->GetbDmg() || !ply->GetbAlive() || emy->GetbDead() || !emy->GetbAlive()) { return; }
+	if (ply->GetbDmg() || ply->GetbDead() || emy->GetbDead() || !emy->GetbAlive()) { return; }
 
 	const float plyRight	= ply->GetPos().x + ply->GetHalfSize() - ply->GetSpaceWidthImg();
 	const float plyLeft		= ply->GetPos().x - ply->GetHalfSize() + ply->GetSpaceWidthImg();
@@ -38,24 +34,24 @@ void Hit::PlyEmyHit()
 
 	if (plyTop > emyBottom && plyTop < emyTop)
 	{
-		if (plyNextRight > emyNextLeft && plyNextRight < emyNextRight)
+		if (plyNextRight >= emyNextLeft && plyNextRight <= emyNextRight)
 		{
-			ply->ApplyDamage();
+			ply->ApplyDamage(emy->GetMovePow().x * 2);
 		}
-		else if (plyNextLeft > emyNextRight && plyNextLeft < emyNextLeft)
+		else if (plyNextLeft >= emyNextRight && plyNextLeft <= emyNextLeft)
 		{
-			ply->ApplyDamage();
+			ply->ApplyDamage(emy->GetMovePow().x * 2);
 		}
 	}
 	else if (plyRight > emyLeft && plyLeft < emyRight)
 	{
-		if (plyNextTop > emyNextBottom && plyNextTop < emyNextTop)
+		if (plyNextTop >= emyNextBottom && plyNextTop <= emyNextTop)
 		{
-			ply->ApplyDamage();
+			ply->ApplyDamage(emy->GetMovePow().x * 2);
 		}
-		else if (plyNextBottom > emyNextTop && plyNextBottom < emyNextBottom)
+		else if (plyNextBottom >= emyNextTop && plyNextBottom <= emyNextBottom)
 		{
-			ply->ApplyDamage();
+			ply->ApplyDamage(emy->GetMovePow().x * 2);
 		}
 	}
 }

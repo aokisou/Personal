@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../utility/utility.h"
+#include "../../../Utility/Utility.h"
 
 class BaseEnemy;
 

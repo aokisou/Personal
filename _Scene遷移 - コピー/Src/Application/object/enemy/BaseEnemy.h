@@ -33,6 +33,8 @@ public:
 
 	bool GetbDead() { return m_bDead; }
 
+	virtual Math::Vector2 GetMovePow() { return m_move; }
+
 	virtual float GetAngleDeg(Math::Vector2 src, Math::Vector2 dest)final;
 
 	virtual float GetHP() { return m_hp; }

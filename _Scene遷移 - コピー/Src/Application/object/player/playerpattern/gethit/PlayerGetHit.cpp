@@ -1,4 +1,5 @@
 #include "PlayerGetHit.h"
+#include "../../Player.h"
 
 void PlayerGetHit::Update()
 {
@@ -13,6 +14,7 @@ void PlayerGetHit::Update()
 		if (m_animeNum >= AnimeNum)
 		{
 			m_animeNum = 0;
+			m_player->EndDamageEfc();
 		}
 	}
 }

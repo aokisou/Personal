@@ -1,7 +1,7 @@
 #include "MapHit.h"
-#include "../map/Map.h"
-#include "../object/BaseObject.h"
-#include "../utility/utility.h"
+#include "../../Map/Map.h"
+#include "../../Object/BaseObject.h"
+#include "../../Utility/utility.h"
 
 void MapHit::MapObjHit(Map* m_map, BaseObject* _obj)
 {

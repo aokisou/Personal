@@ -1,6 +1,6 @@
 #include "ResultScene.h"
-#include "../Scene.h"
-#include "../../utility/utility.h"
+#include "../../Scene.h"
+#include "../../../Utility/utility.h"
 
 int ResultScene::Update()
 {

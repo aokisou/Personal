@@ -8,6 +8,8 @@ class Hit;
 class Map;
 class MapHit;
 
+#define backNum 5
+
 class GameScene:public BaseScene
 {
 public:
@@ -16,6 +18,8 @@ public:
 
 	int Update()override;
 	void Draw()override;
+	void UpdateBack();
+	void DrawBack();
 
 	//クラスアドレス
 	Player* GetPlayer() { return m_player; }
@@ -31,7 +35,7 @@ private:
 	float m_minScrollX = 0.f;
 	float m_maxScrollX = 0.f;
 
-	std::string m_mapNme[1] = { "map/stage1.csv" };
+	std::string m_mapName[1] = { "map/stage1.csv" };
 
 	Player* m_player;
 	BaseEnemy* m_enemy;
@@ -42,7 +46,11 @@ private:
 
 	MapHit* m_mapHit;
 
-	KdTexture m_playerTex;
-	KdTexture m_enemyTex;
-	KdTexture m_mapTex;
+	Math::Vector2 m_backPos[backNum];
+	Math::Vector2 m_nextBackPos[backNum];
+	Math::Matrix m_backMat[backNum];
+	Math::Matrix m_nextBackMat[backNum];
+	KdTexture m_backTex[backNum];
+	std::string m_backName[backNum] = { "Texture/background/1.png","Texture/background/2.png","Texture/background/3.png","Texture/background/4.png",
+										"Texture/background/5.png" };
 };

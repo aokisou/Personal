@@ -1,11 +1,13 @@
 #include "GameScene.h"
-#include "../../object/player/Player.h"
-#include "../../object/enemy/slime/Slime.h"
-#include "../../hit/Hit.h"
-#include "../../map/Map.h"
-#include "../../hit/MapHit.h"
+#include "../../../Object/player/Player.h"
+#include "../../../Object/enemy/slime/Slime.h"
+#include "../../../Hit//Object/Hit.h"
+#include "../../../Map/Map.h"
+#include "../../../Hit/Map/MapHit.h"
 #include<vector>
-#include "../../utility/utility.h"
+#include "../../../Utility/utility.h"
+
+#define backSize 2.3f
 
 int GameScene::Update()
 {
@@ -55,6 +57,8 @@ int GameScene::Update()
 		}
 	}
 
+	UpdateBack();
+
 	if (m_player->GetbAlive())
 	{
 		return ChangeScene::no;
@@ -67,9 +71,35 @@ int GameScene::Update()
 
 void GameScene::Draw()
 {
+	DrawBack();
 	m_map->Draw();
 	m_enemy->Draw();
 	m_player->Draw();
+}
+
+void GameScene::UpdateBack()
+{
+	for (int i = 0; i < backNum; i++)
+	{
+		m_backPos[i].x = m_scrollX * (float)i / backNum;
+		m_nextBackPos[i].x = m_backPos[i].x - (576 * backSize);
+		m_backMat[i] = Math::Matrix::CreateScale(backSize, backSize, 1) * Math::Matrix::CreateTranslation(m_backPos[i].x, m_backPos[i].y, 0);
+		m_nextBackMat[i] = Math::Matrix::CreateScale(backSize, backSize, 1) * Math::Matrix::CreateTranslation(m_nextBackPos[i].x, m_nextBackPos[i].y, 0);
+	}
+}
+
+void GameScene::DrawBack()
+{
+	for (int i = 0; i < backNum; i++)
+	{
+		SHADER.m_spriteShader.SetMatrix(m_backMat[i]);
+		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &Math::Rectangle(0, 0, 576, 324));
+	}
+	for (int i = 0; i < backNum; i++)
+	{
+		SHADER.m_spriteShader.SetMatrix(m_nextBackMat[i]);
+		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &Math::Rectangle(0, 0, 576, 324));
+	}
 }
 
 float GameScene::GetHp()
@@ -87,11 +117,19 @@ void GameScene::Init()
 	m_map = new Map;
 	m_mapHit = new MapHit;
 
-	m_hit->Init();
-
-	m_map->SetMapData(m_mapNme[0]);
+	m_map->SetMapData(m_mapName[0]);
 	m_minScrollX = m_map->GetPos(0, 0).x + SCREEN::width / Half;
 	m_maxScrollX = m_map->GetPos(0,(m_map->GetMaxWidth() - 1)).x - SCREEN::width / Half;
+
+	for (int i = 0; i < backNum; i++)
+	{
+		m_backPos[i] = {};
+		m_nextBackPos[i] = {};
+		m_backMat[i] = Math::Matrix::Identity;
+		m_nextBackMat[i] = Math::Matrix::Identity;
+		bLoad = m_backTex[i].Load(m_backName[i]);
+		_ASSERT_EXPR(bLoad, "ファイル読み取りエラー");
+	}
 
 	m_enemy->SetOwner(this);
 	m_hit->SetOwner(this);

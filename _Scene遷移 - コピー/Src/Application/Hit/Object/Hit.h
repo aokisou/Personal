@@ -8,8 +8,6 @@ public:
 	Hit(){ m_pOwner = nullptr; }
 	~Hit(){}
 
-	void Init();
-
 	void PlyEmyHit();
 	void ArrEmyHit();
 

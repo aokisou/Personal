@@ -1,5 +1,5 @@
 #include "Arrow.h"
-#include "../../utility/utility.h"
+#include "../../Utility/Utility.h"
 
 #define ArrowSpeed 16			//弾の速度
 #define ArrowSize 24			//弾画像サイズ

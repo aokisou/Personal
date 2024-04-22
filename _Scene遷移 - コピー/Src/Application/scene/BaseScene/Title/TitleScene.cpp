@@ -1,6 +1,6 @@
 #include "TitleScene.h"
-#include "../Scene.h"
-#include "../../utility/utility.h"
+#include "../../Scene.h"
+#include "../../../Utility/utility.h"
 
 int TitleScene::Update()
 {

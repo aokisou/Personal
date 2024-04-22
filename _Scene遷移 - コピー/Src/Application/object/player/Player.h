@@ -16,6 +16,7 @@ public:
 	void Draw()override;
 
 	bool GetbDmg() { return m_bDmg; }
+	bool GetbDead() { return m_bDead; }
 
 	void SetStandState();
 	void SetJumpState();
@@ -25,11 +26,13 @@ public:
 	void SetFallState();
 	void SetGetHitState();
 
+	void EndDamageEfc();
+
 	int GetSpaceWidthImg() { return 30; }
 	int GetSpaceHeightImg(){ return 32; }
 
 	//“–‚½‚è”»’è—p
-	void ApplyDamage() { m_bDmg = true; m_hp--; }
+	void ApplyDamage(float _enemyMove);
 	std::vector<Arrow*>* GetArrow() { return &m_arrow; }
 
 	void MapHitY(float _posY, float _moveY, bool _b);
@@ -50,16 +53,18 @@ private:
 
 	float m_hp;
 
+	float m_moveKnockBack;
+
 	bool m_bJump;
 
 	std::vector<Arrow*> m_arrow;
 
 	bool m_bDmg;
-	int m_DmgEfcCnt;
+	bool m_bDead;
 
 	PlayerPattern* m_pState;
 
-	const std::string m_fileName[7] = {  "Texture/player/Idle.png","Texture/player/Death.png","Texture/player/Jump.png","Texture/player/Run.png",
-										 "Texture/player/GetHit.png","Texture/player/Attack.png","Texture/player/Fall.png" };
+	const std::string m_fileName[7] = {  "Texture/player/Idle.png","Texture/player/GetHit.png","Texture/player/Death.png","Texture/player/Jump.png",
+										 "Texture/player/Run.png","Texture/player/Attack.png","Texture/player/Fall.png" };
 public:
 };

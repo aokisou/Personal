@@ -18,10 +18,10 @@ enum ChangeScene
 enum StateType
 {
 	playerStand,
+	playerGetHit,
 	playerDeath,
 	playerJump,
 	playerRun,
-	playerGetHit,
 	playerAttack,
 	playerFall,
 	enemyRun = 0,

@@ -2,7 +2,7 @@
 
 void PlayerAttack::Update()
 {
-	const int MaxCoolCnt = 8;	//1画像アニメ時間
+	const int MaxCoolCnt = 10;	//1画像アニメ時間
 	const int AnimeNum = 6;		//画像数
 
 	m_coolCnt++;

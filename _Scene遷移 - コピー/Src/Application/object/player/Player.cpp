@@ -1,49 +1,59 @@
 #include "player.h"
-#include "../../scene/game/GameScene.h"
-#include "../arrow/Arrow.h"
-#include "playerpattern/run/PlayerRun.h"
-#include "playerpattern/death/PlayerDeath.h"
-#include "playerpattern/jump/PlayerJump.h"
-#include "playerpattern/attack/PlayerAttack.h"
-#include "playerpattern/gethit/PlayerGetHit.h"
-#include "playerpattern/stand/PlayerStand.h"
-#include "playerpattern/fall/PlayerFall.h"
-#include "../../utility/utility.h"
+#include "../../Scene/BaseScene/Game/GameScene.h"
+#include "../Arrow/Arrow.h"
+#include "PlayerPattern/Run/PlayerRun.h"
+#include "PlayerPattern/Death/PlayerDeath.h"
+#include "PlayerPattern/Jump/PlayerJump.h"
+#include "PlayerPattern/Attack/PlayerAttack.h"
+#include "PlayerPattern/GetHit/PlayerGetHit.h"
+#include "PlayerPattern/Stand/PlayerStand.h"
+#include "PlayerPattern/Fall/PlayerFall.h"
+#include "../../utility/Utility.h"
 
 //プレイヤー
-#define PlySpeed 5			//プレイヤー速度
-#define PlyJumpPow 15		//プレイヤーのジャンプ力
-#define PlyShotInterval 6	//プレイヤーの弾を打つ感覚(Maxfps/この数値)
-#define PlyMoveRange -150	//プレイヤーの移動範囲
-#define PlyStartPosX -600	//プレイヤーの開始X座標
-#define PlyStartPosY 0	//プレイヤーの開始Y座標
-#define PlyStartHP 5		//プレイヤーの開始HP
-#define PlyMaxDmgEfcCnt 20	//赤く光る時間
-#define PlyBltCRX 30		//弾の出る位置を銃まで補正X座標
-#define PlyBltCRY 6			//弾の出る位置を銃まで補正Y座標
-#define ImgSize 100		//キャラ画像サイズ
-#define Scale 1			//キャラ拡大率
+#define Speed 5			//速度
+#define JumpPow 15		//ジャンプ力
+#define ShotInterval 6	//弾を打つ感覚(Maxfps/この数値)
+#define MoveRange -150	//移動範囲
+#define StartPosX -600	//開始X座標
+#define StartPosY 0		//開始Y座標
+#define StartHP 5		//開始HP
+#define MaxDmgEfcCnt 20	//赤く光る時間
+#define BltCRX 30		//弾の出る位置を銃まで補正X座標
+#define BltCRY 6			//弾の出る位置を銃まで補正Y座標
+#define ImgSize 100			//キャラ画像サイズ
+#define Scale 1				//キャラ拡大率
 
 void Player::Init()
 {
-	m_pos = { PlyStartPosX,PlyStartPosY };
-	m_move = { 0 };
+	m_pos = { StartPosX,StartPosY };
+	m_move = {};
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
 	m_dir = DefaultDir;
 	m_Size = ImgSize;
 	m_Scale = Scale;
-	m_hp = PlyStartHP;
+	m_moveKnockBack = 0.f;
+	m_hp = StartHP;
 	m_bJump = false;
 	m_bDmg = false;
-	m_DmgEfcCnt = 0;
+	m_bDead = false;
 	m_pState = new PlayerStand;
-	m_pState->Init(this, "Texture/player/Idle.png");
+	m_pState->Init(this, m_fileName[playerStand]);
 }
 
 void Player::Action()
 {
-	if (!m_bAlive) { return; }
+	if (m_bDead || m_bDmg)//矢の処理と移動速度をリセットして帰る
+	{
+		m_move = { 0,m_move.y - Gravity };
+		for (Arrow* i : m_arrow)
+		{
+			i->Action();
+		}
+		return;
+	}
+
 	bool bAct = false;
 	const float a = -3.f;//この値まで行ったらFall状態にする
 
@@ -55,7 +65,7 @@ void Player::Action()
 	{
 		if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 		{
-			m_move.x = -PlySpeed;
+			m_move.x = -Speed;
 			m_dir = -DefaultDir;
 			if (m_pState->GetStateType() != playerRun)
 			{
@@ -65,7 +75,7 @@ void Player::Action()
 		}
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 		{
-			m_move.x = PlySpeed;
+			m_move.x = Speed;
 			m_dir = DefaultDir;
 			if (m_pState->GetStateType() != playerRun)
 			{
@@ -79,7 +89,7 @@ void Player::Action()
 	{
 		if (!m_bJump)
 		{
-			m_move.y += PlyJumpPow;
+			m_move.y += JumpPow;
 			if (m_pState->GetStateType() != playerAttack)
 			{
 				SetJumpState();
@@ -105,7 +115,7 @@ void Player::Action()
 
 	if (!bAct)
 	{
-		if (m_pState->GetStateType() != playerStand)
+		if (m_pState->GetStateType() > playerDeath)
 		{
 			SetStandState();
 		}
@@ -116,26 +126,11 @@ void Player::Update(float _scrollX)
 {
 	if (!m_bAlive) { return; }
 
-	if (m_bDmg)
-	{
-		m_DmgEfcCnt++;
-		if (m_DmgEfcCnt > PlyMaxDmgEfcCnt)
-		{
-			m_bDmg = false;
-			m_DmgEfcCnt = 0;
-			if (m_hp <= 0) 
-			{ 
-				m_hp = 0;
-				m_bDmg = false;
-				SetDeathState();
-			}
-		}
-	}
-
 	m_pState->Update();
 
 	ArrowActivate(_scrollX);
 
+	m_move.x += m_moveKnockBack;
 	m_pos += m_move;
 
 	if (m_pos.y - (m_Size / Half * m_Scale) < -(SCREEN::height / Half))
@@ -212,6 +207,27 @@ void Player::SetGetHitState()
 	m_pState->Init(this, m_fileName[playerGetHit]);
 }
 
+void Player::EndDamageEfc()
+{
+	m_bDmg = false;
+	m_moveKnockBack = 0;
+	if (m_hp <= 0)
+	{
+		m_bDead = true;
+		m_hp = 0;
+		SetDeathState();
+	}
+	else { SetStandState(); }
+}
+
+void Player::ApplyDamage(float _enemyMove)
+{
+	m_bDmg = true;
+	m_hp--;
+	m_moveKnockBack = _enemyMove;
+	SetGetHitState();
+}
+
 void Player::MapHitY(float _posY, float _moveY, bool _b)
 {
 	m_pos.y = _posY;
@@ -237,19 +253,18 @@ bool Player::ArrowShot()
 		{
 			Arrow* tmpArrow = new Arrow;
 
-			tmpArrow->SetPos({ m_pos.x + PlyBltCRX * m_dir, m_pos.y + PlyBltCRY });
+			tmpArrow->SetPos({ m_pos.x + BltCRX * m_dir, m_pos.y + BltCRY });
 			tmpArrow->SetDir(m_dir);
 
 			m_arrow.push_back(tmpArrow);
 			b = true;
 		}
 	}
-	else
-	{
-		b = false;
-	}
 
-	if (m_pState->GetAnimeNum() == 5) { a = false; }
+	if (m_pState->GetAnimeNum() == 5)
+	{
+		a = false; b = false;
+	}
 
 	return a;
 }

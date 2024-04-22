@@ -15,7 +15,6 @@ public:
 	//数値
 	virtual Math::Vector2 GetPos() { return m_pos; }
 	virtual Math::Vector2 GetFuturePos() { return m_pos + m_move; }
-	virtual Math::Matrix GetMat() { return m_mat; }
 	virtual int GetHalfSize()final;
 
 	//画像のスペース

@@ -2,7 +2,7 @@
 #include<iostream>
 #include<fstream>
 #include<sstream>
-#include "../utility/utility.h"
+#include "../Utility/Utility.h"
 
 #define MapSize 64			//マップサイズ
 
