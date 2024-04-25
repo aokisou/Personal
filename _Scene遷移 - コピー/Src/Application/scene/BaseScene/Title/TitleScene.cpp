@@ -14,10 +14,12 @@ int TitleScene::Update()
 	}
 	else { m_pOwner->SetFalseKeyFlg(); }
 
+	m_mat = Math::Matrix::CreateScale(1.05, 1.05, 1) * Math::Matrix::CreateTranslation(0, 0, 0);
+
 	return ChangeScene::no;
 }
 
-void TitleScene::Draw()
+void TitleScene::Draw(KdTexture* _pTex)
 {
 }
 

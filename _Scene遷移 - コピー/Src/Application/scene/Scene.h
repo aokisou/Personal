@@ -5,13 +5,12 @@ class BaseScene;
 class Scene
 {
 private:
-	BaseScene* m_pNowScene = nullptr;
-
+	std::shared_ptr<BaseScene> m_pNowScene = nullptr;
+	
 	bool m_bkeyFlg = false;
 
 	KdTexture m_tmpTex;
 
-	Math::Matrix m_mat = Math::Matrix::Identity;
 public:
 
 	// ‰Šúİ’è

@@ -1,11 +1,11 @@
 #include "Arrow.h"
 #include "../../Utility/Utility.h"
 
-#define ArrowSpeed 16			//弾の速度
-#define ArrowSize 24			//弾画像サイズ
-#define ArrowScale 1			//弾拡大率
-#define ArrowAccelelation 0.99	//減速率
-#define ArrowDown 0.6			//加速度がこの値まで来たら落ちる
+#define ArrowSpeed 16			//矢の速度
+#define ArrowSize 24			//矢画像サイズ
+#define ArrowScale 1			//矢拡大率
+#define ArrowAccelelation 0.99f	//減速率
+#define ArrowDown 0.6f			//加速度がこの値まで来たら落ちる
 
 void Arrow::Init()
 {
@@ -13,8 +13,8 @@ void Arrow::Init()
 	m_move = {  };
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
-	m_Size = ArrowSize;
-	m_Scale = ArrowScale;
+	m_size = ArrowSize;
+	m_scale = ArrowScale;
 	m_accelerlation = 1.f;
 	m_angle = 0;
 }
@@ -29,14 +29,14 @@ void Arrow::Action()
 	if (m_accelerlation < ArrowDown)
 	{
 		m_move.y = -cos(m_accelerlation) * 1.5f;
-		m_angle-= .01f;
-		if (m_angle < -1.f)
+		m_angle-= 0.01f;
+		if (m_angle < -1.0f)
 		{
-			m_angle = -1.f;
+			m_angle = -1.0f;
 		}
-		if (m_accelerlation < .01f)
+		if (m_accelerlation < 0.01f)
 		{
-			m_accelerlation = 0.f;
+			m_accelerlation = 0.0f;
 		}
 	}
 }
@@ -45,8 +45,8 @@ void Arrow::Update(float _scrollX)
 {
 	if (!m_bAlive) { return; }
 	m_pos += m_move;
-	if (m_pos.y - m_Size * m_Scale > (SCREEN::height / Half))m_bAlive = false;
-	m_mat = Math::Matrix::CreateScale(m_Scale * m_dir, m_Scale, 0) * Math::Matrix::CreateRotationZ(m_angle)
+	if (m_pos.y - m_size * m_scale > (SCREEN::height / Half))m_bAlive = false;
+	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0) * Math::Matrix::CreateRotationZ(m_angle)
 		* Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }
 
@@ -54,5 +54,5 @@ void Arrow::Draw()
 {
 	if (!m_bAlive) { return; }
 	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(0, 0, m_Size, 5));
+	SHADER.m_spriteShader.DrawTex(m_pTex, Math::Rectangle(0, 0, m_size, 5));
 }

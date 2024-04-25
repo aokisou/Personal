@@ -3,7 +3,7 @@
 #include "../../Object/BaseObject.h"
 #include "../../Utility/utility.h"
 
-void MapHit::MapObjHit(Map* m_map, BaseObject* _obj)
+void MapHit::MapObjHit(int _s, int _e, Map* m_map, BaseObject* _obj)
 {
 	const float objRight	= _obj->GetPos().x + _obj->GetHalfSize() - _obj->GetSpaceWidthImg();
 	const float objLeft		= _obj->GetPos().x - _obj->GetHalfSize() + _obj->GetSpaceWidthImg();
@@ -17,7 +17,7 @@ void MapHit::MapObjHit(Map* m_map, BaseObject* _obj)
 	
 	for (int i = 0; i < m_map->GetMaxHeight(); i++)
 	{
-		for (int j = 0; j < m_map->GetMaxWidth(); j++)
+		for (int j = _s; j < _e; j++)
 		{
 			int md;
 			if ((md = m_map->GetMapData(i, j)) == none) { continue; }

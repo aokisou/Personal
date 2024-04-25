@@ -1,4 +1,4 @@
-#include "Slime.h"
+#include "Wolf.h"
 #include "../../../Scene/BaseSCene/Game/GameScene.h"
 #include "../../Player/Player.h"
 #include "../EnemyPattern/EnemyPattern.h"
@@ -7,13 +7,14 @@
 #include "../EnemyPattern/Attack/EnemyAttack.h"
 #include "../../../Utility/Utility.h"
 
-#define WalkSpeed 0.5f	//•ú˜Q‚µ‚Ä‚é‚Æ‚«
-#define RunSpeed 1.5f	//UŒ‚ó‘Ô‚ÌŽž
+#define WalkSpeed 1.5f	//•ú˜Q‚µ‚Ä‚é‚Æ‚«
+#define RunSpeed 3.f	//UŒ‚ó‘Ô‚ÌŽž
 
-void Slime::Init()
+void Wolf::Init()
 {
-	const int ImgSize = 48;			//ƒLƒƒƒ‰‰æ‘œƒTƒCƒY
-	const float Scale = 2.0f;				//ƒLƒƒƒ‰Šg‘å—¦
+	const int ImgSize = 48;		//ƒLƒƒƒ‰‰æ‘œƒTƒCƒY
+	const float Scale = 2.0f;		//ƒLƒƒƒ‰Šg‘å—¦
+
 	m_pos = { 0 };
 	m_move = { 0 };
 	m_mat = Math::Matrix::Identity;
@@ -25,28 +26,33 @@ void Slime::Init()
 	m_bDmg = false;
 	DmgEfcCnt = 0;
 	m_moveRange = 100;
-	m_attackRange = m_moveRange * 2;
-	
+	m_lookRange = m_moveRange * 2;
+	m_attackRange = 30;
+	m_attackCoolTime = 0;
+
 	SetRunState();
 
 	m_startPos = m_pos;
 }
 
-void Slime::Action()
+void Wolf::Action()
 {
 	if (!m_bAlive || m_pState->GetStateType() == enemyDeath) { return; }
 
 	m_move = { 0,m_move.y - Gravity };
 
-	if (Attack()) { return; }
+	if (Attack())
+	{
+		return;
+	}
 
-	m_move.x = WalkSpeed * m_dir;
+	m_move.x = WalkSpeed * -m_dir;
 
 	if (m_pos.x > m_startPos.x + m_moveRange && m_move.x > 0) { m_dir *= Reverse; }
 	if (m_pos.x < m_startPos.x - m_moveRange && m_move.x < 0) { m_dir *= Reverse; }
 }
 
-void Slime::Update(float _scrollX)
+void Wolf::Update(float _scrollX)
 {
 	if (!m_bAlive) { return; }
 
@@ -73,51 +79,68 @@ void Slime::Update(float _scrollX)
 	}
 
 	m_pState->Update();
-	
-	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
+
+	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0.0f) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }
 
-bool Slime::Attack()
+bool Wolf::Attack()
 {
+	m_attackCoolTime++;
 	Player* ply = m_pOwner->GetPlayer();
 
-	const float plyTop		= ply->GetPos().y + ply->GetHalfSize() - ply->GetSpaceHeightImg();
-	const float plyBottom	= ply->GetPos().y - ply->GetHalfSize() + ply->GetSpaceHeightImg();
+	const float plyTop = ply->GetPos().y + ply->GetHalfSize() - ply->GetSpaceHeightImg();
+	const float plyBottom = ply->GetPos().y - ply->GetHalfSize() + ply->GetSpaceHeightImg();
 
-	const float emyTop		= GetPos().y + GetHalfSize();
-	const float emyBottom	= GetPos().y - GetHalfSize() + GetSpaceHeightImg();
+	const float emyTop = GetPos().y + GetHalfSize();
+	const float emyBottom = GetPos().y - GetHalfSize() + GetSpaceHeightImg();
 
 	if (plyTop > emyBottom && plyTop < emyTop)
 	{
 		if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_attackRange)
 		{
-			float a = GetAngleDeg(GetFuturePos(), ply->GetFuturePos());
-			m_move.x = cos(DirectX::XMConvertToRadians(a)) * RunSpeed;
-			if (m_move.x > 0) { m_dir = DefaultDir; }
-			else { m_dir = DefaultDir * Reverse; }
-			Math::Vector2 v = ply->GetFuturePos() - GetFuturePos();
-			if (v.Length() < ply->GetHalfSize() - ply->GetSpaceWidthImg() + GetHalfSize() - GetSpaceWidthImg())
+			if (m_attackCoolTime < *m_pOwner->GetMAXfps() * 3)
 			{
-				ply->SetDmg(1, m_move.x * 2);
+				SetRunState();
+				return true;
 			}
+			if (ply->GetFuturePos().x - GetFuturePos().x < 0) { m_dir = DefaultDir; }
+			else { m_dir = DefaultDir * Reverse; }
+			if (m_pState->GetStateType() != enemyAttack)
+			{
+				SetAttackState();
+			}
+			return true;
+		}
+		if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_lookRange)
+		{
+			float a = GetAngleDeg(GetFuturePos(), ply->GetFuturePos());
+			if (cos(DirectX::XMConvertToRadians(a)) < 0) { m_dir = DefaultDir; }
+			else { m_dir = DefaultDir * Reverse; }
+			m_move.x = RunSpeed * -m_dir;
 			return true;
 		}
 	}
 	return false;
 }
 
-void Slime::SetRunState()
+void Wolf::SetRunState()
 {
 	m_pState = std::make_shared<EnemyRun>();
 	m_pState->Init(this, m_fileName[enemyRun]);
 }
 
-void Slime::SetDeathState()
+void Wolf::SetDeathState()
 {
 	m_pState = std::make_shared<EnemyDeath>();
 	m_pState->Init(this, m_fileName[enemyDeath]);
 }
 
-void Slime::Release()
+void Wolf::SetAttackState()
+{
+	m_pState = std::make_shared<EnemyAttack>();
+	m_pState->Init(this, m_fileName[enemyAttack]);
+}
+
+void Wolf::Release()
 {
 }

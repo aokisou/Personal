@@ -13,7 +13,8 @@ public:
 	void Draw()override;
 	void Release()override {}
 
-	void SetPos(Math::Vector2 a_pos) { m_pos = a_pos; }
+	void SetPos(Math::Vector2 _pos) { m_pos = _pos; }
+	void SetScale(float _scale) { m_scale = _scale; }
 	void SetDir(int _dir) { m_dir = _dir; }//ÉvÉåÉCÉÑÅ[ÇÃå¸Ç´Ç…îÚÇ‘ÇÊÇ§Ç…Ç∑ÇÈ
 	void SetTex(KdTexture* _pTex) { m_pTex = _pTex; }
 
@@ -21,8 +22,8 @@ public:
 
 	float GetDmg() { return abs(m_move.x); }
 
-	int GetSpaceWidthImg(){ return 3; }
-	int GetSpaceHeightImg(){ return 3; }
+	int GetSpaceWidthImg(){ return (int)(2 * m_scale); }
+	int GetSpaceHeightImg(){ return (int)(6 * m_scale); }
 private:
 	void Init()override;
 

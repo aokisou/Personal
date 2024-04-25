@@ -13,9 +13,9 @@ public:
 	virtual void Release() = 0;
 
 	//数値
-	virtual Math::Vector2 GetPos() { return m_pos; }
-	virtual Math::Vector2 GetFuturePos() { return m_pos + m_move; }
-	virtual int GetHalfSize()final;
+	Math::Vector2 GetPos() { return m_pos; }
+	Math::Vector2 GetFuturePos() { return m_pos + m_move; }
+	float GetHalfSize();
 
 	//画像のスペース
 	virtual int GetSpaceWidthImg() { return 0; }
@@ -25,8 +25,8 @@ public:
 	virtual void MapHitY(float _posY, float _moveY, bool _b);
 
 	//生存フラグ
-	virtual void SetFalseAlive() { m_bAlive = false; }
-	virtual bool GetAlive()final { return m_bAlive; }
+	void SetFalseAlive() { m_bAlive = false; }
+	bool GetAlive() { return m_bAlive; }
 
 	//当たり判定の時に弾がマップと当たったら壊れる
 	virtual bool GetContent() { return false; }
@@ -40,9 +40,9 @@ protected:
 	int m_dir = 0;
 
 	//画像サイズ
-	int m_Size = 0;
+	int m_size = 0;
 	//画像拡大率
-	int m_Scale = 0;
+	float m_scale = 0.0f;
 
 	bool m_bAlive = false;
 private:

@@ -9,6 +9,6 @@ public:
 	MapHit(){}
 	~MapHit(){}
 
-	void MapObjHit(Map* m_map,BaseObject* _obj);
+	void MapObjHit(int _s, int _e, Map* m_map,BaseObject* _obj);
 private:
 };

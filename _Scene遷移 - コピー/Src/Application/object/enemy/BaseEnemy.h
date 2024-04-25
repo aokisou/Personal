@@ -17,11 +17,14 @@ public:
 	virtual void Draw()override;
 	virtual void Release()override = 0 {}
 
-	virtual void Attack() = 0{}
+	virtual bool Attack() = 0{}
 
 	virtual void SetOwner(GameScene* _pOwner)final { m_pOwner = _pOwner; }
 
-	virtual void SetStandState(){}
+	GameScene* GetOwner() { return m_pOwner; }
+
+	void ResetAttackCoolTime() { m_attackCoolTime = 0; }
+
 	virtual void SetRunState(){}
 	virtual void SetDeathState(){}
 	virtual void SetAttackState(){}
@@ -29,28 +32,34 @@ public:
 	virtual int GetSpaceWidthImg() { return 40; }
 	virtual int GetSpaceHeightImg() { return 20; }
 
-	void SetDamage(float _dmg) { m_bDmg = true; m_hp -= _dmg; }
+	void SetDamage(float _dmg);
 
-	bool GetDead() { return m_bDead; }
+	virtual int GetDmg() { return 0; }//çUåÇÉÇÅ[ÉVÉáÉìÇ™Ç†ÇÈìGÇÃÇ›
+
+	std::shared_ptr<EnemyPattern> GetEnemyState(){ return m_pState; }
 
 	virtual Math::Vector2 GetMovePow() { return m_move; }
 
 	virtual float GetAngleDeg(Math::Vector2 src, Math::Vector2 dest)final;
 
-	virtual float GetHP() { return m_hp; }
+	int GetAttackHitCnt() { return m_attackHitCnt; }
+
 protected:
 	Math::Vector2 m_startPos = {};
 
 	int m_moveRange = 0;
 	int m_attackRange = 0;
 
+	int m_attackHitCnt = 0;
+
 	float m_hp = 0;
-	bool m_bDead = false;
 
 	bool m_bDmg = false;
 	int DmgEfcCnt = 0;
 
-	EnemyPattern* m_pState = nullptr;
+	int m_attackCoolTime = 0;
+
+	std::shared_ptr<EnemyPattern> m_pState = nullptr;
 
 	GameScene* m_pOwner = nullptr;
 };

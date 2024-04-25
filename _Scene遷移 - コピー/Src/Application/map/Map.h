@@ -6,10 +6,8 @@ public:
 	Map(){}
 	~Map() { Release(); }
 
-	void Update(float _scrollX);
-	void Draw();
-
-	void MapSrc(int _i);
+	void Update(int _s,int _e,float _scrollX);
+	void Draw(int _s, int _e);
 
 	//読み込み後初期化(自動実行)
 	void SetMapData(std::string a_FileNme);
@@ -24,6 +22,9 @@ public:
 private:
 	void Init();
 	void Release();
+	//切取場所を決めてDrawする関数(Drawのループ中に呼び出す)
+	//_i…ブロックの番号
+	void Draw(Math::Matrix* _mat, int* _i);
 
 	int m_Size = 64;
 

@@ -9,7 +9,7 @@ public:
 	~TitleScene(){}
 
 	int Update()override;
-	void Draw()override;
+	void Draw(KdTexture* _pTex)override;
 	void DynamicDraw2D()override;
 
 private:

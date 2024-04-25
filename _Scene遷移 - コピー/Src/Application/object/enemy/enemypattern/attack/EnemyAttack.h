@@ -10,5 +10,5 @@ public:
 
 	void Update()override;
 
-	int GetStateType()override { return enemyRun; }
+	int GetStateType()override { return enemyAttack; }
 };

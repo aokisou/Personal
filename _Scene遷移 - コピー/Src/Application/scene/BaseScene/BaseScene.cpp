@@ -6,7 +6,7 @@ int BaseScene::Update()
 	return ChangeScene::no;
 }
 
-void BaseScene::Draw()
+void BaseScene::Draw(KdTexture* _pTex)
 {
 }
 
@@ -16,9 +16,4 @@ void BaseScene::Init()
 
 void BaseScene::Release()
 {
-}
-
-float BaseScene::GetHp()
-{
-	return 0.0f;
 }

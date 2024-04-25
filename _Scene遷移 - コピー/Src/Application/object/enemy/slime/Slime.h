@@ -10,24 +10,17 @@ public:
 
 	void Action()override;
 	void Update(float _scrollX)override;
-	void Attack()override;
+	bool Attack()override;
 
 	void SetRunState()override;
 	void SetDeathState()override;
 
-	int GetSpaceWidthImg() { return 40; }
-	int GetSpaceHeightImg() { return 20; }
+	int GetSpaceWidthImg()override { return (int)(20 * m_scale); }
+	int GetSpaceHeightImg()override { return (int)(10 * m_scale); }
 
-	float GetHP() { return m_hp; }
 private:
 	void Init()override;
 	void Release()override;
-
-	const int EmyMaxDmgEfcCnt = 10;	//赤く光る時間
-	const int ImgSize = 48;		//キャラ画像サイズ
-	const int Scale = 2;		//キャラ拡大率
-
-	bool m_bAttack = false;
 
 	const std::string m_fileName[2] = { "Texture/enemy/1/S_Walk.png","Texture/enemy/1/S_Death.png" };
 };

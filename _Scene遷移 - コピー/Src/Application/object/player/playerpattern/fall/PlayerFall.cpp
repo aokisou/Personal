@@ -8,7 +8,7 @@ void PlayerFall::Update()
 	m_coolCnt++;
 	if (m_coolCnt > MaxCoolCnt)
 	{
-		m_coolCnt = -MaxCoolCnt;
+		m_coolCnt -= MaxCoolCnt;
 		m_animeNum++;
 		if (m_animeNum >= AnimeNum)
 		{

@@ -9,9 +9,7 @@
 void Scene::Draw2D()
 {
 	D3D.SetBackBuffer();
-	m_pNowScene->Draw();
-	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex(&m_tmpTex, 0, 0, &Math::Rectangle(0, 0, SCREEN::width, SCREEN::width));
+	m_pNowScene->Draw(&m_tmpTex);
 }
 
 void Scene::DynamicDraw2D()
@@ -44,8 +42,6 @@ void Scene::Update()
 	default:
 		break;
 	}
-
-	m_mat = Math::Matrix::CreateTranslation(0, -320, 0);
 }
 
 void Scene::Init()
@@ -61,7 +57,6 @@ void Scene::Init()
 
 void Scene::Release()
 {
-	delete m_pNowScene;
 }
 
 void Scene::ImGuiUpdate()
@@ -75,31 +70,27 @@ void Scene::ImGuiUpdate()
 	if (ImGui::Begin("Debug Window"))
 	{
 		ImGui::Text("FPS : %d", APP.m_fps);
-		//ImGui::Text("%f", m_nowScene->GetHp());
 	}
 	ImGui::End();
 }
 
 void Scene::ChangeTitle()
 {
-	delete m_pNowScene;
-	m_pNowScene = new TitleScene(&APP.m_maxFps);
+	m_pNowScene = std::make_shared<TitleScene>(&APP.m_maxFps);
 	m_pNowScene->SetOwner(this);
 	m_pNowScene->Update();
 }
 
 void Scene::ChangeGame()
 {
-	delete m_pNowScene;
-	m_pNowScene = new GameScene(&APP.m_maxFps);
+	m_pNowScene = std::make_shared<GameScene>(&APP.m_maxFps);
 	m_pNowScene->SetOwner(this);
 	m_pNowScene->Update();
 }
 
 void Scene::ChangeResult()
 {
-	delete m_pNowScene;
-	m_pNowScene = new ResultScene(&APP.m_maxFps);
+	m_pNowScene = std::make_shared<ResultScene>(&APP.m_maxFps);
 	m_pNowScene->SetOwner(this);
 	m_pNowScene->Update();
 }

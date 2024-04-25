@@ -11,18 +11,18 @@
 #include "../../utility/Utility.h"
 
 //プレイヤー
-#define Speed 5			//速度
-#define JumpPow 15		//ジャンプ力
-#define ShotInterval 6	//弾を打つ感覚(Maxfps/この数値)
-#define MoveRange -150	//移動範囲
-#define StartPosX -600	//開始X座標
-#define StartPosY 0		//開始Y座標
-#define StartHP 5		//開始HP
-#define MaxDmgEfcCnt 20	//赤く光る時間
-#define BltCRX 30		//弾の出る位置を銃まで補正X座標
-#define BltCRY 6			//弾の出る位置を銃まで補正Y座標
+#define Speed 5				//速度
+#define JumpPow 15			//ジャンプ力
+#define ShotInterval 6		//弾を打つ感覚(Maxfps/この数値)
+#define MoveRange -150.0f	//移動範囲
+#define StartPosX -600.0f	//開始X座標
+#define StartPosY 0.0f		//開始Y座標
+#define StartHP 100			//開始HP
+#define MaxDmgEfcCnt 20		//赤く光る時間
+#define ArrowCRX 30			//弾の出る位置を銃まで補正X座標
+#define ArrowCRY 6			//弾の出る位置を銃まで補正Y座標
 #define ImgSize 100			//キャラ画像サイズ
-#define Scale 1				//キャラ拡大率
+#define Scale 1.0f			//キャラ拡大率
 
 void Player::Init()
 {
@@ -31,21 +31,20 @@ void Player::Init()
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
 	m_dir = DefaultDir;
-	m_Size = ImgSize;
-	m_Scale = Scale;
+	m_size = ImgSize;
+	m_scale = Scale;
 	m_moveKnockBack = 0.f;
 	m_hp = StartHP;
 	m_bJump = false;
 	m_bDmg = false;
-	m_bDead = false;
-	m_pState = new PlayerStand;
+	m_pState = std::make_shared<PlayerStand>();
 	m_pState->Init(this, m_fileName[playerStand]);
 	m_arrowTex.Load("Texture/Arrow/static.png");
 }
 
 void Player::Action()
 {
-	if (m_bDead || m_bDmg)//矢の処理と移動速度をリセットして帰る
+	if (m_pState->GetStateType() == playerDeath || m_bDmg)//矢の処理と移動速度をリセットして帰る
 	{
 		m_move = { 0,m_move.y - Gravity };
 		for (Arrow* i : m_arrow)
@@ -56,7 +55,7 @@ void Player::Action()
 	}
 
 	bool bAct = false;
-	const float a = -3.f;//この値まで行ったらFall状態にする
+	const float a = -1.f;//この値まで行ったらFall状態にする
 
 	m_move = { 0,m_move.y - Gravity };//リセットと重力をかける
 
@@ -134,12 +133,12 @@ void Player::Update(float _scrollX)
 	m_move.x += m_moveKnockBack;
 	m_pos += m_move;
 
-	if (m_pos.y - (m_Size / Half * m_Scale) < -(SCREEN::height / Half))
+	if (m_pos.y - (m_size / Half * m_scale) < -(SCREEN::height / Half))
 	{
 		m_bAlive = false;
 	}
 
-	m_mat = Math::Matrix::CreateScale(m_Scale * m_dir, m_Scale, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
+	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0.0f) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0.0f);
 }
 
 void Player::Draw()
@@ -156,55 +155,48 @@ void Player::Draw()
 
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(m_pState->GetTex(), 0, 0,
-		&Math::Rectangle(m_Size * m_pState->GetAnimeNum(), 0, m_Size, m_Size), &col);
+		&Math::Rectangle(m_size * m_pState->GetAnimeNum(), 0, m_size, m_size), &col);
 }
 
 void Player::SetStandState()
 {
-	delete m_pState;
-	m_pState = new PlayerStand;
+	m_pState = std::make_shared<PlayerStand>();
 	m_pState->Init(this, m_fileName[playerStand]);
 }
 
 void Player::SetJumpState()
 {
-	delete m_pState;
-	m_pState = new PlayerJump;
+	m_pState = std::make_shared<PlayerJump>();
 	m_pState->Init(this, m_fileName[playerJump]);
 }
 
 void Player::SetRunState()
 {
-	delete m_pState;
-	m_pState = new PlayerRun;
+	m_pState = std::make_shared<PlayerRun>();
 	m_pState->Init(this, m_fileName[playerRun]);
 }
 
 void Player::SetDeathState()
 {
-	delete m_pState;
-	m_pState = new PlayerDeath;
+	m_pState = std::make_shared<PlayerDeath>();
 	m_pState->Init(this, m_fileName[playerDeath]);
 }
 
 void Player::SetAttackState()
 {
-	delete m_pState;
-	m_pState = new PlayerAttack;
+	m_pState = std::make_shared<PlayerAttack>();
 	m_pState->Init(this, m_fileName[playerAttack]);
 }
 
 void Player::SetFallState()
 {
-	delete m_pState;
-	m_pState = new PlayerFall;
+	m_pState = std::make_shared<PlayerFall>();
 	m_pState->Init(this, m_fileName[playerFall]);
 }
 
 void Player::SetGetHitState()
 {
-	delete m_pState;
-	m_pState = new PlayerGetHit;
+	m_pState = std::make_shared<PlayerGetHit>();
 	m_pState->Init(this, m_fileName[playerGetHit]);
 }
 
@@ -214,17 +206,16 @@ void Player::EndDamageEfc()
 	m_moveKnockBack = 0;
 	if (m_hp <= 0)
 	{
-		m_bDead = true;
 		m_hp = 0;
 		SetDeathState();
 	}
 	else { SetStandState(); }
 }
 
-void Player::SetDamage(float _enemyMove)
+void Player::SetDmg(int _hp,float _enemyMove)
 {
 	m_bDmg = true;
-	m_hp--;
+	m_hp -= _hp;
 	m_moveKnockBack = _enemyMove;
 	SetGetHitState();
 }
@@ -254,7 +245,8 @@ bool Player::ArrowShot()
 		{
 			Arrow* tmpArrow = new Arrow;
 
-			tmpArrow->SetPos({ m_pos.x + BltCRX * m_dir, m_pos.y + BltCRY });
+			tmpArrow->SetPos({ m_pos.x + ArrowCRX * m_scale * m_dir, m_pos.y + ArrowCRY * m_scale });
+			tmpArrow->SetScale(m_scale);
 			tmpArrow->SetDir(m_dir);
 			tmpArrow->SetTex(&m_arrowTex);
 
@@ -299,5 +291,4 @@ void Player::Release()
 		delete* it;
 		it = m_arrow.erase(it);
 	}
-	delete m_pState;
 }

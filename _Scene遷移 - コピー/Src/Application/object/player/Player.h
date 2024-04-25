@@ -16,7 +16,7 @@ public:
 	void Draw()override;
 
 	bool GetDmg() { return m_bDmg; }
-	bool GetDead() { return m_bDead; }
+	std::shared_ptr<PlayerPattern> GetPlayerState() { return m_pState; }
 
 	void SetStandState();
 	void SetJumpState();
@@ -28,11 +28,11 @@ public:
 
 	void EndDamageEfc();
 
-	int GetSpaceWidthImg() { return 30; }
-	int GetSpaceHeightImg(){ return 32; }
+	int GetSpaceWidthImg() { return (int)(30 * m_scale); }
+	int GetSpaceHeightImg(){ return (int)(32 * m_scale); }
 
 	//当たり判定用
-	void SetDamage(float _enemyMove);//ノックバックをつける
+	void SetDmg(int _hp, float _enemyMove);//ノックバックをつける
 	std::vector<Arrow*>* GetArrow() { return &m_arrow; }
 
 	void MapHitY(float _posY, float _moveY, bool _b);
@@ -51,7 +51,7 @@ private:
 
 	void Release()override;
 
-	float m_hp = 0;
+	int m_hp = 0;
 
 	float m_moveKnockBack = 0;
 
@@ -60,9 +60,8 @@ private:
 	std::vector<Arrow*> m_arrow;
 
 	bool m_bDmg = false;
-	bool m_bDead = false;
 
-	PlayerPattern* m_pState;
+	std::shared_ptr<PlayerPattern> m_pState;
 
 	KdTexture m_arrowTex;
 

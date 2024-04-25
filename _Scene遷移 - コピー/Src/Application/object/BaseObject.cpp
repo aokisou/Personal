@@ -25,11 +25,6 @@ void BaseObject::Draw()
 	if (!m_bAlive) { return; }
 }
 
-int BaseObject::GetHalfSize()
-{
-	return (m_Size * m_Scale) / Half;
-}
-
 void BaseObject::MapHitX(float _posX, float _moveX)
 {
 	m_pos.x = _posX;
@@ -45,4 +40,9 @@ void BaseObject::MapHitY(float _posY, float _moveY, bool _b)
 void BaseObject::Release()
 {
 
+}
+
+float BaseObject::GetHalfSize()
+{
+	return (m_size * m_scale) / Half;
 }

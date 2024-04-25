@@ -124,6 +124,12 @@
     <Filter Include="Src\Application\Scene\BaseScene\Game">
       <UniqueIdentifier>{e5b236a8-6532-41d8-9877-e2281ad2707d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Object\Enemy\Orc">
+      <UniqueIdentifier>{d59eee96-1c0f-4173-9e53-93f5015bc87a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Object\Enemy\Wolf">
+      <UniqueIdentifier>{a2fc2758-31d5-4dc0-b4ef-68958aabe24f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -294,6 +300,12 @@
     <ClInclude Include="Src\Application\Scene\BaseScene\Game\GameScene.h">
       <Filter>Src\Application\Scene\BaseScene\Game</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Object\Enemy\Wolf\Wolf.h">
+      <Filter>Src\Application\Object\Enemy\Wolf</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Object\Enemy\Orc\Orc.h">
+      <Filter>Src\Application\Object\Enemy\Orc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -430,6 +442,12 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Scene\BaseScene\Game\GameScene.cpp">
       <Filter>Src\Application\Scene\BaseScene\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Object\Enemy\Wolf\Wolf.cpp">
+      <Filter>Src\Application\Object\Enemy\Wolf</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Object\Enemy\Orc\Orc.cpp">
+      <Filter>Src\Application\Object\Enemy\Orc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
