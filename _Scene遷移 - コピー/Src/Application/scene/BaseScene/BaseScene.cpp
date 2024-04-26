@@ -1,9 +1,8 @@
 #include "BaseScene.h"
 #include "../../Utility/utility.h"
 
-int BaseScene::Update()
+void BaseScene::Update()
 {
-	return ChangeScene::no;
 }
 
 void BaseScene::Draw(KdTexture* _pTex)

@@ -2,21 +2,20 @@
 #include "../../Scene.h"
 #include "../../../Utility/utility.h"
 
-int TitleScene::Update()
+void TitleScene::Update()
 {
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
 		if (!(*m_pOwner->GetKeyFlg()))
 		{
 			m_pOwner->SetTrueKeyFlg();
-			return ChangeScene::game;
+			m_pOwner->ChangeGame();
+			return;
 		}
 	}
 	else { m_pOwner->SetFalseKeyFlg(); }
 
-	m_mat = Math::Matrix::CreateScale(1.05, 1.05, 1) * Math::Matrix::CreateTranslation(0, 0, 0);
-
-	return ChangeScene::no;
+	m_mat = Math::Matrix::CreateScale(SCREEN::scale, SCREEN::scale, 1.0f) * Math::Matrix::CreateTranslation(0.0f, 320.0f, 0.0f);
 }
 
 void TitleScene::Draw(KdTexture* _pTex)

@@ -5,7 +5,7 @@
 class Orc :public BaseEnemy
 {
 public:
-	Orc() { Init(); }
+	Orc(Math::Vector2 _pos) { Init(_pos); }
 	~Orc() { Release(); }
 
 	void Action()override;
@@ -19,12 +19,13 @@ public:
 	int GetSpaceWidthImg() { return (int)(15* m_scale); }
 	int GetSpaceHeightImg() { return (int)(10 * m_scale); }
 
-	int GetDmg() { return 5; }
+	int GetDmg();
+
 private:
-	void Init()override;
+	void Init(Math::Vector2 _pos)override;
 	void Release()override;
 
-	int m_lookRange = 0;					//Ž‹”F”ÍˆÍ
+	int m_lookRange = 0;	//Ž‹”F”ÍˆÍ
 
-	const std::string m_fileName[3] = { "Texture/enemy/2/S_Walk.png","Texture/enemy/2/S_Death.png","Texture/enemy/2/S_Attack.png" };
+	const std::string m_fileName[3] = { "Texture/Enemy/2/S_Walk.png","Texture/Enemy/2/S_Death.png","Texture/Enemy/2/S_Attack.png" };
 };

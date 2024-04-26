@@ -8,7 +8,7 @@ public:
 	TitleScene(int* _fps) { m_maxFps = _fps; Init(); }
 	~TitleScene(){}
 
-	int Update()override;
+	void Update()override;
 	void Draw(KdTexture* _pTex)override;
 	void DynamicDraw2D()override;
 

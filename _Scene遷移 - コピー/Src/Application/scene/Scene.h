@@ -31,7 +31,7 @@ public:
 
 	void ChangeTitle();
 	void ChangeGame();
-	void ChangeResult();
+	void ChangeResult(bool _b);
 
 	bool* GetKeyFlg() { return &m_bkeyFlg; }
 	void SetTrueKeyFlg() { m_bkeyFlg = true; }

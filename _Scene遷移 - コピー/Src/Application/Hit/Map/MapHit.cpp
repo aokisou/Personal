@@ -20,7 +20,7 @@ void MapHit::MapObjHit(int _s, int _e, Map* m_map, BaseObject* _obj)
 		for (int j = _s; j < _e; j++)
 		{
 			int md;
-			if ((md = m_map->GetMapData(i, j)) == none) { continue; }
+			if ((md = m_map->GetMapData(i, j)) == MapTile::none) { continue; }
 
 			const float mapRight	= m_map->GetPos(i,j).x + m_map->GetHalfSize();
 			const float mapLeft		= m_map->GetPos(i,j).x - m_map->GetHalfSize();
@@ -29,24 +29,24 @@ void MapHit::MapObjHit(int _s, int _e, Map* m_map, BaseObject* _obj)
 
 			if (objRight > mapLeft && objLeft < mapRight)
 			{
-				if (objNextBottom < mapTop && objNextTop > mapTop)//未来座標当たり判定(上)
+				if (objNextBottom < mapTop && objNextTop > mapTop)
 				{
 					if (_obj->GetContent()) { _obj->SetFalseAlive(); }
 					_obj->MapHitY(mapTop + _obj->GetHalfSize() - _obj->GetSpaceHeightImg(), 0.f, false);
 				}
-				else if (objNextTop > mapBottom && objNextBottom < mapBottom)//未来座標当たり判定(下)
+				else if (objNextTop > mapBottom && objNextBottom < mapBottom)
 				{
 					_obj->MapHitY(mapBottom - _obj->GetHalfSize() + _obj->GetSpaceHeightImg(), 0.f,true);
 				}
 			}
 			else if (objTop > mapBottom && objBottom < mapTop)
 			{
-				if (objNextLeft < mapRight && objNextRight > mapRight)//未来座標当たり判定(右)
+				if (objNextLeft < mapRight && objNextRight > mapRight)
 				{
 					if (_obj->GetContent()) { _obj->SetFalseAlive(); }
 					_obj->MapHitX(mapRight + _obj->GetHalfSize() - _obj->GetSpaceWidthImg(), 0.f);
 				}
-				else if (objNextRight > mapLeft && objNextLeft < mapLeft)//未来座標当たり判定(左)
+				else if (objNextRight > mapLeft && objNextLeft < mapLeft)
 				{
 					if (_obj->GetContent()) { _obj->SetFalseAlive(); }
 					_obj->MapHitX(mapLeft - _obj->GetHalfSize() + _obj->GetSpaceWidthImg(), 0.f);

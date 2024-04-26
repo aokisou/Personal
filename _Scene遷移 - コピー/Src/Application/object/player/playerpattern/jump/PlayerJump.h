@@ -11,4 +11,6 @@ public:
 	void Update()override;
 
 	int GetStateType()override { return playerJump; }
+
+	int GetMaxAnimeNum() { return 1; }
 };

@@ -26,6 +26,7 @@ void EnemyAttack::Update()
 				p->SetDmg(m_enemy->GetDmg() ,-5.0f);
 			}
 			m_enemy->ResetAttackCoolTime();
+			m_enemy->SetRunState();
 		}
 	}
 }

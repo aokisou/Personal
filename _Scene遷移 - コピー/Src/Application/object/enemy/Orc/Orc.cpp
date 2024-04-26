@@ -7,15 +7,17 @@
 #include "../EnemyPattern/Attack/EnemyAttack.h"
 #include "../../../Utility/Utility.h"
 
-#define WalkSpeed 1.0f	//•ú˜Q‚µ‚Ä‚é‚Æ‚«
-#define RunSpeed 2.0f	//UŒ‚ó‘Ô‚Ì
+#define WalkSpeed 1.0f			//•ú˜Q‚µ‚Ä‚é‚Æ‚«
+#define RunSpeed 2.0f			//UŒ‚ó‘Ô‚Ì
+#define Dmg 5					//UŒ‚‚Ìƒ_ƒ[ƒW
+#define AttackIntervalSec 3		//UŒ‚ŠÔŠu
 
-void Orc::Init()
+void Orc::Init(Math::Vector2 _pos)
 {
 	const int ImgSize = 48;		//ƒLƒƒƒ‰‰æ‘œƒTƒCƒY
 	const float Scale = 2.0f;	//ƒLƒƒƒ‰Šg‘å—¦
 
-	m_pos = { 0 };
+	m_pos = { _pos };
 	m_move = { 0 };
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
@@ -68,7 +70,7 @@ void Orc::Update(float _scrollX)
 				DmgEfcCnt = 0;
 				if (m_hp <= 0)
 				{
-					m_hp = 0.f;
+					m_hp = 0.0f;
 					SetDeathState();
 				}
 			}
@@ -97,13 +99,14 @@ bool Orc::Attack()
 	{
 		if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_attackRange)
 		{
-			if (m_attackCoolTime < *m_pOwner->GetMAXfps() * 3) 
+			if (m_attackCoolTime < *m_pOwner->GetMAXfps() * AttackIntervalSec) 
 			{
-				SetRunState();
 				return true; 
 			}
+
 			if (ply->GetFuturePos().x - GetFuturePos().x < 0) { m_dir = DefaultDir; }
 			else { m_dir = DefaultDir * Reverse; }
+
 			if (m_pState->GetStateType() != enemyAttack)
 			{
 				SetAttackState();
@@ -138,6 +141,11 @@ void Orc::SetAttackState()
 {
 	m_pState = std::make_shared<EnemyAttack>();
 	m_pState->Init(this, m_fileName[enemyAttack]);
+}
+
+int Orc::GetDmg()
+{
+	return Dmg;
 }
 
 void Orc::Release()

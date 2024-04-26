@@ -1,6 +1,7 @@
 #include "BaseEnemy.h"
 #include "EnemyPattern/Death/EnemyDeath.h"
 #include "EnemyPattern/Run/EnemyRun.h"
+#include "EnemyPattern/Attack/EnemyAttack.h"
 #include "../../Utility/Utility.h"
 
 void BaseEnemy::Init()

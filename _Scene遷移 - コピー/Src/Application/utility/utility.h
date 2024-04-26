@@ -50,10 +50,19 @@ enum MapTile//IDÇ∆çáÇÌÇπÇÈ
 	Block15,
 	Block16,
 	Block17,
+	Block18,
+	Block19,
+	Block20,
+	//ìGîzíu
+	MTSlime = 100,
+	MTWolf,
+	MTOrc,
+	MTBee
 };
 
 namespace SCREEN
 {
 	const int width = 1280;
 	const int height = 720;
+	const float scale = 1.05f;
 }

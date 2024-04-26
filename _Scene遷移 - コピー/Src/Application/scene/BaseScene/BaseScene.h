@@ -8,7 +8,7 @@ public:
 	BaseScene() { m_pOwner = nullptr; m_maxFps = nullptr; }
 	virtual ~BaseScene() { m_pOwner = nullptr; m_maxFps = nullptr; }
 
-	virtual int Update() = 0;
+	virtual void Update() = 0;
 	virtual void Draw(KdTexture* _pTex) = 0;
 	virtual void DynamicDraw2D() = 0;
 	virtual void Init() = 0;

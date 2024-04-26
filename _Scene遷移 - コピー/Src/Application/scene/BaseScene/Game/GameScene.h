@@ -16,7 +16,8 @@ public:
 	GameScene(int* _fps) { m_maxFps = _fps; Init(); }
 	~GameScene() { Release(); }
 
-	int Update()override;
+	void PreUpdate();
+	void Update()override;
 	void Draw(KdTexture* _pTex)override;
 	void DynamicDraw2D()override;
 	void UpdateBack();
@@ -24,6 +25,11 @@ public:
 	//クラスアドレス
 	Player* GetPlayer() { return m_player; }
 	std::vector<BaseEnemy*> GetEnemy() { return m_enemy; }
+
+	void CreateSlime(Math::Vector2 _pos);
+	void CreateWolf(Math::Vector2 _pos);
+	void CreateOrc(Math::Vector2 _pos);
+	void CreateBee(Math::Vector2 _pos);
 
 private:
 	void Init()override;
@@ -37,14 +43,9 @@ private:
 	void DeadEnemyErase();
 	void EnemyErase();
 
-	void CreateSlime();
-	void CreateWolf();
-	void CreateOrc();
-	void CreateBee();
-
-	float m_scrollX = 0.f;
-	float m_minScrollX = 0.f;
-	float m_maxScrollX = 0.f;
+	float m_scrollX = 0.0f;
+	float m_minScrollX = 0.0f;
+	float m_maxScrollX = 0.0f;
 
 	std::string m_mapName[1] = { "map/stage1.csv" };
 
@@ -70,6 +71,6 @@ private:
 	Math::Matrix m_backMat[BackNum];
 	Math::Matrix m_2ndBackMat[BackNum];
 	KdTexture m_backTex[BackNum];
-	std::string m_backName[BackNum] = { "Texture/background/1.png","Texture/background/2.png","Texture/background/3.png","Texture/background/4.png",
-										"Texture/background/5.png" };
+	std::string m_backName[BackNum] = { "Texture/BackGround/1.png","Texture/BackGround/2.png","Texture/BackGround/3.png","Texture/BackGround/4.png",
+										"Texture/BackGround/5.png" };
 };

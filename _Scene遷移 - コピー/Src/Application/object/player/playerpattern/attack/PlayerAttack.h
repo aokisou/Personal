@@ -11,5 +11,7 @@ public:
 	void Update()override;
 
 	int GetStateType() override { return playerAttack; }
+
+	int GetMaxAnimeNum() { return 5; }
 private:
 };

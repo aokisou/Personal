@@ -2,6 +2,7 @@
 #include<iostream>
 #include<fstream>
 #include<sstream>
+#include "../Scene/BaseScene/Game/GameScene.h"
 #include "../Utility/Utility.h"
 
 #define MapSize 64		//マップサイズ
@@ -9,23 +10,42 @@
 
 void Map::Init()
 {
-	for (int i = 0; i < m_pos.size(); i++)
+	m_Size = MapSize;
+
+	int heightSize = m_pos.size(), widthSize = m_pos[0].size();
+
+	for (int i = 0; i < heightSize; i++)
 	{
-		for (int j = 0; j < m_pos[i].size(); j++)
+		for (int j = 0; j < widthSize; j++)
 		{
-			m_pos[i][j] = { j * 64.0f - SCREEN::width / Half,(i * 64.0f - SCREEN::height / Half) * Reverse };
+			m_pos[i][j] = { (float)(j * m_Size - SCREEN::width / Half),(float)((i * m_Size - SCREEN::height / Half) * Reverse) };
 			m_mat[i][j] = Math::Matrix::CreateTranslation(m_pos[i][j].x, m_pos[i][j].y, 0);
+
+			switch (m_data[i][j])
+			{
+			case MapTile::MTSlime:
+				m_pOwner->CreateSlime(m_pos[i][j]);
+				m_data[i][j] = MapTile::none;
+				break;
+			case MapTile::MTWolf:
+				m_pOwner->CreateWolf(m_pos[i][j]);
+				m_data[i][j] = MapTile::none;
+				break;
+			case MapTile::MTOrc:
+				m_pOwner->CreateOrc(m_pos[i][j]);
+				m_data[i][j] = MapTile::none;
+				break;
+			}
 		}
 	}
 
-	m_Size = MapSize;
-
-	m_tex.Load("Texture/MapTile2.png");
+	m_tex.Load("Texture/Map/MapTile.png");
 }
 
 void Map::Update(int _s, int _e, float _scrollX)
 {
-	for (int i = 0; i < m_pos.size(); i++)
+	int heightSize = m_pos.size();
+	for (int i = 0; i < heightSize; i++)
 	{
 		for (int j = _s; j < _e; j++)
 		{
@@ -36,7 +56,8 @@ void Map::Update(int _s, int _e, float _scrollX)
 
 void Map::Draw(int _s, int _e)
 {
-	for (int i = 0; i < m_pos.size(); i++)
+	int heightSize = m_pos.size();
+	for (int i = 0; i < heightSize; i++)
 	{
 		for (int j = _s; j < _e; j++)
 		{

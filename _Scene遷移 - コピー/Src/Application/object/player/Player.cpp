@@ -151,7 +151,7 @@ void Player::Draw()
 	}
 
 	Math::Color col = { 1,1,1,1 };
-	if (m_bDmg)col = { 1,0,0,1 };
+	if (m_bDmg)col = { 1,0,0,(float)m_pState->GetAnimeNum() / m_pState->GetMaxAnimeNum() * 0.7f + 0.3f };
 
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(m_pState->GetTex(), 0, 0,
@@ -255,7 +255,7 @@ bool Player::ArrowShot()
 		}
 	}
 
-	if (m_pState->GetAnimeNum() == 5)
+	if (m_pState->GetAnimeNum() == m_pState->GetMaxAnimeNum() - 1)
 	{
 		a = false; b = false;
 	}

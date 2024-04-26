@@ -14,13 +14,14 @@ public:
 	virtual void Init(BaseEnemy* _enemy, std::string _file)final;
 	virtual void Update();
 
-	virtual int GetAnimeCnt() { return m_animeNum; }
+	int GetAnimeCnt() { return m_animeNum; }
 	virtual int GetStateType() = 0{}
 
-	void Release() { m_enemy = nullptr; }
+	virtual int GetMaxAnimeNum() = 0 { return 0; }
 
 	KdTexture* GetTex() { return &m_tex; }
 
+	void Release() { m_enemy = nullptr; }
 protected:
 
 	BaseEnemy* m_enemy = nullptr;

@@ -65,7 +65,7 @@ private:
 
 	KdTexture m_arrowTex;
 
-	const std::string m_fileName[7] = { "Texture/player/Idle.png","Texture/player/GetHit.png","Texture/player/Death.png","Texture/player/Jump.png",
-										"Texture/player/Run.png","Texture/player/Attack.png","Texture/player/Fall.png" };
+	const std::string m_fileName[7] = { "Texture/Player/Idle.png","Texture/Player/GetHit.png","Texture/Player/Death.png","Texture/Player/Jump.png",
+										"Texture/Player/Run.png","Texture/Player/Attack.png","Texture/Player/Fall.png" };
 public:
 };

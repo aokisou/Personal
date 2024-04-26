@@ -8,40 +8,18 @@
 
 void Scene::Draw2D()
 {
-	D3D.SetBackBuffer();
-	m_pNowScene->Draw(&m_tmpTex);
-}
-
-void Scene::DynamicDraw2D()
-{
 	m_tmpTex.ClearRenerTarget(Math::Color{ 0,0,0,0 });
 	m_tmpTex.SetRenderTarget();
 
 	m_pNowScene->DynamicDraw2D();
+
+	D3D.SetBackBuffer();
+	m_pNowScene->Draw(&m_tmpTex);
 }
 
 void Scene::Update()
 {
-	switch (m_pNowScene->Update())
-	{
-	case ChangeScene::title:
-	{
-		ChangeTitle();
-		break;
-	}
-	case ChangeScene::game:
-	{
-		ChangeGame();
-		break;
-	}
-	case ChangeScene::result:
-	{
-		ChangeResult();
-		break;
-	}
-	default:
-		break;
-	}
+	m_pNowScene->Update();
 }
 
 void Scene::Init()
@@ -88,9 +66,9 @@ void Scene::ChangeGame()
 	m_pNowScene->Update();
 }
 
-void Scene::ChangeResult()
+void Scene::ChangeResult(bool _b)
 {
-	m_pNowScene = std::make_shared<ResultScene>(&APP.m_maxFps);
+	m_pNowScene = std::make_shared<ResultScene>(&APP.m_maxFps,_b);
 	m_pNowScene->SetOwner(this);
 	m_pNowScene->Update();
 }

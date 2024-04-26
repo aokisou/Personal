@@ -11,4 +11,6 @@ public:
 	void Update()override;
 
 	int GetStateType() override{ return playerDeath; }
+
+	int GetMaxAnimeNum() { return 9; }
 };

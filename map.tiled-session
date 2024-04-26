@@ -13,20 +13,20 @@
             "scaleInEditor": 1
         },
         "mapTile2.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 0.5,
             "scaleInEditor": 1
         },
         "stage1.tmx": {
-            "scale": 0.25,
+            "scale": 0.125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 5564,
-                "y": 410
+                "x": 3704,
+                "y": 852
             }
         }
     },
     "last.exportedFilePath": "C:/2年/個人製作/Personal/_Scene遷移 - コピー/map",
-    "last.imagePath": "C:/2年/個人製作/Personal/_Scene遷移 - コピー/Texture",
+    "last.imagePath": "C:/2年/個人製作/Personal/_Scene遷移 - コピー/Texture/Map",
     "map.height": 12,
     "map.lastUsedExportFilter": "CSV ファイル (*.csv)",
     "map.lastUsedFormat": "tmx",

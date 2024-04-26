@@ -11,4 +11,6 @@ public:
 	void Update()override;
 
 	int GetStateType() override{ return enemyDeath; }
+
+	int GetMaxAnimeNum() { return 5; }
 };

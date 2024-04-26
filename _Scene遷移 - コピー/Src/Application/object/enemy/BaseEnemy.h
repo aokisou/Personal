@@ -11,7 +11,8 @@ public:
 	BaseEnemy() { Init(); }
 	virtual ~BaseEnemy() {}
 
-	virtual void Init()override = 0;
+	virtual void Init()override;
+	virtual void Init(Math::Vector2 _pos) = 0;
 	virtual void Action()override = 0;
 	virtual void Update(float _scrollX)override = 0;
 	virtual void Draw()override;

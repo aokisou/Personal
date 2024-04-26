@@ -9,13 +9,15 @@
 
 #define WalkSpeed 1.5f	//•ú˜Q‚µ‚Ä‚é‚Æ‚«
 #define RunSpeed 3.f	//UŒ‚ó‘Ô‚ÌŽž
+#define Dmg 3 //UŒ‚Žž‚Ìƒ_ƒ[ƒW
+#define AttackIntervalSec 3		//UŒ‚ŠÔŠu
 
-void Wolf::Init()
+void Wolf::Init(Math::Vector2 _pos)
 {
 	const int ImgSize = 48;		//ƒLƒƒƒ‰‰æ‘œƒTƒCƒY
 	const float Scale = 2.0f;		//ƒLƒƒƒ‰Šg‘å—¦
 
-	m_pos = { 0 };
+	m_pos = { _pos };
 	m_move = { 0 };
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
@@ -98,9 +100,8 @@ bool Wolf::Attack()
 	{
 		if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_attackRange)
 		{
-			if (m_attackCoolTime < *m_pOwner->GetMAXfps() * 3)
+			if (m_attackCoolTime < *m_pOwner->GetMAXfps() * AttackIntervalSec)
 			{
-				SetRunState();
 				return true;
 			}
 			if (ply->GetFuturePos().x - GetFuturePos().x < 0) { m_dir = DefaultDir; }
@@ -139,6 +140,12 @@ void Wolf::SetAttackState()
 {
 	m_pState = std::make_shared<EnemyAttack>();
 	m_pState->Init(this, m_fileName[enemyAttack]);
+}
+
+
+int Wolf::GetDmg()
+{
+	return Dmg;
 }
 
 void Wolf::Release()

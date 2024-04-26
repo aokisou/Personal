@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "../../Scene.h"
 #include "../../../Object/Player/Player.h"
 #include "../../../Object/Enemy/Slime/Slime.h"
 #include "../../../Object/Enemy/Wolf/Wolf.h"
@@ -13,10 +14,28 @@
 #include<vector>
 #include "../../../Utility/utility.h"
 
-#define BackSize 2.3f
+#define BackWidth 576		//”wŒi‰¡•
+#define BackHeight 324		//”wŒic•
+#define BackScale 2.3f		//”wŒiŠg‘å—¦
+#define MaxShakeCnt 10		//—h‚ê‚éŽžŠÔ
+#define BigShakePow 20		//‘å‚«‚¢—h‚ê
+#define SmallShakePow 20	//¬‚³‚¢—h‚ê
+#define OnePunch 2			//ˆê”­‚Å“|‚³‚ê‚½‚ç
+#define ScreenRange 22		//‰æ–Ê‚É“ü‚éƒ}ƒbƒvƒ`ƒbƒv‚Ì”ÍˆÍ
+#define Clear true			//ƒNƒŠƒA
 
-int GameScene::Update()
+void GameScene::PreUpdate()
 {
+	UpdateBack();
+	MapRange();
+	DeadEnemy();
+	DeadEnemyErase();
+}
+
+void GameScene::Update()
+{
+	PreUpdate();
+
 	m_player->Action();
 
 	for (auto& i : m_enemy)
@@ -29,7 +48,7 @@ int GameScene::Update()
 	m_mapHit->MapObjHit(m_mapRangeStart, m_mapRangeEnd, m_map, m_player);
 	for (auto& i : m_enemy)
 	{
-		m_mapHit->MapObjHit(m_mapRangeStart, m_mapRangeEnd, m_map, i);
+		m_mapHit->MapObjHit(0, m_map->GetMaxWidth(), m_map, i);
 	}
 
 	std::vector<Arrow*>* b = m_player->GetArrow();
@@ -46,7 +65,6 @@ int GameScene::Update()
 	{
 		i->Update(m_scrollX);
 	}
-	DeadEnemyErase();
 	m_map->Update(m_mapRangeStart, m_mapRangeEnd, m_scrollX);
 
 	m_scrollX = m_player->GetPos().x;
@@ -68,36 +86,37 @@ int GameScene::Update()
 		}
 	}
 
-	UpdateBack();
-	MapRange();
-	DeadEnemy();
-
-	float r = 0;
+	float r = 0.0f;
 	if (m_BigShake)
 	{
 		m_shakeCnt++;
-		r = rand() % 20 - 10;
-		if (m_shakeCnt > 10) { ShakeReset(m_BigShake); }
+		r = (float)(rand() % BigShakePow - BigShakePow / Half);
+		if (m_shakeCnt > MaxShakeCnt) { ShakeReset(m_BigShake); }
 	}
 	if (m_smallShake)
 	{
 		m_shakeCnt++;
-		r = rand() % 10 - 5;
-		if (m_shakeCnt > 10) { ShakeReset(m_smallShake); }
+		r = (float)(rand() % SmallShakePow - SmallShakePow / Half);
+		if (m_shakeCnt > MaxShakeCnt) { ShakeReset(m_smallShake); }
 	}
-	m_mat = Math::Matrix::CreateScale(1.05f, 1.05f, 1.0f) * Math::Matrix::CreateTranslation(r + 28, 320.0f, 0.0f);
-	if (m_player->GetAlive()) { return ChangeScene::no; }
-	else { return ChangeScene::result; }
+	m_mat = Math::Matrix::CreateScale(SCREEN::scale, SCREEN::scale, 1.0f) *
+		Math::Matrix::CreateTranslation(r + m_player->GetHalfSize() - m_player->GetSpaceWidthImg(), 320.0f, 0.0f);
+
+	if (!m_player->GetAlive()) 
+	{
+		m_pOwner->ChangeResult(!Clear);
+		return;
+	}
 }
 
 void GameScene::MapRange()
 {
-	m_mapRangeStart = m_scrollX / 64;
+	m_mapRangeStart = (int)(m_scrollX / m_map->GetHalfSize() * 2);
 	if (m_mapRangeStart < 0) { m_mapRangeStart = 0; }
-	m_mapRangeEnd = m_mapRangeStart + 22;
+	m_mapRangeEnd = m_mapRangeStart + ScreenRange;
 	if (m_mapRangeEnd > m_map->GetMaxWidth())
 	{
-		m_mapRangeStart = m_map->GetMaxWidth() - 1 - 22;
+		m_mapRangeStart = m_map->GetMaxWidth() - 1 - ScreenRange;
 		m_mapRangeEnd = m_map->GetMaxWidth() - 1;
 	}
 }
@@ -115,7 +134,7 @@ void GameScene::DeadEnemy()
 	{
 		if ((*it)->GetEnemyState()->GetStateType() == enemyDeath)
 		{
-			if ((*it)->GetAttackHitCnt() < 2) { m_BigShake = true; }
+			if ((*it)->GetAttackHitCnt() < OnePunch) { m_BigShake = true; }
 			else { m_smallShake = true; }
 		}
 		it++;
@@ -154,16 +173,16 @@ void GameScene::UpdateBack()
 	for (int i = 0; i < BackNum; i++)
 	{
 		m_backPos[i].x = -(m_scrollX * m_backScrollSpeed[i]);
-		if (m_backPos[i].x < -576 * BackSize)
+		if (m_backPos[i].x < -BackWidth * BackScale)
 		{
-			while (m_backPos[i].x < -576 * BackSize)
+			while (m_backPos[i].x < -BackWidth * BackScale)
 			{
-				m_backPos[i].x += 576 * BackSize;
+				m_backPos[i].x += BackWidth * BackScale;
 			}
 		}
-		m_2ndBackPos[i].x = m_backPos[i].x + 576 * BackSize;
-		m_backMat[i] = Math::Matrix::CreateScale(BackSize, BackSize, 1) * Math::Matrix::CreateTranslation(m_backPos[i].x, m_backPos[i].y, 0);
-		m_2ndBackMat[i] = Math::Matrix::CreateScale(BackSize, BackSize, 1) * Math::Matrix::CreateTranslation(m_2ndBackPos[i].x, m_2ndBackPos[i].y, 0);
+		m_2ndBackPos[i].x = m_backPos[i].x + 576 * BackScale;
+		m_backMat[i] = Math::Matrix::CreateScale(BackScale, BackScale, 1.0f) * Math::Matrix::CreateTranslation(m_backPos[i].x, m_backPos[i].y, 0.0f);
+		m_2ndBackMat[i] = Math::Matrix::CreateScale(BackScale, BackScale, 1.0f) * Math::Matrix::CreateTranslation(m_2ndBackPos[i].x, m_2ndBackPos[i].y, 0.0f);
 	}
 }
 
@@ -172,7 +191,7 @@ void GameScene::Draw(KdTexture* _pTex)
 {
 	for (int i = 0; i < BackNum; i++)
 	{
-		Math::Rectangle src = { 0,0,576,324 };
+		Math::Rectangle src = { 0,0,BackWidth,BackHeight };
 		SHADER.m_spriteShader.SetMatrix(m_backMat[i]);
 		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src);
 		SHADER.m_spriteShader.SetMatrix(m_2ndBackMat[i]);
@@ -204,12 +223,11 @@ void GameScene::Init()
 	m_smallShake = false;
 
 	m_player = new Player;
-	CreateSlime();
-	CreateWolf();
-	CreateOrc();
 	m_hit = new Hit;
 	m_map = new Map;
 	m_mapHit = new MapHit;
+
+	m_map->SetOwner(this);
 
 	m_map->SetMapData(m_mapName[0]);
 	m_minScrollX = m_map->GetPos(0, 0).x + SCREEN::width / Half;
@@ -237,28 +255,28 @@ void GameScene::Release()
 	delete m_mapHit;
 }
 
-void GameScene::CreateSlime()
+void GameScene::CreateSlime(Math::Vector2 _pos)
 {
-	Slime* s = new Slime;
+	Slime* s = new Slime(_pos);
 	s->SetOwner(this);
 	m_enemy.push_back(s);
 }
 
-void GameScene::CreateWolf()
+void GameScene::CreateWolf(Math::Vector2 _pos)
 {
-	Wolf* w = new Wolf;
+	Wolf* w = new Wolf(_pos);
 	w->SetOwner(this);
 	m_enemy.push_back(w);
 }
 
-void GameScene::CreateOrc()
+void GameScene::CreateOrc(Math::Vector2 _pos)
 {
-	Orc* o = new Orc;
+	Orc* o = new Orc(_pos);
 	o->SetOwner(this);
 	m_enemy.push_back(o);
 }
 
-void GameScene::CreateBee()
+void GameScene::CreateBee(Math::Vector2 _pos)
 {
 
 }

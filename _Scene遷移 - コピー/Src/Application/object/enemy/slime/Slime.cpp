@@ -9,12 +9,13 @@
 
 #define WalkSpeed 0.5f	//•ú˜Q‚µ‚Ä‚é‚Æ‚«
 #define RunSpeed 1.5f	//UŒ‚ó‘Ô‚ÌŽž
+#define Dmg 1 //UŒ‚Žž‚Ìƒ_ƒ[ƒW
 
-void Slime::Init()
+void Slime::Init(Math::Vector2 _pos)
 {
 	const int ImgSize = 48;			//ƒLƒƒƒ‰‰æ‘œƒTƒCƒY
 	const float Scale = 2.0f;				//ƒLƒƒƒ‰Šg‘å—¦
-	m_pos = { 0 };
+	m_pos = { _pos };
 	m_move = { 0 };
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
@@ -40,7 +41,7 @@ void Slime::Action()
 
 	if (Attack()) { return; }
 
-	m_move.x = WalkSpeed * m_dir;
+	m_move.x = WalkSpeed * -m_dir;
 
 	if (m_pos.x > m_startPos.x + m_moveRange && m_move.x > 0) { m_dir *= Reverse; }
 	if (m_pos.x < m_startPos.x - m_moveRange && m_move.x < 0) { m_dir *= Reverse; }
@@ -98,7 +99,7 @@ bool Slime::Attack()
 			Math::Vector2 v = ply->GetFuturePos() - GetFuturePos();
 			if (v.Length() < ply->GetHalfSize() - ply->GetSpaceWidthImg() + GetHalfSize() - GetSpaceWidthImg())
 			{
-				ply->SetDmg(1, m_move.x * 2);
+				ply->SetDmg(Dmg, m_move.x * 2);
 			}
 			return true;
 		}

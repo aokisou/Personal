@@ -19,6 +19,8 @@ public:
 	virtual int GetAnimeNum()final { return m_animeNum; }
 	virtual int GetStateType() { return playerStand; }
 
+	virtual int GetMaxAnimeNum() = 0 { return 0; }
+
 	KdTexture* GetTex() { return &m_tex; }
 
 protected:

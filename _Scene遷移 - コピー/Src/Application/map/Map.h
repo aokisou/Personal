@@ -1,5 +1,7 @@
 #pragma once
 
+class GameScene;
+
 class Map
 {
 public:
@@ -9,7 +11,7 @@ public:
 	void Update(int _s,int _e,float _scrollX);
 	void Draw(int _s, int _e);
 
-	//読み込み後初期化(自動実行)
+	//読み込み後初期化(自動実行敵配置もする)
 	void SetMapData(std::string a_FileNme);
 
 	int GetMaxHeight() { return m_data.size(); }
@@ -19,6 +21,7 @@ public:
 	int GetHalfSize();
 	int GetMapData(int _w, int _h) { return m_data[_w][_h]; }
 
+	void SetOwner(GameScene* _pOwner) { m_pOwner = _pOwner; }
 private:
 	void Init();
 	void Release();
@@ -33,4 +36,6 @@ private:
 	std::vector<std::vector<Math::Matrix>> m_mat;
 
 	KdTexture m_tex;
+
+	GameScene* m_pOwner = nullptr;
 };

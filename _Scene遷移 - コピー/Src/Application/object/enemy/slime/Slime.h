@@ -5,7 +5,7 @@
 class Slime :public BaseEnemy
 {
 public:
-	Slime() { Init(); }
+	Slime(Math::Vector2 _pos) { Init(_pos); }
 	~Slime() { Release(); }
 
 	void Action()override;
@@ -19,8 +19,8 @@ public:
 	int GetSpaceHeightImg()override { return (int)(10 * m_scale); }
 
 private:
-	void Init()override;
+	void Init(Math::Vector2 _pos)override;
 	void Release()override;
 
-	const std::string m_fileName[2] = { "Texture/enemy/1/S_Walk.png","Texture/enemy/1/S_Death.png" };
+	const std::string m_fileName[2] = { "Texture/Enemy/1/S_Walk.png","Texture/Enemy/1/S_Death.png" };
 };
