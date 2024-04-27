@@ -6,10 +6,16 @@ class Scene
 {
 private:
 	std::shared_ptr<BaseScene> m_pNowScene = nullptr;
+	std::shared_ptr<BaseScene> m_pNextScene = nullptr;//ˆê•Û‘¶
 	
 	bool m_bkeyFlg = false;
 
+	bool m_bChangeScene = false;
+	int m_sceneChageAlpha = 0;
+	Math::Matrix m_sceneChangeMat = Math::Matrix::Identity;
+
 	KdTexture m_tmpTex;
+	KdTexture m_sceneChangeTex;
 
 public:
 
@@ -24,10 +30,14 @@ public:
 
 	// •`‰æˆ—
 	void Draw2D();
-	void DynamicDraw2D();
 
 	// GUIˆ—
 	void ImGuiUpdate();
+
+	void UpdateChangeScene();
+	void DrawChangeScene();
+
+	void SetTrueChangeScene() { m_bChangeScene = true; }
 
 	void ChangeTitle();
 	void ChangeGame();

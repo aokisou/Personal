@@ -187,6 +187,8 @@
     <ClInclude Include="Src\Application\Scene\BaseScene\Result\ResultScene.h" />
     <ClInclude Include="Src\Application\Scene\BaseScene\Title\TitleScene.h" />
     <ClInclude Include="Src\Application\scene\Scene.h" />
+    <ClInclude Include="Src\Application\UI\HP\Enemy\EnemyHPBar.h" />
+    <ClInclude Include="Src\Application\UI\HP\Player\PlayerHPBar.h" />
     <ClInclude Include="Src\Application\utility\Utility.h" />
     <ClInclude Include="Src\System\Audio\KdAudio.h" />
     <ClInclude Include="src\System\Direct3D\KdDirect3D.h" />
@@ -239,6 +241,8 @@
     <ClCompile Include="Src\Application\Scene\BaseScene\Result\ResultScene.cpp" />
     <ClCompile Include="Src\Application\Scene\BaseScene\Title\TitleScene.cpp" />
     <ClCompile Include="Src\Application\scene\Scene.cpp" />
+    <ClCompile Include="Src\Application\UI\HP\Enemy\EnemyHPBar.cpp" />
+    <ClCompile Include="Src\Application\UI\HP\Player\PlayerHPBar.cpp" />
     <ClCompile Include="Src\System\Audio\KdAudio.cpp" />
     <ClCompile Include="src\System\Direct3D\KdDirect3D.cpp" />
     <ClCompile Include="Src\System\Direct3D\KdDirect3DHelper.cpp" />

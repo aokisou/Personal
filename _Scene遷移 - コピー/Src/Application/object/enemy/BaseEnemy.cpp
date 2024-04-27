@@ -2,6 +2,7 @@
 #include "EnemyPattern/Death/EnemyDeath.h"
 #include "EnemyPattern/Run/EnemyRun.h"
 #include "EnemyPattern/Attack/EnemyAttack.h"
+#include "../../UI/HP/Enemy/EnemyHPBar.h"
 #include "../../Utility/Utility.h"
 
 void BaseEnemy::Init()
@@ -23,6 +24,7 @@ void BaseEnemy::Update(float _scrollX)
 void BaseEnemy::Draw()
 {
 	if (!m_bAlive) { return; }
+	DrawUI();
 	Math::Color col = { 1,1,1,1 };
 	if (m_bDmg)col = { 1,0,0,1 };
 	SHADER.m_spriteShader.SetMatrix(m_mat);
@@ -52,4 +54,12 @@ float BaseEnemy::GetAngleDeg(Math::Vector2 src, Math::Vector2 dest)
 		deg += 360;
 	}
 	return deg;
+}
+
+void BaseEnemy::InitUI()
+{
+	m_gaugeTex.Load("Texture/UI/bg.png");
+	m_barTex.Load("Texture/UI/red.png");
+
+	m_pHPBar = std::make_shared<EnemyHPBar>(&m_gaugeTex,&m_barTex);
 }

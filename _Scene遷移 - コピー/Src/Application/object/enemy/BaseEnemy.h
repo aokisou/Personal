@@ -4,6 +4,7 @@
 
 class EnemyPattern;
 class GameScene;
+class EnemyHPBar;
 
 class BaseEnemy :public BaseObject
 {
@@ -17,6 +18,9 @@ public:
 	virtual void Update(float _scrollX)override = 0;
 	virtual void Draw()override;
 	virtual void Release()override = 0 {}
+
+	virtual void UpdateUI(float _scrollX) = 0{}
+	virtual void DrawUI() = 0{}
 
 	virtual bool Attack() = 0{}
 
@@ -46,6 +50,8 @@ public:
 	int GetAttackHitCnt() { return m_attackHitCnt; }
 
 protected:
+	void InitUI();
+
 	Math::Vector2 m_startPos = {};
 
 	int m_moveRange = 0;
@@ -61,6 +67,11 @@ protected:
 	int m_attackCoolTime = 0;
 
 	std::shared_ptr<EnemyPattern> m_pState = nullptr;
+
+	std::shared_ptr<EnemyHPBar> m_pHPBar = nullptr;
+
+	KdTexture m_gaugeTex;
+	KdTexture m_barTex;
 
 	GameScene* m_pOwner = nullptr;
 };

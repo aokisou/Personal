@@ -130,6 +130,18 @@
     <Filter Include="Src\Application\Object\Enemy\Wolf">
       <UniqueIdentifier>{a2fc2758-31d5-4dc0-b4ef-68958aabe24f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\UI">
+      <UniqueIdentifier>{6e3e6414-267d-4ab6-b242-228d4f13f0a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\UI\HP">
+      <UniqueIdentifier>{995e443a-1e9c-4b07-972f-bcd4b6cb77b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\UI\HP\Player">
+      <UniqueIdentifier>{5514eee4-5e88-4e48-8a66-7ff0bdee06e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\UI\HP\Enemy">
+      <UniqueIdentifier>{55f440bf-2e3f-425e-8b34-9ff43f52a01d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -306,6 +318,12 @@
     <ClInclude Include="Src\Application\Object\Enemy\Orc\Orc.h">
       <Filter>Src\Application\Object\Enemy\Orc</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\UI\HP\Player\PlayerHPBar.h">
+      <Filter>Src\Application\UI\HP\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\UI\HP\Enemy\EnemyHPBar.h">
+      <Filter>Src\Application\UI\HP\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -448,6 +466,12 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Object\Enemy\Orc\Orc.cpp">
       <Filter>Src\Application\Object\Enemy\Orc</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\UI\HP\Player\PlayerHPBar.cpp">
+      <Filter>Src\Application\UI\HP\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\UI\HP\Enemy\EnemyHPBar.cpp">
+      <Filter>Src\Application\UI\HP\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

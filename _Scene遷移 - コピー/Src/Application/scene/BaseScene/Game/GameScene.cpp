@@ -7,19 +7,15 @@
 #include "../../../Hit//Object/Hit.h"
 #include "../../../Map/Map.h"
 #include "../../../Hit/Map/MapHit.h"
-#include "../../../Object/Enemy/EnemyPattern/EnemyPattern.h"
 #include "../../../Object/Enemy/EnemyPattern/Death/EnemyDeath.h"
 #include "../../../Object/Enemy/EnemyPattern/Run/EnemyRun.h"
 #include "../../../Object/Enemy/EnemyPattern/Attack/EnemyAttack.h"
 #include<vector>
 #include "../../../Utility/utility.h"
 
-#define BackWidth 576		//”wŒi‰¡•
-#define BackHeight 324		//”wŒic•
-#define BackScale 2.3f		//”wŒiŠg‘å—¦
 #define MaxShakeCnt 10		//—h‚ê‚éŽžŠÔ
 #define BigShakePow 20		//‘å‚«‚¢—h‚ê
-#define SmallShakePow 20	//¬‚³‚¢—h‚ê
+#define SmallShakePow 10	//¬‚³‚¢—h‚ê
 #define OnePunch 2			//ˆê”­‚Å“|‚³‚ê‚½‚ç
 #define ScreenRange 22		//‰æ–Ê‚É“ü‚éƒ}ƒbƒvƒ`ƒbƒv‚Ì”ÍˆÍ
 #define Clear true			//ƒNƒŠƒA
@@ -36,11 +32,14 @@ void GameScene::Update()
 {
 	PreUpdate();
 
-	m_player->Action();
-
-	for (auto& i : m_enemy)
+	if (!m_BigShake || !m_smallShake)
 	{
-		i->Action();
+		m_player->Action();
+
+		for (auto& i : m_enemy)
+		{
+			i->Action();
+		}
 	}
 
 	m_hit->ArrEmyHit();
@@ -100,10 +99,11 @@ void GameScene::Update()
 		if (m_shakeCnt > MaxShakeCnt) { ShakeReset(m_smallShake); }
 	}
 	m_mat = Math::Matrix::CreateScale(SCREEN::scale, SCREEN::scale, 1.0f) *
-		Math::Matrix::CreateTranslation(r + m_player->GetHalfSize() - m_player->GetSpaceWidthImg(), 320.0f, 0.0f);
+		Math::Matrix::CreateTranslation(r + m_player->GetHalfSize() - m_player->GetSpaceWidthImg(), 0.0f, 0.0f);
 
 	if (!m_player->GetAlive()) 
 	{
+		m_pOwner->SetTrueChangeScene();
 		m_pOwner->ChangeResult(!Clear);
 		return;
 	}
@@ -111,7 +111,7 @@ void GameScene::Update()
 
 void GameScene::MapRange()
 {
-	m_mapRangeStart = (int)(m_scrollX / m_map->GetHalfSize() * 2);
+	m_mapRangeStart = (int)(m_scrollX / (m_map->GetHalfSize() * 2));
 	if (m_mapRangeStart < 0) { m_mapRangeStart = 0; }
 	m_mapRangeEnd = m_mapRangeStart + ScreenRange;
 	if (m_mapRangeEnd > m_map->GetMaxWidth())
@@ -170,35 +170,38 @@ void GameScene::EnemyErase()
 
 void GameScene::UpdateBack()
 {
-	for (int i = 0; i < BackNum; i++)
+	for (int i = 0; i < Back::Num; i++)
 	{
 		m_backPos[i].x = -(m_scrollX * m_backScrollSpeed[i]);
-		if (m_backPos[i].x < -BackWidth * BackScale)
+		if (m_backPos[i].x < -Back::Width * Back::Scale)
 		{
-			while (m_backPos[i].x < -BackWidth * BackScale)
+			while (m_backPos[i].x < -Back::Width * Back::Scale)
 			{
-				m_backPos[i].x += BackWidth * BackScale;
+				m_backPos[i].x += Back::Width * Back::Scale;
 			}
 		}
-		m_2ndBackPos[i].x = m_backPos[i].x + 576 * BackScale;
-		m_backMat[i] = Math::Matrix::CreateScale(BackScale, BackScale, 1.0f) * Math::Matrix::CreateTranslation(m_backPos[i].x, m_backPos[i].y, 0.0f);
-		m_2ndBackMat[i] = Math::Matrix::CreateScale(BackScale, BackScale, 1.0f) * Math::Matrix::CreateTranslation(m_2ndBackPos[i].x, m_2ndBackPos[i].y, 0.0f);
+		m_2ndBackPos[i].x = m_backPos[i].x + 576 * Back::Scale;
+		m_backMat[i] = Math::Matrix::CreateScale(Back::Scale, Back::Scale, 1.0f) * Math::Matrix::CreateTranslation(m_backPos[i].x, m_backPos[i].y, 0.0f);
+		m_2ndBackMat[i] = Math::Matrix::CreateScale(Back::Scale, Back::Scale, 1.0f) * Math::Matrix::CreateTranslation(m_2ndBackPos[i].x, m_2ndBackPos[i].y, 0.0f);
 	}
 }
 
 
 void GameScene::Draw(KdTexture* _pTex)
 {
-	for (int i = 0; i < BackNum; i++)
+	Math::Rectangle src = { 0,0,Back::Width,Back::Height };
+	for (int i = 0; i < Back::Num; i++)
 	{
-		Math::Rectangle src = { 0,0,BackWidth,BackHeight };
 		SHADER.m_spriteShader.SetMatrix(m_backMat[i]);
 		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src);
 		SHADER.m_spriteShader.SetMatrix(m_2ndBackMat[i]);
 		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src);
 	}
+	src = { 0,0, SCREEN::width, SCREEN::height };
 	SHADER.m_spriteShader.SetMatrix(m_mat);
-	SHADER.m_spriteShader.DrawTex(_pTex, 0, 0, &Math::Rectangle(0, 0, SCREEN::width, SCREEN::width));
+	SHADER.m_spriteShader.DrawTex(_pTex, 0, 0, &src);
+
+	m_player->DrawUI();
 }
 
 void GameScene::DynamicDraw2D()
@@ -233,7 +236,7 @@ void GameScene::Init()
 	m_minScrollX = m_map->GetPos(0, 0).x + SCREEN::width / Half;
 	m_maxScrollX = m_map->GetPos(0,(m_map->GetMaxWidth() - 1)).x - SCREEN::width / Half;
 
-	for (int i = 0; i < BackNum; i++)
+	for (int i = 0; i < Back::Num; i++)
 	{
 		m_backPos[i] = {};
 		m_2ndBackPos[i] = {};

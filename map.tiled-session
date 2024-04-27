@@ -17,11 +17,11 @@
             "scaleInEditor": 1
         },
         "stage1.tmx": {
-            "scale": 0.125,
+            "scale": 0.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 3704,
-                "y": 852
+                "x": 2786,
+                "y": 393
             }
         }
     },

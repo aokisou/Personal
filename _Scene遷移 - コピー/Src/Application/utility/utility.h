@@ -53,6 +53,36 @@ enum MapTile//IDÇ∆çáÇÌÇπÇÈ
 	Block18,
 	Block19,
 	Block20,
+	Block21,
+	Block22,
+	Block23,
+	Block24,
+	Block25,
+	Block26,
+	Block27,
+	Block28,
+	Block29,
+	Block30,
+	Block31,
+	Block32,
+	Block33,
+	Block34,
+	Block35,
+	Block36,
+	Block37,
+	Block38,
+	Block39,
+	Block40,
+	Block41,
+	Block42,
+	Block43,
+	Block44,
+	Block45,
+	Block46,
+	Block47,
+	Block48,
+	Block49,
+	Block50,
 	//ìGîzíu
 	MTSlime = 100,
 	MTWolf,
@@ -65,4 +95,12 @@ namespace SCREEN
 	const int width = 1280;
 	const int height = 720;
 	const float scale = 1.05f;
+}
+
+namespace Back
+{
+	const int Num = 5;			//âÊëúêî
+	const int Width = 576;		//îwåiâ°ïù
+	const int Height = 324;		//îwåiècïù
+	const float Scale = 2.3f;	//îwåiägëÂó¶
 }

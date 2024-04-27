@@ -1,16 +1,19 @@
 #include "Wolf.h"
 #include "../../../Scene/BaseSCene/Game/GameScene.h"
 #include "../../Player/Player.h"
+#include "../../Player/PlayerPattern/PlayerPattern.h"
 #include "../EnemyPattern/EnemyPattern.h"
 #include "../EnemyPattern/Death/EnemyDeath.h"
 #include "../EnemyPattern/Run/EnemyRun.h"
 #include "../EnemyPattern/Attack/EnemyAttack.h"
+#include "../../../UI/HP/Enemy/EnemyHPBar.h"
 #include "../../../Utility/Utility.h"
 
-#define WalkSpeed 1.5f	//•ú˜Q‚µ‚Ä‚é‚Æ‚«
-#define RunSpeed 3.f	//UŒ‚ó‘Ô‚ÌŽž
-#define Dmg 3 //UŒ‚Žž‚Ìƒ_ƒ[ƒW
-#define AttackIntervalSec 3		//UŒ‚ŠÔŠu
+#define WalkSpeed 1.5f			//•ú˜Q‚µ‚Ä‚é‚Æ‚«
+#define RunSpeed 3.f			//UŒ‚ó‘Ô‚ÌŽž
+#define Dmg 3					//UŒ‚Žž‚Ìƒ_ƒ[ƒW
+#define AttackIntervalSec 2		//UŒ‚ŠÔŠu
+#define MaxHP 15				//‰ŠúHP
 
 void Wolf::Init(Math::Vector2 _pos)
 {
@@ -24,16 +27,15 @@ void Wolf::Init(Math::Vector2 _pos)
 	m_size = ImgSize;
 	m_scale = Scale;
 	m_dir = DefaultDir;
-	m_hp = 15;
+	m_hp = MaxHP;
 	m_bDmg = false;
 	DmgEfcCnt = 0;
 	m_moveRange = 100;
 	m_lookRange = m_moveRange * 2;
 	m_attackRange = 30;
 	m_attackCoolTime = 0;
-
 	SetRunState();
-
+	InitUI();
 	m_startPos = m_pos;
 }
 
@@ -81,6 +83,7 @@ void Wolf::Update(float _scrollX)
 	}
 
 	m_pState->Update();
+	UpdateUI(_scrollX);
 
 	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0.0f) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }
@@ -89,6 +92,8 @@ bool Wolf::Attack()
 {
 	m_attackCoolTime++;
 	Player* ply = m_pOwner->GetPlayer();
+
+	if (ply->GetPlayerState()->GetStateType() == playerDeath || ply->GetPlayerState()->GetStateType() == playerGetHit) { return false; }
 
 	const float plyTop = ply->GetPos().y + ply->GetHalfSize() - ply->GetSpaceHeightImg();
 	const float plyBottom = ply->GetPos().y - ply->GetHalfSize() + ply->GetSpaceHeightImg();
@@ -122,6 +127,16 @@ bool Wolf::Attack()
 		}
 	}
 	return false;
+}
+
+void Wolf::UpdateUI(float _scrollX)
+{
+	m_pHPBar->Update(&m_hp, MaxHP, { m_pos.x - _scrollX, m_pos.y });
+}
+
+void Wolf::DrawUI()
+{
+	m_pHPBar->Draw(MaxHP);
 }
 
 void Wolf::SetRunState()

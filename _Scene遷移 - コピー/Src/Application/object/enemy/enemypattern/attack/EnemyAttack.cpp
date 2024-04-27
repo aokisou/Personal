@@ -17,13 +17,17 @@ void EnemyAttack::Update()
 		{
 			m_animeNum = 0;
 			Player* p = m_enemy->GetOwner()->GetPlayer();
-			if (p->GetFuturePos().x - m_enemy->GetFuturePos().x > 0)
+			Math::Vector2 v = p->GetFuturePos() - m_enemy->GetFuturePos();
+			if (v.Length() < p->GetHalfSize() - p->GetSpaceWidthImg() + m_enemy->GetHalfSize() - m_enemy->GetSpaceWidthImg())
 			{
-				p->SetDmg(m_enemy->GetDmg(),5.0f);
-			}
-			else
-			{
-				p->SetDmg(m_enemy->GetDmg() ,-5.0f);
+				if (p->GetFuturePos().x - m_enemy->GetFuturePos().x > 0)
+				{
+					p->SetDmg(m_enemy->GetDmg(), 5.0f);
+				}
+				else
+				{
+					p->SetDmg(m_enemy->GetDmg(), -5.0f);
+				}
 			}
 			m_enemy->ResetAttackCoolTime();
 			m_enemy->SetRunState();

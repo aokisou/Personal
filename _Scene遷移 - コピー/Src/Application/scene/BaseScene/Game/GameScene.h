@@ -7,8 +7,7 @@ class BaseEnemy;
 class Hit;
 class Map;
 class MapHit;
-
-#define BackNum 5
+class HPBar;
 
 class GameScene:public BaseScene
 {
@@ -22,14 +21,14 @@ public:
 	void DynamicDraw2D()override;
 	void UpdateBack();
 
-	//クラスアドレス
-	Player* GetPlayer() { return m_player; }
-	std::vector<BaseEnemy*> GetEnemy() { return m_enemy; }
-
 	void CreateSlime(Math::Vector2 _pos);
 	void CreateWolf(Math::Vector2 _pos);
 	void CreateOrc(Math::Vector2 _pos);
 	void CreateBee(Math::Vector2 _pos);
+
+	//クラスアドレス
+	Player* GetPlayer() { return m_player; }
+	std::vector<BaseEnemy*> GetEnemy() { return m_enemy; }
 
 private:
 	void Init()override;
@@ -65,12 +64,12 @@ private:
 	bool m_BigShake = false;
 	bool m_smallShake = false;
 
-	const float m_backScrollSpeed[BackNum] = { 0.0f, 0.1f, 0.2f, 0.3f, 0.4f };
-	Math::Vector2 m_backPos[BackNum];
-	Math::Vector2 m_2ndBackPos[BackNum];
-	Math::Matrix m_backMat[BackNum];
-	Math::Matrix m_2ndBackMat[BackNum];
-	KdTexture m_backTex[BackNum];
-	std::string m_backName[BackNum] = { "Texture/BackGround/1.png","Texture/BackGround/2.png","Texture/BackGround/3.png","Texture/BackGround/4.png",
+	const float m_backScrollSpeed[5] = { 0.0f, 0.1f, 0.2f, 0.3f, 0.4f };
+	Math::Vector2 m_backPos[5];
+	Math::Vector2 m_2ndBackPos[5];
+	Math::Matrix m_backMat[5];
+	Math::Matrix m_2ndBackMat[5];
+	KdTexture m_backTex[5];
+	std::string m_backName[5] = { "Texture/BackGround/1.png","Texture/BackGround/2.png","Texture/BackGround/3.png","Texture/BackGround/4.png",
 										"Texture/BackGround/5.png" };
 };

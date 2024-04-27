@@ -4,6 +4,7 @@
 
 class Arrow;
 class PlayerPattern;
+class PlayerHPBar;
 
 class Player:public BaseObject
 {
@@ -15,6 +16,10 @@ public:
 	void Update(float _scrollX)override;
 	void Draw()override;
 
+	void UpdateUI();
+	void DrawUI();
+
+	Math::Vector2 GetFuturePos() { return { m_pos.x + m_move.x + m_moveKnockBack,m_pos.y + m_move.y }; }
 	bool GetDmg() { return m_bDmg; }
 	std::shared_ptr<PlayerPattern> GetPlayerState() { return m_pState; }
 
@@ -35,6 +40,7 @@ public:
 	void SetDmg(int _hp, float _enemyMove);//ノックバックをつける
 	std::vector<Arrow*>* GetArrow() { return &m_arrow; }
 
+	void MapHitX(float _posX, float _moveX);
 	void MapHitY(float _posY, float _moveY, bool _b);
 
 	//確認用
@@ -62,6 +68,8 @@ private:
 	bool m_bDmg = false;
 
 	std::shared_ptr<PlayerPattern> m_pState;
+
+	std::shared_ptr<PlayerHPBar> m_hpBar;
 
 	KdTexture m_arrowTex;
 

@@ -8,16 +8,17 @@
 #include "PlayerPattern/GetHit/PlayerGetHit.h"
 #include "PlayerPattern/Stand/PlayerStand.h"
 #include "PlayerPattern/Fall/PlayerFall.h"
+#include "../../UI/HP/Player/PlayerHPBar.h"
 #include "../../utility/Utility.h"
 
 //プレイヤー
-#define Speed 5				//速度
+#define MovePow 5			//速度
 #define JumpPow 15			//ジャンプ力
 #define ShotInterval 6		//弾を打つ感覚(Maxfps/この数値)
 #define MoveRange -150.0f	//移動範囲
 #define StartPosX -600.0f	//開始X座標
 #define StartPosY 0.0f		//開始Y座標
-#define StartHP 100			//開始HP
+#define MaxHP 1			//開始HP
 #define MaxDmgEfcCnt 20		//赤く光る時間
 #define ArrowCRX 30			//弾の出る位置を銃まで補正X座標
 #define ArrowCRY 6			//弾の出る位置を銃まで補正Y座標
@@ -34,12 +35,12 @@ void Player::Init()
 	m_size = ImgSize;
 	m_scale = Scale;
 	m_moveKnockBack = 0.f;
-	m_hp = StartHP;
+	m_hp = MaxHP;
 	m_bJump = false;
 	m_bDmg = false;
-	m_pState = std::make_shared<PlayerStand>();
-	m_pState->Init(this, m_fileName[playerStand]);
+	SetStandState();
 	m_arrowTex.Load("Texture/Arrow/static.png");
+	m_hpBar = std::make_shared<PlayerHPBar>();
 }
 
 void Player::Action()
@@ -65,7 +66,7 @@ void Player::Action()
 	{
 		if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 		{
-			m_move.x = -Speed;
+			m_move.x = -MovePow;
 			m_dir = -DefaultDir;
 			if (m_pState->GetStateType() != playerRun)
 			{
@@ -75,7 +76,7 @@ void Player::Action()
 		}
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 		{
-			m_move.x = Speed;
+			m_move.x = MovePow;
 			m_dir = DefaultDir;
 			if (m_pState->GetStateType() != playerRun)
 			{
@@ -138,6 +139,8 @@ void Player::Update(float _scrollX)
 		m_bAlive = false;
 	}
 
+	UpdateUI();
+
 	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0.0f) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0.0f);
 }
 
@@ -156,6 +159,16 @@ void Player::Draw()
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(m_pState->GetTex(), 0, 0,
 		&Math::Rectangle(m_size * m_pState->GetAnimeNum(), 0, m_size, m_size), &col);
+}
+
+void Player::UpdateUI()
+{
+	m_hpBar->Update(&m_hp,MaxHP);
+}
+
+void Player::DrawUI()
+{
+	m_hpBar->Draw(MaxHP);
 }
 
 void Player::SetStandState()
@@ -220,6 +233,13 @@ void Player::SetDmg(int _hp,float _enemyMove)
 	SetGetHitState();
 }
 
+void Player::MapHitX(float _posX, float _moveX)
+{
+	m_pos.x = _posX;
+	m_move.x = _moveX;
+	m_moveKnockBack = _moveX;
+}
+
 void Player::MapHitY(float _posY, float _moveY, bool _b)
 {
 	m_pos.y = _posY;
@@ -234,13 +254,13 @@ bool Player::ArrowShot()
 
 	if (GetAsyncKeyState(VK_SPACE) & 0x8000)
 	{
+		a = true;
 		const int c = 4;//矢を打つアニメーションのタイミング
 
 		if (m_pState->GetStateType() != playerAttack)
 		{
 			SetAttackState();
 		}
-		a = true;
 		if (m_pState->GetAnimeNum() == c && !b)
 		{
 			Arrow* tmpArrow = new Arrow;
@@ -255,9 +275,10 @@ bool Player::ArrowShot()
 		}
 	}
 
-	if (m_pState->GetAnimeNum() == m_pState->GetMaxAnimeNum() - 1)
+	if (m_pState->GetAnimeNum() == m_pState->GetMaxAnimeNum())
 	{
-		a = false; b = false;
+		a = false; 
+		b = false;
 	}
 
 	return a;

@@ -11,6 +11,9 @@ public:
 	void Action()override;
 	void Update(float _scrollX)override;
 	bool Attack()override;
+	
+	void UpdateUI(float _scrollX)override;
+	void DrawUI()override;
 
 	void SetRunState()override;
 	void SetDeathState()override;

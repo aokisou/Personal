@@ -1,15 +1,18 @@
 #include "Slime.h"
 #include "../../../Scene/BaseSCene/Game/GameScene.h"
 #include "../../Player/Player.h"
+#include "../../Player/PlayerPattern/PlayerPattern.h"
 #include "../EnemyPattern/EnemyPattern.h"
 #include "../EnemyPattern/Death/EnemyDeath.h"
 #include "../EnemyPattern/Run/EnemyRun.h"
 #include "../EnemyPattern/Attack/EnemyAttack.h"
+#include "../../../UI/HP/Enemy/EnemyHPBar.h"
 #include "../../../Utility/Utility.h"
 
 #define WalkSpeed 0.5f	//•ú˜Q‚µ‚Ä‚é‚Æ‚«
 #define RunSpeed 1.5f	//UŒ‚ó‘Ô‚ÌŽž
-#define Dmg 1 //UŒ‚Žž‚Ìƒ_ƒ[ƒW
+#define Dmg 1			//UŒ‚Žž‚Ìƒ_ƒ[ƒW
+#define MaxHP 15		//‰ŠúHP
 
 void Slime::Init(Math::Vector2 _pos)
 {
@@ -22,14 +25,13 @@ void Slime::Init(Math::Vector2 _pos)
 	m_size = ImgSize;
 	m_scale = Scale;
 	m_dir = DefaultDir;
-	m_hp = 15;
+	m_hp = MaxHP;
 	m_bDmg = false;
 	DmgEfcCnt = 0;
 	m_moveRange = 100;
 	m_attackRange = m_moveRange * 2;
-	
 	SetRunState();
-
+	InitUI();
 	m_startPos = m_pos;
 }
 
@@ -74,13 +76,16 @@ void Slime::Update(float _scrollX)
 	}
 
 	m_pState->Update();
-	
+	UpdateUI(_scrollX);
+
 	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }
 
 bool Slime::Attack()
 {
 	Player* ply = m_pOwner->GetPlayer();
+
+	if (ply->GetPlayerState()->GetStateType() == playerDeath || ply->GetPlayerState()->GetStateType() == playerGetHit) { return false; }
 
 	const float plyTop		= ply->GetPos().y + ply->GetHalfSize() - ply->GetSpaceHeightImg();
 	const float plyBottom	= ply->GetPos().y - ply->GetHalfSize() + ply->GetSpaceHeightImg();
@@ -105,6 +110,16 @@ bool Slime::Attack()
 		}
 	}
 	return false;
+}
+
+void Slime::UpdateUI(float _scrollX)
+{
+	m_pHPBar->Update(&m_hp, MaxHP, { m_pos.x - _scrollX, m_pos.y });
+}
+
+void Slime::DrawUI()
+{
+	m_pHPBar->Draw(MaxHP);
 }
 
 void Slime::SetRunState()

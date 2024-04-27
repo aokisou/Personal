@@ -15,6 +15,12 @@ public:
 private:
 	void Init()override;
 	void Release()override;
+	
+	int m_alphaAng;
+	KdTexture m_startTex;
+	Math::Matrix m_startMat = Math::Matrix::Identity;
 
-	KdTexture m_titleTex;
+	KdTexture m_backTex[5];
+	std::string m_backName[5] = { "Texture/BackGround/1.png","Texture/BackGround/2.png","Texture/BackGround/3.png","Texture/BackGround/4.png",
+										"Texture/BackGround/5.png" };
 };
