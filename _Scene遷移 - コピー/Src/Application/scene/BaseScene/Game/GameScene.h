@@ -25,6 +25,12 @@ public:
 	void CreateWolf(Math::Vector2 _pos);
 	void CreateOrc(Math::Vector2 _pos);
 	void CreateBee(Math::Vector2 _pos);
+	void CreateMinotaur(Math::Vector2 _pos);
+
+	void SetDrawTutorial(int _data);
+
+	void TutorialUpdate();
+	void TutorialDraw();
 
 	//クラスアドレス
 	Player* GetPlayer() { return m_player; }
@@ -33,6 +39,7 @@ public:
 private:
 	void Init()override;
 	void Release()override;
+	void Reset();
 
 	void MapRange();
 
@@ -46,7 +53,8 @@ private:
 	float m_minScrollX = 0.0f;
 	float m_maxScrollX = 0.0f;
 
-	std::string m_mapName[1] = { "map/stage1.csv" };
+	int m_nowMap = 0;
+	std::string m_mapName[3] = { "map/tutorial.csv","map/stage1.csv","map/boss.csv"};
 
 	Player* m_player = nullptr;
 	std::vector<BaseEnemy*> m_enemy;
@@ -72,4 +80,10 @@ private:
 	KdTexture m_backTex[5];
 	std::string m_backName[5] = { "Texture/BackGround/1.png","Texture/BackGround/2.png","Texture/BackGround/3.png","Texture/BackGround/4.png",
 										"Texture/BackGround/5.png" };
+
+	bool m_bAction = true;
+	float m_tutorialAlpha = 0.0f;
+	int m_tutorialCutY = 0;
+	Math::Matrix m_tutorialMat = Math::Matrix::Identity;
+	KdTexture m_tutorialTex;
 };

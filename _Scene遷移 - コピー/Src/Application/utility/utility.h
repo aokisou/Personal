@@ -84,10 +84,17 @@ enum MapTile//IDと合わせる
 	Block49,
 	Block50,
 	//敵配置
+	Enemy = 100,
 	MTSlime = 100,
 	MTWolf,
 	MTOrc,
-	MTBee
+	MTBee,
+	MTMinotaur,
+	//チュートリアル
+	Tutorial = 200,
+	Move = 200,
+	Jump,
+	Attack,
 };
 
 namespace SCREEN

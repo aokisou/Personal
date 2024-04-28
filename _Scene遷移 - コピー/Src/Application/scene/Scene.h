@@ -43,6 +43,8 @@ public:
 	void ChangeGame();
 	void ChangeResult(bool _b);
 
+	void ChangePreUpdate();//更新前の行列作成などのため一回Update
+
 	bool* GetKeyFlg() { return &m_bkeyFlg; }
 	void SetTrueKeyFlg() { m_bkeyFlg = true; }
 	void SetFalseKeyFlg() { m_bkeyFlg = false; }

@@ -142,6 +142,9 @@
     <Filter Include="Src\Application\UI\HP\Enemy">
       <UniqueIdentifier>{55f440bf-2e3f-425e-8b34-9ff43f52a01d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Object\Enemy\Minotaur">
+      <UniqueIdentifier>{6bc5b4ad-2307-4fb6-8279-90ce25e83f4f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -324,6 +327,9 @@
     <ClInclude Include="Src\Application\UI\HP\Enemy\EnemyHPBar.h">
       <Filter>Src\Application\UI\HP\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Object\Enemy\Minotaur\Minotaur.h">
+      <Filter>Src\Application\Object\Enemy\Minotaur</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -472,6 +478,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\UI\HP\Enemy\EnemyHPBar.cpp">
       <Filter>Src\Application\UI\HP\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Object\Enemy\Minotaur\Minotaur.cpp">
+      <Filter>Src\Application\Object\Enemy\Minotaur</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

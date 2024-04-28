@@ -11,6 +11,7 @@ public:
 	virtual void Update(float _scrollX) = 0;
 	virtual void Draw() = 0;
 	virtual void Release() = 0;
+	virtual void Reset() = 0;
 
 	//êîíl
 	Math::Vector2 GetPos() { return m_pos; }

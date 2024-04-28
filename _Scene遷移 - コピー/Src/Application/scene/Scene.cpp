@@ -22,7 +22,7 @@ void Scene::Draw2D()
 void Scene::Update()
 {
 	if (m_bChangeScene) { UpdateChangeScene(); }
-	m_pNowScene->Update();
+	else { m_pNowScene->Update(); }
 }
 
 void Scene::DrawChangeScene()
@@ -38,8 +38,15 @@ void Scene::UpdateChangeScene()
 	m_sceneChageAlpha += 5;
 	if (m_sceneChageAlpha == OneTimeChangeScene / Half)
 	{
-		m_pNowScene = m_pNextScene;
-		m_pNextScene = nullptr;
+		if (m_pNextScene != nullptr)
+		{
+			m_pNowScene = m_pNextScene;
+			m_pNextScene = nullptr;
+		}
+		else
+		{
+			m_pNowScene->Reset();
+		}
 	}
 
 	if (m_sceneChageAlpha > OneTimeChangeScene)
@@ -57,7 +64,7 @@ void Scene::Init()
 
 	bLoad = m_tmpTex.CreateRenderTarget(SCREEN::width, SCREEN::height);
 	_ASSERT_EXPR(bLoad, "ターゲット読み取りエラー");
-	bLoad = m_sceneChangeTex.Load("Texture/Screen/Black.png");
+	bLoad = m_sceneChangeTex.Load("Texture/Screen/white.png");
 	_ASSERT_EXPR(bLoad, "画面遷移画像読み取りエラー");
 
 	ChangeTitle();
@@ -91,22 +98,23 @@ void Scene::ImGuiUpdate()
 void Scene::ChangeTitle()
 {
 	m_pNextScene = std::make_shared<TitleScene>(&APP.m_maxFps);
-	m_pNextScene->SetOwner(this);
-	m_pNextScene->Update();
-	m_bChangeScene = true;
+	ChangePreUpdate();
 }
 
 void Scene::ChangeGame()
 {
 	m_pNextScene = std::make_shared<GameScene>(&APP.m_maxFps);
-	m_pNextScene->SetOwner(this);
-	m_pNextScene->Update();
-	m_bChangeScene = true;
+	ChangePreUpdate();
 }
 
 void Scene::ChangeResult(bool _b)
 {
 	m_pNextScene = std::make_shared<ResultScene>(&APP.m_maxFps,_b);
+	ChangePreUpdate();
+}
+
+void Scene::ChangePreUpdate()
+{
 	m_pNextScene->SetOwner(this);
 	m_pNextScene->Update();
 	m_bChangeScene = true;

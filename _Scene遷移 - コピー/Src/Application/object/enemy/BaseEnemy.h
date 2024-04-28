@@ -18,7 +18,7 @@ public:
 	virtual void Update(float _scrollX)override = 0;
 	virtual void Draw()override;
 	virtual void Release()override = 0 {}
-
+	void Reset()override;
 	virtual void UpdateUI(float _scrollX) = 0{}
 	virtual void DrawUI() = 0{}
 

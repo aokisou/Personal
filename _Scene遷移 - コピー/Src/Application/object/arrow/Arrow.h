@@ -12,6 +12,7 @@ public:
 	void Update(float _scrollX)override;
 	void Draw()override;
 	void Release()override {}
+	void Reset()override {}
 
 	void SetPos(Math::Vector2 _pos) { m_pos = _pos; }
 	void SetScale(float _scale) { m_scale = _scale; }

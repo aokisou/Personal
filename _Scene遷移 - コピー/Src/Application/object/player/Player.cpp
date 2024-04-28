@@ -17,7 +17,7 @@
 #define ShotInterval 6		//弾を打つ感覚(Maxfps/この数値)
 #define MoveRange -150.0f	//移動範囲
 #define StartPosX -600.0f	//開始X座標
-#define StartPosY 0.0f		//開始Y座標
+#define StartPosY -100.0f		//開始Y座標
 #define MaxHP 1			//開始HP
 #define MaxDmgEfcCnt 20		//赤く光る時間
 #define ArrowCRX 30			//弾の出る位置を銃まで補正X座標
@@ -159,6 +159,23 @@ void Player::Draw()
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(m_pState->GetTex(), 0, 0,
 		&Math::Rectangle(m_size * m_pState->GetAnimeNum(), 0, m_size, m_size), &col);
+}
+
+void Player::Reset()
+{
+	m_pos = { StartPosX,StartPosY };
+	m_move = {};
+	m_mat = Math::Matrix::Identity;
+	m_bAlive = true;
+	m_dir = DefaultDir;
+	m_size = ImgSize;
+	m_scale = Scale;
+	m_moveKnockBack = 0.f;
+	m_hp = MaxHP;
+	m_bJump = false;
+	m_bDmg = false;
+	SetStandState();
+	ArrowDel();
 }
 
 void Player::UpdateUI()
@@ -303,13 +320,18 @@ void Player::ArrowActivate(float _scrollX)
 	}
 }
 
-void Player::Release()
+void Player::ArrowDel()
 {
-	//実行終了時
 	std::vector<Arrow*>::iterator it = m_arrow.begin();
 	while (it != m_arrow.end())
 	{
 		delete* it;
 		it = m_arrow.erase(it);
 	}
+}
+
+void Player::Release()
+{
+	//実行終了時
+	ArrowDel();
 }

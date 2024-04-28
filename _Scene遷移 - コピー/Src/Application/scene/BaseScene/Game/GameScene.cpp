@@ -4,6 +4,7 @@
 #include "../../../Object/Enemy/Slime/Slime.h"
 #include "../../../Object/Enemy/Wolf/Wolf.h"
 #include "../../../Object/Enemy/Orc/Orc.h"
+#include "../../../Object/Enemy/Minotaur/Minotaur.h"
 #include "../../../Hit//Object/Hit.h"
 #include "../../../Map/Map.h"
 #include "../../../Hit/Map/MapHit.h"
@@ -13,12 +14,15 @@
 #include<vector>
 #include "../../../Utility/utility.h"
 
+#define MaxMap 3			//最大ステージ
 #define MaxShakeCnt 10		//揺れる時間
 #define BigShakePow 20		//大きい揺れ
 #define SmallShakePow 10	//小さい揺れ
 #define OnePunch 2			//一発で倒されたら
 #define ScreenRange 22		//画面に入るマップチップの範囲
 #define Clear true			//クリア
+#define TutorialWidth 580	//チュートリアルの文字幅
+#define TutorialHeight 78	//チュートリアルの文字幅
 
 void GameScene::PreUpdate()
 {
@@ -40,50 +44,59 @@ void GameScene::Update()
 		{
 			i->Action();
 		}
-	}
 
-	m_hit->ArrEmyHit();
+		m_hit->ArrEmyHit();
 
-	m_mapHit->MapObjHit(m_mapRangeStart, m_mapRangeEnd, m_map, m_player);
-	for (auto& i : m_enemy)
-	{
-		m_mapHit->MapObjHit(0, m_map->GetMaxWidth(), m_map, i);
-	}
-
-	std::vector<Arrow*>* b = m_player->GetArrow();
-	std::vector<Arrow*>::iterator it = b->begin();
-	while (it != b->end())
-	{
-		m_mapHit->MapObjHit(m_mapRangeStart, m_mapRangeEnd, m_map, (BaseObject*)*it);
-		it++;
-	}
-
-	m_player->Update(m_scrollX);
-
-	for (auto& i : m_enemy)
-	{
-		i->Update(m_scrollX);
-	}
-	m_map->Update(m_mapRangeStart, m_mapRangeEnd, m_scrollX);
-
-	m_scrollX = m_player->GetPos().x;
-
-	if (m_scrollX < m_minScrollX)
-	{
-		m_scrollX = m_minScrollX;
-		if (m_player->GetPos().x - m_player->GetHalfSize() + m_player->GetSpaceWidthImg() < m_minScrollX - SCREEN::width / Half)
+		m_mapHit->MapObjHit(m_mapRangeStart, m_mapRangeEnd, m_map, m_player);
+		for (auto& i : m_enemy)
 		{
-			m_player->MapHitX(m_minScrollX - SCREEN::width / Half + m_player->GetHalfSize() - m_player->GetSpaceWidthImg(), 0);
+			m_mapHit->MapObjHit(0, m_map->GetMaxWidth(), m_map, i);
+		}
+
+		std::vector<Arrow*>* b = m_player->GetArrow();
+		std::vector<Arrow*>::iterator it = b->begin();
+		while (it != b->end())
+		{
+			m_mapHit->MapObjHit(m_mapRangeStart, m_mapRangeEnd, m_map, (BaseObject*)*it);
+			it++;
+		}
+
+		m_player->Update(m_scrollX);
+
+		for (auto& i : m_enemy)
+		{
+			i->Update(m_scrollX);
+		}
+		m_map->Update(m_mapRangeStart, m_mapRangeEnd, m_scrollX);
+
+		m_scrollX = m_player->GetPos().x;
+
+		if (m_scrollX < m_minScrollX)
+		{
+			m_scrollX = m_minScrollX;
+			if (m_player->GetPos().x - m_player->GetHalfSize() + m_player->GetSpaceWidthImg() < m_minScrollX - SCREEN::width / Half)
+			{
+				m_player->MapHitX(m_minScrollX - SCREEN::width / Half + m_player->GetHalfSize() - m_player->GetSpaceWidthImg(), 0);
+			}
+		}
+		if (m_scrollX > m_maxScrollX)
+		{
+			m_scrollX = m_maxScrollX;
+			if (m_player->GetPos().x + m_player->GetHalfSize() - m_player->GetSpaceWidthImg() > m_maxScrollX + SCREEN::width / Half)
+			{
+				m_player->MapHitX(m_maxScrollX + SCREEN::width / Half - m_player->GetHalfSize() + m_player->GetSpaceWidthImg(), 0);
+				if (m_nowMap + 1 < MaxMap)
+				{
+					//m_bTutorialSkip = true;
+					m_pOwner->SetTrueChangeScene();
+					m_nowMap++;
+					return;
+				}
+			}
 		}
 	}
-	if (m_scrollX > m_maxScrollX)
-	{
-		m_scrollX = m_maxScrollX;
-		if (m_player->GetPos().x + m_player->GetHalfSize() - m_player->GetSpaceWidthImg() > m_maxScrollX + SCREEN::width / Half)
-		{
-			m_player->MapHitX(m_maxScrollX + SCREEN::width / Half - m_player->GetHalfSize() + m_player->GetSpaceWidthImg(), 0);
-		}
-	}
+
+	TutorialUpdate();
 
 	float r = 0.0f;
 	if (m_BigShake)
@@ -186,6 +199,27 @@ void GameScene::UpdateBack()
 	}
 }
 
+void GameScene::Reset()
+{
+	m_bAction = true;
+	EnemyErase();
+
+	m_player->Reset();
+
+	m_mapRangeStart = 0;
+	m_mapRangeEnd = 0;
+
+	m_shakeCnt = 0;
+	m_BigShake = false;
+	m_smallShake = false;
+
+	m_map->SetMapData(m_mapName[m_nowMap]);
+	m_scrollX = 0;
+	m_minScrollX = m_map->GetPos(0, 0).x + SCREEN::width / Half;
+	m_maxScrollX = m_map->GetPos(0, (m_map->GetMaxWidth() - 1)).x - SCREEN::width / Half;
+
+	Update();
+}
 
 void GameScene::Draw(KdTexture* _pTex)
 {
@@ -200,6 +234,8 @@ void GameScene::Draw(KdTexture* _pTex)
 	src = { 0,0, SCREEN::width, SCREEN::height };
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(_pTex, 0, 0, &src);
+
+	TutorialDraw();
 
 	m_player->DrawUI();
 }
@@ -216,14 +252,15 @@ void GameScene::DynamicDraw2D()
 
 void GameScene::Init()
 {
+	static bool m_bTutorialSkip = false;//実行1回目のみチュートリアル
 	bool bLoad = false;
 
-	m_mapRangeStart = 0;
-	m_mapRangeEnd = 0;
-
-	m_shakeCnt = 0;
-	m_BigShake = false;
-	m_smallShake = false;
+	if (!m_bTutorialSkip)
+	{ 
+		m_nowMap = 0;
+		m_tutorialTex.Load("Texture/UI/tutorial.png");
+	}
+	else { m_nowMap = 1; }
 
 	m_player = new Player;
 	m_hit = new Hit;
@@ -231,10 +268,6 @@ void GameScene::Init()
 	m_mapHit = new MapHit;
 
 	m_map->SetOwner(this);
-
-	m_map->SetMapData(m_mapName[0]);
-	m_minScrollX = m_map->GetPos(0, 0).x + SCREEN::width / Half;
-	m_maxScrollX = m_map->GetPos(0,(m_map->GetMaxWidth() - 1)).x - SCREEN::width / Half;
 
 	for (int i = 0; i < Back::Num; i++)
 	{
@@ -246,7 +279,11 @@ void GameScene::Init()
 		_ASSERT_EXPR(bLoad, "ファイル読み取りエラー");
 	}
 
+	m_map->SetOwner(this);
 	m_hit->SetOwner(this);
+	m_tutorialMat = Math::Matrix::CreateTranslation(SCREEN::width / Half - TutorialWidth / Half, SCREEN::height / Half - TutorialHeight, 0.0f);
+
+	Reset();
 }
 
 void GameScene::Release()
@@ -282,4 +319,65 @@ void GameScene::CreateOrc(Math::Vector2 _pos)
 void GameScene::CreateBee(Math::Vector2 _pos)
 {
 
+}
+
+void GameScene::CreateMinotaur(Math::Vector2 _pos)
+{
+	Minotaur* m = new Minotaur(_pos);
+	m->SetOwner(this);
+	m_enemy.push_back(m);
+}
+
+void GameScene::SetDrawTutorial(int _data)
+{
+	m_tutorialCutY = (_data - MapTile::Tutorial) * TutorialHeight;
+	m_bAction = false;
+	m_tutorialAlpha = 90.0f;
+}
+
+void GameScene::TutorialUpdate()
+{
+	if (m_nowMap != 0) { return; }
+	switch (m_tutorialCutY)
+	{
+	case TutorialHeight * 0:
+		if (GetAsyncKeyState(VK_RIGHT) & 0x8000 || GetAsyncKeyState(VK_LEFT) & 0x8000)
+		{
+			m_bAction = true;
+		}
+		break;
+	case TutorialHeight:
+		if (GetAsyncKeyState(VK_UP) & 0x8000)
+		{
+			m_bAction = true;
+		}
+		break;
+	case TutorialHeight * 2:
+		if (GetAsyncKeyState(VK_SPACE) & 0x8000)
+		{
+			if (m_player->GetArrow()->size() > 0)
+			{
+				m_bAction = true;
+			}
+		}
+		break;
+	}
+
+	if (m_bAction)
+	{
+		m_tutorialAlpha -= 1.0f;
+		if (m_tutorialAlpha < 0.0f)
+		{
+			m_tutorialAlpha = 0.0f;
+		}
+	}
+}
+
+void GameScene::TutorialDraw()
+{
+	if (m_nowMap != 0) { return; }
+	Math::Rectangle src = { 0,m_tutorialCutY, TutorialWidth, TutorialHeight };
+	Math::Color col = { 1.0f,1.0f,1.0f,sin(DirectX::XMConvertToRadians(m_tutorialAlpha)) };
+	SHADER.m_spriteShader.SetMatrix(m_tutorialMat);
+	SHADER.m_spriteShader.DrawTex(&m_tutorialTex, 0, 0, &src, &col);
 }

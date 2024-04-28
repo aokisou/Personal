@@ -15,6 +15,8 @@ public:
 	virtual void Release() = 0;
 	virtual int* GetMAXfps() { return m_maxFps; }
 
+	virtual void Reset(){}
+
 	virtual void SetOwner(Scene* _pOwner)final { m_pOwner = _pOwner; }
 
 protected:

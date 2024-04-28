@@ -169,6 +169,7 @@
     <ClInclude Include="Src\Application\object\enemy\enemypattern\death\EnemyDeath.h" />
     <ClInclude Include="Src\Application\object\enemy\enemypattern\EnemyPattern.h" />
     <ClInclude Include="Src\Application\object\enemy\enemypattern\run\EnemyRun.h" />
+    <ClInclude Include="Src\Application\Object\Enemy\Minotaur\Minotaur.h" />
     <ClInclude Include="Src\Application\Object\Enemy\Orc\Orc.h" />
     <ClInclude Include="Src\Application\object\enemy\slime\Slime.h" />
     <ClInclude Include="Src\Application\Object\Enemy\Wolf\Wolf.h" />
@@ -223,6 +224,7 @@
     <ClCompile Include="Src\Application\object\enemy\enemypattern\death\EnemyDeath.cpp" />
     <ClCompile Include="Src\Application\object\enemy\enemypattern\EnemyPattern.cpp" />
     <ClCompile Include="Src\Application\object\enemy\enemypattern\run\EnemyRun.cpp" />
+    <ClCompile Include="Src\Application\Object\Enemy\Minotaur\Minotaur.cpp" />
     <ClCompile Include="Src\Application\Object\Enemy\Orc\Orc.cpp" />
     <ClCompile Include="Src\Application\object\enemy\slime\Slime.cpp" />
     <ClCompile Include="Src\Application\Object\Enemy\Wolf\Wolf.cpp" />

@@ -32,6 +32,10 @@ void BaseEnemy::Draw()
 		&Math::Rectangle(m_pState->GetAnimeCnt() * m_size, m_pState->GetStateType() * m_size, m_size, m_size), &col);
 }
 
+void BaseEnemy::Reset()
+{
+}
+
 void BaseEnemy::SetDamage(float _dmg)
 {
 	m_bDmg = true;

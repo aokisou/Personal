@@ -5,7 +5,7 @@ class GameScene;
 class Map
 {
 public:
-	Map(){}
+	Map() { m_tex.Load("Texture/Map/MapTile.png"); }
 	~Map() { Release(); }
 
 	void Update(int _s,int _e,float _scrollX);

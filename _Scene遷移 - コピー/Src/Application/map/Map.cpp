@@ -3,6 +3,7 @@
 #include<fstream>
 #include<sstream>
 #include "../Scene/BaseScene/Game/GameScene.h"
+#include "../Object/Player/Player.h"
 #include "../Utility/Utility.h"
 
 #define MapSize 64		//マップサイズ
@@ -35,11 +36,13 @@ void Map::Init()
 				m_pOwner->CreateOrc(m_pos[i][j]);
 				m_data[i][j] = MapTile::none;
 				break;
+			case MapTile::MTMinotaur:
+				m_pOwner->CreateMinotaur(m_pos[i][j]);
+				m_data[i][j] = MapTile::none;
+				break;
 			}
 		}
 	}
-
-	m_tex.Load("Texture/Map/MapTile.png");
 }
 
 void Map::Update(int _s, int _e, float _scrollX)
@@ -49,6 +52,14 @@ void Map::Update(int _s, int _e, float _scrollX)
 	{
 		for (int j = _s; j < _e; j++)
 		{
+			if (m_data[i][j] >= MapTile::Tutorial)
+			{
+				if (m_pOwner->GetPlayer()->GetPos().x > m_pos[i][j].x)
+				{
+					m_pOwner->SetDrawTutorial(m_data[i][j]);
+					m_data[i][j] = MapTile::none;
+				}
+			}
 			m_mat[i][j] = Math::Matrix::CreateTranslation(m_pos[i][j].x - _scrollX, m_pos[i][j].y, 0);
 		}
 	}
@@ -68,7 +79,7 @@ void Map::Draw(int _s, int _e)
 
 void Map::Draw(Math::Matrix* _mat, int* _i)
 {
-	if (*_i == -1) { return; }
+	if (*_i == -1 || *_i >= MapTile::Tutorial) { return; }
 	int i = *_i % MaxRecord;
 	int j = *_i / MaxRecord;
 	SHADER.m_spriteShader.SetMatrix(*_mat);
@@ -77,6 +88,11 @@ void Map::Draw(Math::Matrix* _mat, int* _i)
 
 void Map::SetMapData(std::string _filenme)
 {
+	//きれいにしてから入れる
+	m_data.clear();
+	m_pos.clear();
+	m_mat.clear();
+
 	std::ifstream ifs(_filenme);
 
 	std::string str, field;
@@ -87,7 +103,7 @@ void Map::SetMapData(std::string _filenme)
 
 		std::vector<Math::Matrix> m;
 		std::vector<Math::Vector2> p;
-		std::vector<int> n;			
+		std::vector<int> n;
 
 		while (getline(iss, field, ','))
 		{
