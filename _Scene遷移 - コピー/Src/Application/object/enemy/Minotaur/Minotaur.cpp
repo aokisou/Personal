@@ -18,7 +18,7 @@
 void Minotaur::Init(Math::Vector2 _pos)
 {
 	const int ImgSize = 96;		//キャラ画像サイズ
-	const float Scale = 1.0f;	//キャラ拡大率
+	const float Scale = 1.5f;	//キャラ拡大率
 
 	m_pos = { _pos };
 	m_move = { 0 };
@@ -26,7 +26,7 @@ void Minotaur::Init(Math::Vector2 _pos)
 	m_bAlive = true;
 	m_size = ImgSize;
 	m_scale = Scale;
-	m_dir = DefaultDir;
+	m_dir = DefaultDir * Reverse;
 	m_hp = MaxHP;
 	m_bDmg = false;
 	DmgEfcCnt = 0;
@@ -104,8 +104,8 @@ bool Minotaur::Attack()
 				return true;
 			}
 
-			if (ply->GetFuturePos().x - GetFuturePos().x < 0) { m_dir = DefaultDir; }
-			else { m_dir = DefaultDir * Reverse; }
+			if (ply->GetFuturePos().x - GetFuturePos().x < 0) { m_dir = DefaultDir * Reverse; }
+			else { m_dir = DefaultDir; }
 
 			if (m_pState->GetStateType() != enemyAttack)
 			{
@@ -116,9 +116,9 @@ bool Minotaur::Attack()
 		else
 		{
 			float a = GetAngleDeg(GetFuturePos(), ply->GetFuturePos());
-			if (cos(DirectX::XMConvertToRadians(a)) < 0) { m_dir = DefaultDir; }
-			else { m_dir = DefaultDir * Reverse; }
-			m_move.x = RunSpeed * -m_dir;
+			if (cos(DirectX::XMConvertToRadians(a)) < 0) { m_dir = DefaultDir * Reverse; }
+			else { m_dir = DefaultDir; }
+			m_move.x = RunSpeed * m_dir;
 			return true;
 		}
 	}
@@ -127,7 +127,7 @@ bool Minotaur::Attack()
 
 void Minotaur::UpdateUI(float _scrollX)
 {
-	m_pHPBar->Update(&m_hp, MaxHP, { m_pos.x - _scrollX, m_pos.y });
+	m_pHPBar->Update(&m_hp, MaxHP, { m_pos.x - _scrollX, m_pos.y + m_size * m_scale});
 }
 
 void Minotaur::DrawUI()

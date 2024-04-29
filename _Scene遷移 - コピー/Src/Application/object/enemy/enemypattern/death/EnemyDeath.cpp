@@ -5,6 +5,7 @@ void EnemyDeath::Update()
 {
 	const int MaxCoolCnt = 5;	//1‰æ‘œƒAƒjƒŽžŠÔ
 	const int AnimeNum = 6;		//‰æ‘œ”
+
 	m_coolCnt++;
 	if (m_coolCnt > MaxCoolCnt)
 	{
@@ -12,7 +13,7 @@ void EnemyDeath::Update()
 		m_animeNum++;
 		if (m_animeNum >= AnimeNum)
 		{
-			m_animeNum = 0;
+			m_animeNum = AnimeNum - 1;
 			m_enemy->SetFalseAlive();
 		}
 	}

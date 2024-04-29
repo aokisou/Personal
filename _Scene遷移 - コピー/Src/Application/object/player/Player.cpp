@@ -134,7 +134,7 @@ void Player::Update(float _scrollX)
 	m_move.x += m_moveKnockBack;
 	m_pos += m_move;
 
-	if (m_pos.y - (m_size / Half * m_scale) < -(SCREEN::height / Half))
+	if (m_pos.y - GetHalfSize() < -(SCREEN::height / Half))
 	{
 		m_bAlive = false;
 	}

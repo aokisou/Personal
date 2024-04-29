@@ -19,8 +19,8 @@ public:
 	void SetDeathState()override;
 	void SetAttackState()override;
 
-	int GetSpaceWidthImg() { return (int)(15 * m_scale); }
-	int GetSpaceHeightImg() { return (int)(10 * m_scale); }
+	int GetSpaceWidthImg() { return (int)(32 * m_scale); }
+	int GetSpaceHeightImg() { return (int)(32 * m_scale); }
 
 	int GetDmg();
 

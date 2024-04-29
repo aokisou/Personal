@@ -24,6 +24,8 @@
 #define TutorialWidth 580	//チュートリアルの文字幅
 #define TutorialHeight 78	//チュートリアルの文字幅
 
+static bool m_bTutorialSkip = false;//実行1回目のみチュートリアル
+
 void GameScene::PreUpdate()
 {
 	UpdateBack();
@@ -87,7 +89,7 @@ void GameScene::Update()
 				m_player->MapHitX(m_maxScrollX + SCREEN::width / Half - m_player->GetHalfSize() + m_player->GetSpaceWidthImg(), 0);
 				if (m_nowMap + 1 < MaxMap)
 				{
-					//m_bTutorialSkip = true;
+					m_bTutorialSkip = true;
 					m_pOwner->SetTrueChangeScene();
 					m_nowMap++;
 					return;
@@ -114,7 +116,21 @@ void GameScene::Update()
 	m_mat = Math::Matrix::CreateScale(SCREEN::scale, SCREEN::scale, 1.0f) *
 		Math::Matrix::CreateTranslation(r + m_player->GetHalfSize() - m_player->GetSpaceWidthImg(), 0.0f, 0.0f);
 
-	if (!m_player->GetAlive()) 
+	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
+	{
+		for (BaseEnemy* e : m_enemy)
+		{
+			if (typeid(*e) == typeid(Minotaur))
+			{
+				if (!e->GetAlive())
+				{
+					m_pOwner->SetTrueChangeScene();
+					m_pOwner->ChangeResult(Clear);
+				}
+			}
+		}
+	}
+	if (!m_player->GetAlive())
 	{
 		m_pOwner->SetTrueChangeScene();
 		m_pOwner->ChangeResult(!Clear);
@@ -130,7 +146,8 @@ void GameScene::MapRange()
 	if (m_mapRangeEnd > m_map->GetMaxWidth())
 	{
 		m_mapRangeStart = m_map->GetMaxWidth() - 1 - ScreenRange;
-		m_mapRangeEnd = m_map->GetMaxWidth() - 1;
+		if (m_mapRangeStart < 0) { m_mapRangeStart = 0; }
+		m_mapRangeEnd = m_map->GetMaxWidth();
 	}
 }
 
@@ -145,7 +162,7 @@ void GameScene::DeadEnemy()
 	std::vector<BaseEnemy*>::iterator it = m_enemy.begin();
 	while (it != m_enemy.end())
 	{
-		if ((*it)->GetEnemyState()->GetStateType() == enemyDeath)
+		if ((*it)->GetEnemyState()->GetStateType() == enemyDeath && (*it)->GetAlive())
 		{
 			if ((*it)->GetAttackHitCnt() < OnePunch) { m_BigShake = true; }
 			else { m_smallShake = true; }
@@ -159,10 +176,17 @@ void GameScene::DeadEnemyErase()
 	std::vector<BaseEnemy*>::iterator it = m_enemy.begin();
 	while (it != m_enemy.end())
 	{
-		if (!(*it)->GetAlive())
+		if (typeid(*it) == typeid(Minotaur))
 		{
-			delete* it;
-			it = m_enemy.erase(it);
+			if (!(*it)->GetAlive())
+			{
+				delete* it;
+				it = m_enemy.erase(it);
+			}
+			else
+			{
+				it++;
+			}
 		}
 		else
 		{
@@ -252,12 +276,11 @@ void GameScene::DynamicDraw2D()
 
 void GameScene::Init()
 {
-	static bool m_bTutorialSkip = false;//実行1回目のみチュートリアル
 	bool bLoad = false;
 
 	if (!m_bTutorialSkip)
 	{ 
-		m_nowMap = 0;
+		m_nowMap = 2;
 		m_tutorialTex.Load("Texture/UI/tutorial.png");
 	}
 	else { m_nowMap = 1; }

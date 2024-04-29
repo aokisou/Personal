@@ -23,7 +23,6 @@ void BaseEnemy::Update(float _scrollX)
 
 void BaseEnemy::Draw()
 {
-	if (!m_bAlive) { return; }
 	DrawUI();
 	Math::Color col = { 1,1,1,1 };
 	if (m_bDmg)col = { 1,0,0,1 };

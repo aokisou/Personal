@@ -1,4 +1,8 @@
 #include "EnemyPattern.h"
+#include "../slime/Slime.h"
+#include "../Wolf/Wolf.h"
+#include "../Orc/Orc.h"
+#include "../Minotaur/Minotaur.h"
 
 void EnemyPattern::Init(BaseEnemy* _enemy, std::string _file)
 {
@@ -13,7 +17,7 @@ void EnemyPattern::Init(BaseEnemy* _enemy, std::string _file)
 void EnemyPattern::Update()
 {
 	const int MaxCoolCnt = 5;	//1‰æ‘œƒAƒjƒŽžŠÔ
-	const int AnimeNum = 6;		//‰æ‘œ”
+	int AnimeNum = 6;		//‰æ‘œ”
 
 	m_coolCnt++;
 	if (m_coolCnt > MaxCoolCnt)
