@@ -17,7 +17,7 @@
 void Slime::Init(Math::Vector2 _pos)
 {
 	const int ImgSize = 48;			//キャラ画像サイズ
-	const float Scale = 2.0f;				//キャラ拡大率
+	const float Scale = 2.0f;		//キャラ拡大率
 	m_pos = { _pos };
 	m_move = { 0 };
 	m_mat = Math::Matrix::Identity;
@@ -95,7 +95,7 @@ bool Slime::Attack()
 
 	if (plyTop > emyBottom && plyTop < emyTop)
 	{
-		if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_attackRange)
+		if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_attackRange || m_hp < MaxHP)
 		{
 			float a = GetAngleDeg(GetFuturePos(), ply->GetFuturePos());
 			m_move.x = cos(DirectX::XMConvertToRadians(a)) * RunSpeed;
@@ -114,7 +114,7 @@ bool Slime::Attack()
 
 void Slime::UpdateUI(float _scrollX)
 {
-	m_pHPBar->Update(&m_hp, MaxHP, { m_pos.x - _scrollX, m_pos.y });
+	m_pHPBar->Update(&m_hp, MaxHP, { m_pos.x - _scrollX, m_pos.y + GetHalfSize() - GetSpaceHeightImg() });
 }
 
 void Slime::DrawUI()

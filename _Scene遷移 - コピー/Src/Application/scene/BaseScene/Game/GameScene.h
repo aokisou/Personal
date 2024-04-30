@@ -40,13 +40,13 @@ private:
 	void Init()override;
 	void Release()override;
 	void Reset();
+	void SetMap();//デバグ用マップを変える
 
 	void MapRange();
 
 	void ShakeReset(bool& _b);
 
 	void DeadEnemy();
-	void DeadEnemyErase();
 	void EnemyErase();
 
 	float m_scrollX = 0.0f;
@@ -86,4 +86,8 @@ private:
 	int m_tutorialCutY = 0;
 	Math::Matrix m_tutorialMat = Math::Matrix::Identity;
 	KdTexture m_tutorialTex;
+
+	float m_arrowSizeAng = 0;
+	Math::Matrix m_arrowMat = Math::Matrix::Identity;
+	KdTexture m_arrowTex;//これは行先を示す画像
 };

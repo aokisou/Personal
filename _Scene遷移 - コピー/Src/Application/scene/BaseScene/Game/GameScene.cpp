@@ -11,8 +11,8 @@
 #include "../../../Object/Enemy/EnemyPattern/Death/EnemyDeath.h"
 #include "../../../Object/Enemy/EnemyPattern/Run/EnemyRun.h"
 #include "../../../Object/Enemy/EnemyPattern/Attack/EnemyAttack.h"
-#include<vector>
 #include "../../../Utility/utility.h"
+#include<vector>
 
 #define MaxMap 3			//最大ステージ
 #define MaxShakeCnt 10		//揺れる時間
@@ -31,7 +31,7 @@ void GameScene::PreUpdate()
 	UpdateBack();
 	MapRange();
 	DeadEnemy();
-	DeadEnemyErase();
+	SetMap();
 }
 
 void GameScene::Update()
@@ -116,17 +116,34 @@ void GameScene::Update()
 	m_mat = Math::Matrix::CreateScale(SCREEN::scale, SCREEN::scale, 1.0f) *
 		Math::Matrix::CreateTranslation(r + m_player->GetHalfSize() - m_player->GetSpaceWidthImg(), 0.0f, 0.0f);
 
+	if (m_enemy.size() <= 0)
+	{
+		m_arrowSizeAng += 3.0f;
+		m_arrowMat = Math::Matrix::CreateScale(1.0f + (float)sin(DirectX::XMConvertToRadians(m_arrowSizeAng)) * 0.2f, 1.0f + (float)sin(DirectX::XMConvertToRadians(m_arrowSizeAng)) * 0.2f, 1.0f) *
+			Math::Matrix::CreateTranslation(SCREEN::width / Half - 128, 0.0f, 0.0f);
+	}
+
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
-		for (BaseEnemy* e : m_enemy)
+		std::vector<BaseEnemy*>::iterator it = m_enemy.begin();
+		while (it != m_enemy.end())
 		{
-			if (typeid(*e) == typeid(Minotaur))
+			if (typeid(**it) == typeid(Minotaur))
 			{
-				if (!e->GetAlive())
+				if (!(*it)->GetAlive())
 				{
 					m_pOwner->SetTrueChangeScene();
 					m_pOwner->ChangeResult(Clear);
+					break;
 				}
+				else
+				{
+					it++;
+				}
+			}
+			else
+			{
+				it++;
 			}
 		}
 	}
@@ -162,23 +179,9 @@ void GameScene::DeadEnemy()
 	std::vector<BaseEnemy*>::iterator it = m_enemy.begin();
 	while (it != m_enemy.end())
 	{
-		if ((*it)->GetEnemyState()->GetStateType() == enemyDeath && (*it)->GetAlive())
+		if (!(*it)->GetAlive())
 		{
-			if ((*it)->GetAttackHitCnt() < OnePunch) { m_BigShake = true; }
-			else { m_smallShake = true; }
-		}
-		it++;
-	}
-}
-
-void GameScene::DeadEnemyErase()
-{
-	std::vector<BaseEnemy*>::iterator it = m_enemy.begin();
-	while (it != m_enemy.end())
-	{
-		if (typeid(*it) == typeid(Minotaur))
-		{
-			if (!(*it)->GetAlive())
+			if (typeid(**it) != typeid(Minotaur))
 			{
 				delete* it;
 				it = m_enemy.erase(it);
@@ -190,6 +193,11 @@ void GameScene::DeadEnemyErase()
 		}
 		else
 		{
+			if ((*it)->GetEnemyState()->GetStateType() == enemyDeath && (*it)->GetAlive())
+			{
+				if ((*it)->GetAttackHitCnt() < OnePunch) { m_BigShake = true; }
+				else { m_smallShake = true; }
+			}
 			it++;
 		}
 	}
@@ -228,6 +236,8 @@ void GameScene::Reset()
 	m_bAction = true;
 	EnemyErase();
 
+	m_arrowSizeAng = 0;
+
 	m_player->Reset();
 
 	m_mapRangeStart = 0;
@@ -255,6 +265,14 @@ void GameScene::Draw(KdTexture* _pTex)
 		SHADER.m_spriteShader.SetMatrix(m_2ndBackMat[i]);
 		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src);
 	}
+
+	if (m_enemy.size() <= 0)
+	{
+		src = { 0,0,256,128 };
+		SHADER.m_spriteShader.SetMatrix(m_arrowMat);
+		SHADER.m_spriteShader.DrawTex(&m_arrowTex, 0, 0, &src);
+	}
+
 	src = { 0,0, SCREEN::width, SCREEN::height };
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(_pTex, 0, 0, &src);
@@ -280,17 +298,12 @@ void GameScene::Init()
 
 	if (!m_bTutorialSkip)
 	{ 
-		m_nowMap = 2;
+		m_nowMap = 0;
 		m_tutorialTex.Load("Texture/UI/tutorial.png");
 	}
 	else { m_nowMap = 1; }
 
-	m_player = new Player;
-	m_hit = new Hit;
-	m_map = new Map;
-	m_mapHit = new MapHit;
-
-	m_map->SetOwner(this);
+	m_arrowTex.Load("Texture/UI/arrow.png");
 
 	for (int i = 0; i < Back::Num; i++)
 	{
@@ -301,6 +314,13 @@ void GameScene::Init()
 		bLoad = m_backTex[i].Load(m_backName[i]);
 		_ASSERT_EXPR(bLoad, "ファイル読み取りエラー");
 	}
+
+	m_player = new Player;
+	m_hit = new Hit;
+	m_map = new Map;
+	m_mapHit = new MapHit;
+
+	m_map->SetOwner(this);
 
 	m_map->SetOwner(this);
 	m_hit->SetOwner(this);
@@ -363,19 +383,19 @@ void GameScene::TutorialUpdate()
 	if (m_nowMap != 0) { return; }
 	switch (m_tutorialCutY)
 	{
-	case TutorialHeight * 0:
+	case TutorialHeight * 0://1つ目
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000 || GetAsyncKeyState(VK_LEFT) & 0x8000)
 		{
 			m_bAction = true;
 		}
 		break;
-	case TutorialHeight:
+	case TutorialHeight://2つ目
 		if (GetAsyncKeyState(VK_UP) & 0x8000)
 		{
 			m_bAction = true;
 		}
 		break;
-	case TutorialHeight * 2:
+	case TutorialHeight * 2://3つ目
 		if (GetAsyncKeyState(VK_SPACE) & 0x8000)
 		{
 			if (m_player->GetArrow()->size() > 0)
@@ -403,4 +423,23 @@ void GameScene::TutorialDraw()
 	Math::Color col = { 1.0f,1.0f,1.0f,sin(DirectX::XMConvertToRadians(m_tutorialAlpha)) };
 	SHADER.m_spriteShader.SetMatrix(m_tutorialMat);
 	SHADER.m_spriteShader.DrawTex(&m_tutorialTex, 0, 0, &src, &col);
+}
+
+void GameScene::SetMap()
+{
+	if (GetAsyncKeyState('1') & 0x8000)
+	{
+		m_nowMap = 0;
+		m_pOwner->SetTrueChangeScene();
+	}
+	if (GetAsyncKeyState('2') & 0x8000)
+	{
+		m_nowMap = 1;
+		m_pOwner->SetTrueChangeScene();
+	}
+	if (GetAsyncKeyState('3') & 0x8000)
+	{
+		m_nowMap = 2;
+		m_pOwner->SetTrueChangeScene();
+	}
 }

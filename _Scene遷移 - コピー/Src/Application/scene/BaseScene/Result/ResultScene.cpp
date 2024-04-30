@@ -61,27 +61,31 @@ void ResultScene::Update()
 void ResultScene::Draw(KdTexture* _pTex)
 {
 	Math::Rectangle src = { 0,0,Back::Width,Back::Height };
+	Math::Color col = { 1,1,1,1 };
+	if (!m_bClear) { col = { 1,0,0,1 }; }
 	for (int i = 0; i < BackNum; i++)
 	{
 		SHADER.m_spriteShader.SetMatrix(m_mat);
-		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src);
+		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src, &col);
 	}
 
 	for (int i = 0; i < CharType::num; i++)
 	{
-		Math::Color col = { 1,1,1,1 };
 		if (i == CharType::Continue)
 		{ 
 			src = { 0,0,ImgWidthMiddle,ImgHeight };
 			if (m_posY == ContinuePos) { col = { 1.0f,1.0f,1.0f,abs(sin(DirectX::XMConvertToRadians((float)m_alphaAng))) * AlphaRange + AlphaMin }; }
+			else { col = { 1, 1, 1, 1 }; }
 		}
 		if (i == CharType::Title)
 		{
 			src = { 0,0,ImgWidthShort,ImgHeight };
 			if (m_posY == TitlePos) { col = { 1.0f,1.0f,1.0f,abs(sin(DirectX::XMConvertToRadians((float)m_alphaAng))) * AlphaRange + AlphaMin }; }
+			else { col = { 1, 1, 1, 1 }; }
 		}
 		if(i == CharType::Main)
 		{
+			col = { 1,1,1,1 };
 			if(m_bClear)src = { 0,0,ImgWidthShort,ImgHeight };
 			if(!m_bClear)src = { 0,0,ImgWidthLong,ImgHeight };
 		}

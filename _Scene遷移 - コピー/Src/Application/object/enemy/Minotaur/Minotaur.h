@@ -19,7 +19,7 @@ public:
 	void SetDeathState()override;
 	void SetAttackState()override;
 
-	int GetSpaceWidthImg() { return (int)(32 * m_scale); }
+	int GetSpaceWidthImg() { return (int)(20 * m_scale); }
 	int GetSpaceHeightImg() { return (int)(32 * m_scale); }
 
 	int GetDmg();
@@ -27,6 +27,11 @@ public:
 private:
 	void Init(Math::Vector2 _pos)override;
 	void Release()override;
+	int GetDeadSpaceRightImg() { return int(48 * m_scale); }
+	int GetDeadSpaceLeftImg() { return int(28 * m_scale); }
+	int GetDeadSpaceTopImg() { return int(45 * m_scale); }
+	int GetDeadSpaceBottomImg() { return int(20 * m_scale); }
+	int GetUISpaceTop() { return int(20 * m_scale); }
 
 	const std::string m_fileName[3] = { "Texture/Enemy/Boss/run.png","Texture/Enemy/Boss/death.png","Texture/Enemy/Boss/attack.png" };
 };

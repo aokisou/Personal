@@ -27,6 +27,7 @@ void TitleScene::Update()
 	}
 	else { m_pOwner->SetFalseKeyFlg(); }
 
+	m_titleMat = Math::Matrix::CreateTranslation(0.0f, 200.0f, 0.0f);
 	m_startMat = Math::Matrix::CreateTranslation(0.0f, -160.0f, 0.0f);
 	m_mat = Math::Matrix::CreateScale(Back::Scale, Back::Scale, 1.0f) * Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
 }
@@ -44,6 +45,10 @@ void TitleScene::Draw(KdTexture* _pTex)
 	Math::Color col = { 1.0f,1.0f,1.0f,abs(sin(DirectX::XMConvertToRadians((float)m_alphaAng))) * AlphaRange + AlphaMin };
 	SHADER.m_spriteShader.SetMatrix(m_startMat);
 	SHADER.m_spriteShader.DrawTex(&m_startTex, 0, 0, &src,&col);
+
+	src = { 0,0,400,128 };
+	SHADER.m_spriteShader.SetMatrix(m_titleMat);
+	SHADER.m_spriteShader.DrawTex(&m_titleTex, 0, 0, &src);
 }
 
 void TitleScene::DynamicDraw2D()
@@ -58,6 +63,7 @@ void TitleScene::Init()
 		m_backTex[i].Load(m_backName[i]);
 	}
 	m_startTex.Load("Texture/Title/start.png");
+	m_titleTex.Load("Texture/Title/title.png");
 }
 
 void TitleScene::Release()

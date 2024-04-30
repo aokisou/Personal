@@ -23,4 +23,7 @@ private:
 	KdTexture m_backTex[5];
 	std::string m_backName[5] = { "Texture/BackGround/1.png","Texture/BackGround/2.png","Texture/BackGround/3.png","Texture/BackGround/4.png",
 										"Texture/BackGround/5.png" };
+
+	Math::Matrix m_titleMat = Math::Matrix::Identity;
+	KdTexture m_titleTex;
 };

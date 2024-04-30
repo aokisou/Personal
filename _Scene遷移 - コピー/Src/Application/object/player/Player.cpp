@@ -13,7 +13,7 @@
 
 //プレイヤー
 #define MovePow 5			//速度
-#define JumpPow 15			//ジャンプ力
+#define JumpPow 20			//ジャンプ力
 #define ShotInterval 6		//弾を打つ感覚(Maxfps/この数値)
 #define MoveRange -150.0f	//移動範囲
 #define StartPosX -600.0f	//開始X座標

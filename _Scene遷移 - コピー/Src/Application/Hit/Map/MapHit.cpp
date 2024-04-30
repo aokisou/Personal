@@ -22,35 +22,53 @@ void MapHit::MapObjHit(int _s, int _e, Map* m_map, BaseObject* _obj)
 			int md;
 			if ((md = m_map->GetMapData(i, j)) == MapTile::none) { continue; }
 
-			const float mapRight	= m_map->GetPos(i,j).x + m_map->GetHalfSize();
-			const float mapLeft		= m_map->GetPos(i,j).x - m_map->GetHalfSize();
-			const float mapTop		= m_map->GetPos(i,j).y + m_map->GetHalfSize();
-			const float mapBottom	= m_map->GetPos(i,j).y - m_map->GetHalfSize();
+			const float mapRight = m_map->GetPos(i, j).x + m_map->GetHalfSize();
+			const float mapLeft = m_map->GetPos(i, j).x - m_map->GetHalfSize();
+			const float mapTop = m_map->GetPos(i, j).y + m_map->GetHalfSize();
+			const float mapBottom = m_map->GetPos(i, j).y - m_map->GetHalfSize();
 
-			if (objRight > mapLeft && objLeft < mapRight)
+			switch (md)
 			{
-				if (objNextBottom < mapTop && objNextTop > mapTop)
+			case Block6:
+			case Block7:
+			case Block8:
+				if (objRight > mapLeft && objLeft < mapRight)
 				{
-					if (_obj->GetContent()) { _obj->SetFalseAlive(); }
-					_obj->MapHitY(mapTop + _obj->GetHalfSize() - _obj->GetSpaceHeightImg(), 0.f, false);
+					if (objNextBottom < mapTop && objNextTop > mapTop && objTop > objNextTop)
+					{
+						if (_obj->GetContent()) { _obj->SetFalseAlive(); }
+						_obj->MapHitY(mapTop + _obj->GetHalfSize() - _obj->GetSpaceHeightImg(), 0.f, false);
+					}
 				}
-				else if (objNextTop > mapBottom && objNextBottom < mapBottom)
+				break;
+			default:
+
+				if (objRight > mapLeft && objLeft < mapRight)
 				{
-					_obj->MapHitY(mapBottom - _obj->GetHalfSize() + _obj->GetSpaceHeightImg(), 0.f,true);
+					if (objNextBottom < mapTop && objNextTop > mapTop)
+					{
+						if (_obj->GetContent()) { _obj->SetFalseAlive(); }
+						_obj->MapHitY(mapTop + _obj->GetHalfSize() - _obj->GetSpaceHeightImg(), 0.f, false);
+					}
+					else if (objNextTop > mapBottom && objNextBottom < mapBottom)
+					{
+						_obj->MapHitY(mapBottom - _obj->GetHalfSize() + _obj->GetSpaceHeightImg(), 0.f, true);
+					}
 				}
-			}
-			else if (objTop > mapBottom && objBottom < mapTop)
-			{
-				if (objNextLeft < mapRight && objNextRight > mapRight)
+				else if (objTop > mapBottom && objBottom < mapTop)
 				{
-					if (_obj->GetContent()) { _obj->SetFalseAlive(); }
-					_obj->MapHitX(mapRight + _obj->GetHalfSize() - _obj->GetSpaceWidthImg(), 0.f);
+					if (objNextLeft < mapRight && objNextRight > mapRight)
+					{
+						if (_obj->GetContent()) { _obj->SetFalseAlive(); }
+						_obj->MapHitX(mapRight + _obj->GetHalfSize() - _obj->GetSpaceWidthImg(), 0.f);
+					}
+					else if (objNextRight > mapLeft && objNextLeft < mapLeft)
+					{
+						if (_obj->GetContent()) { _obj->SetFalseAlive(); }
+						_obj->MapHitX(mapLeft - _obj->GetHalfSize() + _obj->GetSpaceWidthImg(), 0.f);
+					}
 				}
-				else if (objNextRight > mapLeft && objNextLeft < mapLeft)
-				{
-					if (_obj->GetContent()) { _obj->SetFalseAlive(); }
-					_obj->MapHitX(mapLeft - _obj->GetHalfSize() + _obj->GetSpaceWidthImg(), 0.f);
-				}
+				break;
 			}
 		}
 	}

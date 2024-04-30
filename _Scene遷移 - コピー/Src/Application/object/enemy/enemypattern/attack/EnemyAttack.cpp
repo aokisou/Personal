@@ -9,7 +9,7 @@
 void EnemyAttack::Update()
 {
 	const int MaxCoolCnt = 5;	//1‰æ‘œƒAƒjƒŽžŠÔ
-	int AnimeNum = 6;		//‰æ‘œ”
+	int AnimeNum = 6;			//‰æ‘œ”
 
 	if (typeid(*m_enemy) == typeid(Minotaur))
 	{
@@ -23,7 +23,7 @@ void EnemyAttack::Update()
 		m_animeNum++;
 		if (typeid(*m_enemy) == typeid(Minotaur))
 		{
-			if(m_animeNum == 3){ Attack(); }
+			if(m_animeNum == 2){ Attack(); }
 		}
 		if (m_animeNum >= AnimeNum)
 		{

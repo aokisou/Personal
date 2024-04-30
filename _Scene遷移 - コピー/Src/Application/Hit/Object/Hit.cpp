@@ -3,7 +3,6 @@
 #include "../../Object/Player/player.h"
 #include "../../Object/Enemy/BaseEnemy.h"
 #include "../../Object/Arrow/Arrow.h"
-//#include "../../Object/Player/PlayerPattern/PlayerPattern.h"
 #include "../../Object/Enemy/EnemyPattern/EnemyPattern.h"
 #include "../../Utility/utility.h"
 

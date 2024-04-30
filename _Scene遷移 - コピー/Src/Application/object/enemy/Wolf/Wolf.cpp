@@ -117,7 +117,7 @@ bool Wolf::Attack()
 			}
 			return true;
 		}
-		if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_lookRange)
+		if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_lookRange || m_hp < MaxHP)
 		{
 			float a = GetAngleDeg(GetFuturePos(), ply->GetFuturePos());
 			if (cos(DirectX::XMConvertToRadians(a)) < 0) { m_dir = DefaultDir; }
@@ -131,7 +131,7 @@ bool Wolf::Attack()
 
 void Wolf::UpdateUI(float _scrollX)
 {
-	m_pHPBar->Update(&m_hp, MaxHP, { m_pos.x - _scrollX, m_pos.y });
+	m_pHPBar->Update(&m_hp, MaxHP, { m_pos.x - _scrollX, m_pos.y + GetHalfSize() - GetSpaceHeightImg() });
 }
 
 void Wolf::DrawUI()

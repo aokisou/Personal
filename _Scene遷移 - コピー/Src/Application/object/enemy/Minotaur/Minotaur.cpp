@@ -9,8 +9,7 @@
 #include "../../../UI/HP/Enemy/EnemyHPBar.h"
 #include "../../../Utility/Utility.h"
 
-#define WalkSpeed 1.0f			//•ú˜Q‚µ‚Ä‚é‚Æ‚«
-#define RunSpeed 2.0f			//UŒ‚ó‘Ô‚ÌŽž
+#define RunSpeed 3.0f			//UŒ‚ó‘Ô‚ÌŽž
 #define Dmg 5					//UŒ‚Žž‚Ìƒ_ƒ[ƒW
 #define AttackIntervalSec 2		//UŒ‚ŠÔŠu
 #define MaxHP 40				//‰ŠúHP
@@ -40,7 +39,50 @@ void Minotaur::Init(Math::Vector2 _pos)
 
 void Minotaur::Action()
 {
-	if (!m_bAlive || m_pState->GetStateType() == enemyDeath) { return; }
+	if (!m_bAlive || m_pState->GetStateType() == enemyDeath) //æ‚Á‚©‚ê‚é‚æ‚¤‚É“–‚½‚è”»’è
+	{
+		Player* p = m_pOwner->GetPlayer();
+		const float plyRight	= p->GetPos().x + p->GetHalfSize() - p->GetSpaceWidthImg();
+		const float plyLeft		= p->GetPos().x - p->GetHalfSize() + p->GetSpaceWidthImg();
+		const float plyTop		= p->GetPos().y + p->GetHalfSize() - p->GetSpaceHeightImg();
+		const float plyBottom	= p->GetPos().y - p->GetHalfSize() + p->GetSpaceHeightImg();
+
+		const float plyNextRight	= p->GetFuturePos().x + p->GetHalfSize() - p->GetSpaceWidthImg();
+		const float plyNextLeft		= p->GetFuturePos().x - p->GetHalfSize() + p->GetSpaceWidthImg();
+		const float plyNextTop		= p->GetFuturePos().y + p->GetHalfSize() - p->GetSpaceHeightImg();
+		const float plyNextBottom	= p->GetFuturePos().y - p->GetHalfSize() + p->GetSpaceHeightImg();
+
+		const float emyRight	= GetPos().x + GetHalfSize() + GetDeadSpaceRightImg() * abs((m_dir - 1) / Half)
+															 + GetDeadSpaceLeftImg() * abs((m_dir + 1) / Half);
+		const float emyLeft		= GetPos().x - GetHalfSize() - GetDeadSpaceRightImg() * abs((m_dir + 1) / Half)
+															 - GetDeadSpaceLeftImg() * abs((m_dir - 1) / Half);
+		const float emyTop		= GetPos().y + GetHalfSize() - GetDeadSpaceTopImg();
+		const float emyBottom	= GetPos().y - GetHalfSize() + GetDeadSpaceBottomImg();
+
+		if (plyRight > emyLeft && plyLeft < emyRight)
+		{
+			if (plyNextBottom < emyTop && plyNextTop > emyTop)
+			{
+				p->MapHitY(emyTop + p->GetHalfSize() - p->GetSpaceHeightImg(), 0.f, false);
+			}
+			else if (plyNextTop > emyBottom && plyNextBottom < emyBottom)
+			{
+				p->MapHitY(emyBottom - p->GetHalfSize() + p->GetSpaceHeightImg(), 0.f, true);
+			}
+		}
+		else if (plyTop > emyBottom && plyBottom < emyTop)
+		{
+			if (plyNextLeft < emyRight && plyNextRight > emyRight)
+			{
+				p->MapHitX(emyRight + p->GetHalfSize() - p->GetSpaceWidthImg(), 0.f);
+			}
+			else if (plyNextRight > emyLeft && plyNextLeft < emyLeft)
+			{
+				p->MapHitX(emyLeft - p->GetHalfSize() + p->GetSpaceWidthImg(), 0.f);
+			}
+		}
+		return;
+	}
 
 	m_move = { 0,m_move.y - Gravity };
 
@@ -52,7 +94,7 @@ void Minotaur::Action()
 
 void Minotaur::Update(float _scrollX)
 {
-	if (!m_bAlive) { return; }
+	if (!m_bAlive){ return; }
 
 	if (m_pState->GetStateType() != enemyDeath)
 	{
@@ -127,11 +169,12 @@ bool Minotaur::Attack()
 
 void Minotaur::UpdateUI(float _scrollX)
 {
-	m_pHPBar->Update(&m_hp, MaxHP, { m_pos.x - _scrollX, m_pos.y + m_size * m_scale});
+	m_pHPBar->Update(&m_hp, MaxHP, { m_pos.x - _scrollX, m_pos.y + GetHalfSize() - GetUISpaceTop()});
 }
 
 void Minotaur::DrawUI()
 {
+	if (!m_bAlive) { return; }
 	m_pHPBar->Draw(MaxHP);
 }
 
