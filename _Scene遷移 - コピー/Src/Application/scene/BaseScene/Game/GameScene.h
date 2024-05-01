@@ -9,7 +9,7 @@ class Map;
 class MapHit;
 class HPBar;
 
-class GameScene:public BaseScene
+class GameScene :public BaseScene
 {
 public:
 	GameScene(int* _fps) { m_maxFps = _fps; Init(); }
@@ -32,6 +32,8 @@ public:
 	void TutorialUpdate();
 	void TutorialDraw();
 
+	void SetFalseEntry() { m_bEntry = false; }
+
 	//クラスアドレス
 	Player* GetPlayer() { return m_player; }
 	std::vector<BaseEnemy*> GetEnemy() { return m_enemy; }
@@ -46,15 +48,17 @@ private:
 
 	void ShakeReset(bool& _b);
 
-	void DeadEnemy();
+	void Enemy();
 	void EnemyErase();
+
+	bool m_bEntry = false;
 
 	float m_scrollX = 0.0f;
 	float m_minScrollX = 0.0f;
 	float m_maxScrollX = 0.0f;
 
 	int m_nowMap = 0;
-	std::string m_mapName[3] = { "map/tutorial.csv","map/stage1.csv","map/boss.csv"};
+	std::string m_mapName[3] = { "map/tutorial.csv","map/stage1.csv","map/boss.csv" };
 
 	Player* m_player = nullptr;
 	std::vector<BaseEnemy*> m_enemy;
@@ -79,7 +83,7 @@ private:
 	Math::Matrix m_2ndBackMat[5];
 	KdTexture m_backTex[5];
 	std::string m_backName[5] = { "Texture/BackGround/1.png","Texture/BackGround/2.png","Texture/BackGround/3.png","Texture/BackGround/4.png",
-										"Texture/BackGround/5.png" };
+								  "Texture/BackGround/5.png" };
 
 	bool m_bAction = true;
 	float m_tutorialAlpha = 0.0f;
@@ -90,4 +94,9 @@ private:
 	float m_arrowSizeAng = 0;
 	Math::Matrix m_arrowMat = Math::Matrix::Identity;
 	KdTexture m_arrowTex;//これは行先を示す画像
+
+	bool m_bEnter = false;
+	Math::Vector2 startCut = {};
+	Math::Matrix m_enterMat = Math::Matrix::Identity;
+	KdTexture m_enterTex;
 };

@@ -30,5 +30,5 @@ private:
 
 	int m_lookRange = 0;	//Ž‹”F”ÍˆÍ
 
-	const std::string m_fileName[3] = { "Texture/Enemy/2/S_Walk.png","Texture/Enemy/2/S_Death.png","Texture/Enemy/2/S_Attack.png" };
+	const std::string m_fileName[3] = { "Texture/Enemy/2/S_Walk.png","Texture/Enemy/2/S_Attack.png" ,"Texture/Enemy/2/S_Death.png" };
 };

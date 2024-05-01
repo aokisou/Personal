@@ -55,12 +55,12 @@ void ResultScene::Update()
 	m_charMat[0] = Math::Matrix::CreateTranslation(0.0f, ContinuePos, 0.0f);
 	m_charMat[1] = Math::Matrix::CreateTranslation(0.0f, TitlePos, 0.0f);
 	m_charMat[2] = Math::Matrix::CreateTranslation(0.0f, MainPos, 0.0f);
-	m_mat = Math::Matrix::CreateScale(Back::Scale, Back::Scale, 1.0f) * Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
+	m_mat = Math::Matrix::CreateScale(Back::scale, Back::scale, 1.0f) * Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
 }
 
 void ResultScene::Draw(KdTexture* _pTex)
 {
-	Math::Rectangle src = { 0,0,Back::Width,Back::Height };
+	Math::Rectangle src = { 0,0,Back::width,Back::height };
 	Math::Color col = { 1,1,1,1 };
 	if (!m_bClear) { col = { 1,0,0,1 }; }
 	for (int i = 0; i < BackNum; i++)
@@ -103,7 +103,7 @@ void ResultScene::Init()
 	m_posY = ContinuePos;
 	m_alphaAng = 0;
 
-	for (int i = 0; i < Back::Num; i++)
+	for (int i = 0; i < Back::num; i++)
 	{
 		m_backTex[i].Load(m_backName[i]);
 	}

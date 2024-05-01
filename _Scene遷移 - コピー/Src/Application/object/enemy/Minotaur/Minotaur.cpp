@@ -6,18 +6,19 @@
 #include "../EnemyPattern/Death/EnemyDeath.h"
 #include "../EnemyPattern/Run/EnemyRun.h"
 #include "../EnemyPattern/Attack/EnemyAttack.h"
+#include "../EnemyPattern/Boss/EntryBoss.h"
 #include "../../../UI/HP/Enemy/EnemyHPBar.h"
 #include "../../../Utility/Utility.h"
 
 #define RunSpeed 3.0f			//UŒ‚ó‘Ô‚ÌŽž
 #define Dmg 5					//UŒ‚Žž‚Ìƒ_ƒ[ƒW
-#define AttackIntervalSec 2		//UŒ‚ŠÔŠu
-#define MaxHP 40				//‰ŠúHP
+#define AttackIntervalSec 1		//UŒ‚ŠÔŠu
+#define MaxHP 1					//‰ŠúHP
 
 void Minotaur::Init(Math::Vector2 _pos)
 {
 	const int ImgSize = 96;		//ƒLƒƒƒ‰‰æ‘œƒTƒCƒY
-	const float Scale = 1.5f;	//ƒLƒƒƒ‰Šg‘å—¦
+	const float Scale = 2.5f;	//ƒLƒƒƒ‰Šg‘å—¦
 
 	m_pos = { _pos };
 	m_move = { 0 };
@@ -32,14 +33,15 @@ void Minotaur::Init(Math::Vector2 _pos)
 	m_moveRange = 100;
 	m_attackRange = 30;
 	m_attackCoolTime = 0;
-	SetRunState();
+	SetEntryState();
 	InitUI();
 	m_startPos = m_pos;
 }
 
 void Minotaur::Action()
 {
-	if (!m_bAlive || m_pState->GetStateType() == enemyDeath) //æ‚Á‚©‚ê‚é‚æ‚¤‚É“–‚½‚è”»’è
+	if (m_pState->GetStateType() >= enemyDeath && m_bAlive) { return; }
+	if (!m_bAlive) //æ‚Á‚©‚ê‚é‚æ‚¤‚É“–‚½‚è”»’è
 	{
 		Player* p = m_pOwner->GetPlayer();
 		const float plyRight	= p->GetPos().x + p->GetHalfSize() - p->GetSpaceWidthImg();
@@ -52,10 +54,10 @@ void Minotaur::Action()
 		const float plyNextTop		= p->GetFuturePos().y + p->GetHalfSize() - p->GetSpaceHeightImg();
 		const float plyNextBottom	= p->GetFuturePos().y - p->GetHalfSize() + p->GetSpaceHeightImg();
 
-		const float emyRight	= GetPos().x + GetHalfSize() + GetDeadSpaceRightImg() * abs((m_dir - 1) / Half)
-															 + GetDeadSpaceLeftImg() * abs((m_dir + 1) / Half);
-		const float emyLeft		= GetPos().x - GetHalfSize() - GetDeadSpaceRightImg() * abs((m_dir + 1) / Half)
-															 - GetDeadSpaceLeftImg() * abs((m_dir - 1) / Half);
+		const float emyRight	= GetPos().x + GetHalfSize() - GetDeadSpaceRightImg() * abs((m_dir - 1) / Half)
+															 - GetDeadSpaceLeftImg() * abs((m_dir + 1) / Half);
+		const float emyLeft		= GetPos().x - GetHalfSize() + GetDeadSpaceRightImg() * abs((m_dir + 1) / Half)
+															 + GetDeadSpaceLeftImg() * abs((m_dir - 1) / Half);
 		const float emyTop		= GetPos().y + GetHalfSize() - GetDeadSpaceTopImg();
 		const float emyBottom	= GetPos().y - GetHalfSize() + GetDeadSpaceBottomImg();
 
@@ -94,9 +96,9 @@ void Minotaur::Action()
 
 void Minotaur::Update(float _scrollX)
 {
-	if (!m_bAlive){ return; }
+	if (!m_bAlive) { return; }
 
-	if (m_pState->GetStateType() != enemyDeath)
+	if (m_pState->GetStateType() <= enemyDeath)
 	{
 		if (m_bDmg)
 		{
@@ -194,6 +196,12 @@ void Minotaur::SetAttackState()
 {
 	m_pState = std::make_shared<EnemyAttack>();
 	m_pState->Init(this, m_fileName[enemyAttack]);
+}
+
+void Minotaur::SetEntryState()
+{
+	m_pState = std::make_shared<EntryEnemy>();
+	m_pState->Init(this, m_fileName[enemyBossEntry]);
 }
 
 int Minotaur::GetDmg()

@@ -25,8 +25,10 @@ enum StateType
 	playerAttack,
 	playerFall,
 	enemyRun = 0,
+	slimeDeath,
+	enemyAttack = slimeDeath,
 	enemyDeath,
-	enemyAttack,
+	enemyBossEntry,
 };
 
 enum MapTile//ID‚Æ‡‚í‚¹‚é
@@ -106,8 +108,8 @@ namespace SCREEN
 
 namespace Back
 {
-	const int Num = 5;			//‰æ‘œ”
-	const int Width = 576;		//”wŒi‰¡•
-	const int Height = 324;		//”wŒic•
-	const float Scale = 2.3f;	//”wŒiŠg‘å—¦
+	const int num = 5;			//‰æ‘œ”
+	const int width = 576;		//”wŒi‰¡•
+	const int height = 324;		//”wŒic•
+	const float scale = 2.3f;	//”wŒiŠg‘å—¦
 }

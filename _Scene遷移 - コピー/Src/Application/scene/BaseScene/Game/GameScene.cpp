@@ -23,6 +23,15 @@
 #define Clear true			//クリア
 #define TutorialWidth 580	//チュートリアルの文字幅
 #define TutorialHeight 78	//チュートリアルの文字幅
+#define ArrowWidth 256		//矢印の文字幅
+#define ArrowHeight 128		//矢印の文字幅
+#define EnterScale 2.3f		//エンターキーの拡大率
+#define EnterWidth 30		//エンターキーの文字幅
+#define EnterHeight 14		//エンターキーの文字幅
+#define StartAlpha 90.0f	//α値の初期値
+#define CutRangeX 400		//ボス登場シーンの切取幅
+#define CutRangeY 400		//ボス登場シーンの切取幅
+#define CutScale 4.0f		//ボス登場シーンの拡大率
 
 static bool m_bTutorialSkip = false;//実行1回目のみチュートリアル
 
@@ -30,7 +39,7 @@ void GameScene::PreUpdate()
 {
 	UpdateBack();
 	MapRange();
-	DeadEnemy();
+	Enemy();
 	SetMap();
 }
 
@@ -40,11 +49,14 @@ void GameScene::Update()
 
 	if (!m_BigShake || !m_smallShake)
 	{
-		m_player->Action();
-
-		for (auto& i : m_enemy)
+		if (!m_bEntry)
 		{
-			i->Action();
+			m_player->Action();
+
+			for (auto& i : m_enemy)
+			{
+				i->Action();
+			}
 		}
 
 		m_hit->ArrEmyHit();
@@ -113,14 +125,29 @@ void GameScene::Update()
 		r = (float)(rand() % SmallShakePow - SmallShakePow / Half);
 		if (m_shakeCnt > MaxShakeCnt) { ShakeReset(m_smallShake); }
 	}
-	m_mat = Math::Matrix::CreateScale(SCREEN::scale, SCREEN::scale, 1.0f) *
-		Math::Matrix::CreateTranslation(r + m_player->GetHalfSize() - m_player->GetSpaceWidthImg(), 0.0f, 0.0f);
+
+	if (m_bEntry)
+	{
+		m_mat = Math::Matrix::CreateScale(CutScale, CutScale, 1.0f) *
+			Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
+	}
+	else
+	{
+		m_mat = Math::Matrix::CreateScale(SCREEN::scale, SCREEN::scale, 1.0f) *
+			Math::Matrix::CreateTranslation(r, 0.0f, 0.0f);
+	}
 
 	if (m_enemy.size() <= 0)
 	{
 		m_arrowSizeAng += 3.0f;
 		m_arrowMat = Math::Matrix::CreateScale(1.0f + (float)sin(DirectX::XMConvertToRadians(m_arrowSizeAng)) * 0.2f, 1.0f + (float)sin(DirectX::XMConvertToRadians(m_arrowSizeAng)) * 0.2f, 1.0f) *
-			Math::Matrix::CreateTranslation(SCREEN::width / Half - 128, 0.0f, 0.0f);
+			Math::Matrix::CreateTranslation(SCREEN::width / Half - ArrowWidth / Half, 0.0f, 0.0f);
+	}
+
+	if (m_bEnter)
+	{
+		m_enterMat = Math::Matrix::CreateScale(EnterScale,EnterScale,1.0f) * 
+			Math::Matrix::CreateTranslation(SCREEN::width / Half - EnterWidth * EnterScale, -SCREEN::height / Half + EnterHeight * EnterScale, 0.0f);
 	}
 
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
@@ -174,7 +201,7 @@ void GameScene::ShakeReset(bool& _b)
 	m_shakeCnt = 0;
 }
 
-void GameScene::DeadEnemy()
+void GameScene::Enemy()
 {
 	std::vector<BaseEnemy*>::iterator it = m_enemy.begin();
 	while (it != m_enemy.end())
@@ -188,6 +215,7 @@ void GameScene::DeadEnemy()
 			}
 			else
 			{
+				m_bEnter = true;
 				it++;
 			}
 		}
@@ -198,8 +226,13 @@ void GameScene::DeadEnemy()
 				if ((*it)->GetAttackHitCnt() < OnePunch) { m_BigShake = true; }
 				else { m_smallShake = true; }
 			}
+			if ((*it)->GetEnemyState()->GetStateType() == enemyBossEntry)
+			{
+				m_bEntry = true;
+				startCut = { ((*it)->GetPos().x - m_scrollX) - CutRangeX / Half, (*it)->GetPos().y + (*it)->GetHalfSize() + CutRangeY / Half};
+			}
 			it++;
-		}
+		} 
 	}
 }
 
@@ -215,50 +248,26 @@ void GameScene::EnemyErase()
 
 void GameScene::UpdateBack()
 {
-	for (int i = 0; i < Back::Num; i++)
+	for (int i = 0; i < Back::num; i++)
 	{
 		m_backPos[i].x = -(m_scrollX * m_backScrollSpeed[i]);
-		if (m_backPos[i].x < -Back::Width * Back::Scale)
+		if (m_backPos[i].x < -Back::width * Back::scale)
 		{
-			while (m_backPos[i].x < -Back::Width * Back::Scale)
+			while (m_backPos[i].x < -Back::width * Back::scale)
 			{
-				m_backPos[i].x += Back::Width * Back::Scale;
+				m_backPos[i].x += Back::width * Back::scale;
 			}
 		}
-		m_2ndBackPos[i].x = m_backPos[i].x + 576 * Back::Scale;
-		m_backMat[i] = Math::Matrix::CreateScale(Back::Scale, Back::Scale, 1.0f) * Math::Matrix::CreateTranslation(m_backPos[i].x, m_backPos[i].y, 0.0f);
-		m_2ndBackMat[i] = Math::Matrix::CreateScale(Back::Scale, Back::Scale, 1.0f) * Math::Matrix::CreateTranslation(m_2ndBackPos[i].x, m_2ndBackPos[i].y, 0.0f);
+		m_2ndBackPos[i].x = m_backPos[i].x + Back::width * Back::scale;
+		m_backMat[i] = Math::Matrix::CreateScale(Back::scale, Back::scale, 1.0f) * Math::Matrix::CreateTranslation(m_backPos[i].x, m_backPos[i].y, 0.0f);
+		m_2ndBackMat[i] = Math::Matrix::CreateScale(Back::scale, Back::scale, 1.0f) * Math::Matrix::CreateTranslation(m_2ndBackPos[i].x, m_2ndBackPos[i].y, 0.0f);
 	}
-}
-
-void GameScene::Reset()
-{
-	m_bAction = true;
-	EnemyErase();
-
-	m_arrowSizeAng = 0;
-
-	m_player->Reset();
-
-	m_mapRangeStart = 0;
-	m_mapRangeEnd = 0;
-
-	m_shakeCnt = 0;
-	m_BigShake = false;
-	m_smallShake = false;
-
-	m_map->SetMapData(m_mapName[m_nowMap]);
-	m_scrollX = 0;
-	m_minScrollX = m_map->GetPos(0, 0).x + SCREEN::width / Half;
-	m_maxScrollX = m_map->GetPos(0, (m_map->GetMaxWidth() - 1)).x - SCREEN::width / Half;
-
-	Update();
 }
 
 void GameScene::Draw(KdTexture* _pTex)
 {
-	Math::Rectangle src = { 0,0,Back::Width,Back::Height };
-	for (int i = 0; i < Back::Num; i++)
+	Math::Rectangle src = { 0,0,Back::width,Back::height };
+	for (int i = 0; i < Back::num; i++)
 	{
 		SHADER.m_spriteShader.SetMatrix(m_backMat[i]);
 		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src);
@@ -268,16 +277,24 @@ void GameScene::Draw(KdTexture* _pTex)
 
 	if (m_enemy.size() <= 0)
 	{
-		src = { 0,0,256,128 };
+		src = { 0,0,ArrowWidth,ArrowHeight };
 		SHADER.m_spriteShader.SetMatrix(m_arrowMat);
 		SHADER.m_spriteShader.DrawTex(&m_arrowTex, 0, 0, &src);
 	}
 
-	src = { 0,0, SCREEN::width, SCREEN::height };
+	if (m_bEntry) { src = { (int)startCut.x + SCREEN::width / Half,(int)startCut.y,CutRangeX,CutRangeY }; }
+	else { src = { 0,0, SCREEN::width, SCREEN::height }; }
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(_pTex, 0, 0, &src);
 
 	TutorialDraw();
+
+	if (m_bEnter)
+	{
+		src = { 0,0,EnterWidth,EnterHeight };
+		SHADER.m_spriteShader.SetMatrix(m_enterMat);
+		SHADER.m_spriteShader.DrawTex(&m_enterTex, 0, 0, &src);
+	}
 
 	m_player->DrawUI();
 }
@@ -303,9 +320,7 @@ void GameScene::Init()
 	}
 	else { m_nowMap = 1; }
 
-	m_arrowTex.Load("Texture/UI/arrow.png");
-
-	for (int i = 0; i < Back::Num; i++)
+	for (int i = 0; i < Back::num; i++)
 	{
 		m_backPos[i] = {};
 		m_2ndBackPos[i] = {};
@@ -314,6 +329,10 @@ void GameScene::Init()
 		bLoad = m_backTex[i].Load(m_backName[i]);
 		_ASSERT_EXPR(bLoad, "ファイル読み取りエラー");
 	}
+
+	m_arrowTex.Load("Texture/UI/arrow.png");
+
+	m_enterTex.Load("Texture/UI/enter.png");
 
 	m_player = new Player;
 	m_hit = new Hit;
@@ -328,6 +347,33 @@ void GameScene::Init()
 
 	Reset();
 }
+
+void GameScene::Reset()
+{
+	m_bEntry = false;
+	startCut = {};
+	m_bAction = true;
+	EnemyErase();
+
+	m_arrowSizeAng = 0;
+
+	m_player->Reset();
+
+	m_mapRangeStart = 0;
+	m_mapRangeEnd = 0;
+
+	m_shakeCnt = 0;
+	m_BigShake = false;
+	m_smallShake = false;
+
+	m_map->SetMapData(m_mapName[m_nowMap]);
+	m_scrollX = 0;
+	m_minScrollX = m_map->GetPos(0, 0).x + SCREEN::width / Half;
+	m_maxScrollX = m_map->GetPos(0, (m_map->GetMaxWidth() - 1)).x - SCREEN::width / Half;
+
+	Update();
+}
+
 
 void GameScene::Release()
 {
@@ -375,7 +421,7 @@ void GameScene::SetDrawTutorial(int _data)
 {
 	m_tutorialCutY = (_data - MapTile::Tutorial) * TutorialHeight;
 	m_bAction = false;
-	m_tutorialAlpha = 90.0f;
+	m_tutorialAlpha = StartAlpha;
 }
 
 void GameScene::TutorialUpdate()

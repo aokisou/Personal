@@ -131,7 +131,7 @@ void Slime::SetRunState()
 void Slime::SetDeathState()
 {
 	m_pState = std::make_shared<EnemyDeath>();
-	m_pState->Init(this, m_fileName[enemyDeath]);
+	m_pState->Init(this, m_fileName[slimeDeath]);
 }
 
 void Slime::Release()

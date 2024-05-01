@@ -23,7 +23,7 @@ void EnemyAttack::Update()
 		m_animeNum++;
 		if (typeid(*m_enemy) == typeid(Minotaur))
 		{
-			if(m_animeNum == 2){ Attack(); }
+			if(m_animeNum >= 1 && m_animeNum <= 3){ Attack(); }
 		}
 		if (m_animeNum >= AnimeNum)
 		{
@@ -32,17 +32,20 @@ void EnemyAttack::Update()
 			{
 				Attack();
 			}
+			m_enemy->ResetAttackCoolTime();
+			m_enemy->SetRunState();
 		}
 	}
 }
 
 void EnemyAttack::Attack()
 {
+	if (m_bAttack) { return; }
 	Player* p = m_enemy->GetOwner()->GetPlayer();
 	Math::Vector2 v = p->GetFuturePos() - m_enemy->GetFuturePos();
 	if (v.Length() < p->GetHalfSize() - p->GetSpaceWidthImg() + m_enemy->GetHalfSize() - m_enemy->GetSpaceWidthImg())
 	{
-		if (p->GetFuturePos().x - m_enemy->GetFuturePos().x > 0)
+		if (p->GetFuturePos().x - m_enemy->GetFuturePos().x >= 0)
 		{
 			p->SetDmg(m_enemy->GetDmg(), 5.0f);
 		}
@@ -50,7 +53,6 @@ void EnemyAttack::Attack()
 		{
 			p->SetDmg(m_enemy->GetDmg(), -5.0f);
 		}
+		m_bAttack = true;
 	}
-	m_enemy->ResetAttackCoolTime();
-	m_enemy->SetRunState();
 }

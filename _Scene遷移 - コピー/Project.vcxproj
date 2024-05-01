@@ -166,6 +166,7 @@
     <ClInclude Include="Src\Application\object\BaseObject.h" />
     <ClInclude Include="Src\Application\object\enemy\BaseEnemy.h" />
     <ClInclude Include="Src\Application\object\enemy\enemypattern\attack\EnemyAttack.h" />
+    <ClInclude Include="Src\Application\Object\Enemy\EnemyPattern\Boss\EntryBoss.h" />
     <ClInclude Include="Src\Application\object\enemy\enemypattern\death\EnemyDeath.h" />
     <ClInclude Include="Src\Application\object\enemy\enemypattern\EnemyPattern.h" />
     <ClInclude Include="Src\Application\object\enemy\enemypattern\run\EnemyRun.h" />
@@ -221,6 +222,7 @@
     <ClCompile Include="Src\Application\object\BaseObject.cpp" />
     <ClCompile Include="Src\Application\object\enemy\BaseEnemy.cpp" />
     <ClCompile Include="Src\Application\object\enemy\enemypattern\attack\EnemyAttack.cpp" />
+    <ClCompile Include="Src\Application\Object\Enemy\EnemyPattern\Boss\EntryBoss.cpp" />
     <ClCompile Include="Src\Application\object\enemy\enemypattern\death\EnemyDeath.cpp" />
     <ClCompile Include="Src\Application\object\enemy\enemypattern\EnemyPattern.cpp" />
     <ClCompile Include="Src\Application\object\enemy\enemypattern\run\EnemyRun.cpp" />

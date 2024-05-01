@@ -14,5 +14,8 @@ public:
 
 	int GetMaxAnimeNum() { return 5; }
 
+private:
 	void Attack();
+
+	bool m_bAttack = false;
 };
