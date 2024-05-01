@@ -12,8 +12,8 @@
 #define WalkSpeed 1.0f			//•ú˜Q‚µ‚Ä‚é‚Æ‚«
 #define RunSpeed 2.0f			//UŒ‚ó‘Ô‚Ì
 #define Dmg 5					//UŒ‚‚Ìƒ_ƒ[ƒW
-#define AttackIntervalSec 2		//UŒ‚ŠÔŠu
-#define MaxHP 40				//‰ŠúHP
+#define AttackIntervalSec 1		//UŒ‚ŠÔŠu
+#define MaxHP 100				//‰ŠúHP
 
 void Orc::Init(Math::Vector2 _pos)
 {

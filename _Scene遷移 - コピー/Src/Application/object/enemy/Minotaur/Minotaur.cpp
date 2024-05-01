@@ -11,9 +11,9 @@
 #include "../../../Utility/Utility.h"
 
 #define RunSpeed 3.0f			//UŒ‚ó‘Ô‚ÌŽž
-#define Dmg 5					//UŒ‚Žž‚Ìƒ_ƒ[ƒW
-#define AttackIntervalSec 1		//UŒ‚ŠÔŠu
-#define MaxHP 1					//‰ŠúHP
+#define Dmg 10					//UŒ‚Žž‚Ìƒ_ƒ[ƒW
+#define AttackIntervalSec 3		//UŒ‚ŠÔŠu
+#define MaxHP 200				//‰ŠúHP
 
 void Minotaur::Init(Math::Vector2 _pos)
 {
@@ -139,32 +139,29 @@ bool Minotaur::Attack()
 	const float emyTop = GetPos().y + GetHalfSize();
 	const float emyBottom = GetPos().y - GetHalfSize() + GetSpaceHeightImg();
 
-	if (plyTop > emyBottom && plyTop < emyTop)
+	if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_attackRange)
 	{
-		if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_attackRange)
+		if (m_attackCoolTime < *m_pOwner->GetMAXfps() * AttackIntervalSec)
 		{
-			if (m_attackCoolTime < *m_pOwner->GetMAXfps() * AttackIntervalSec)
-			{
-				return true;
-			}
-
-			if (ply->GetFuturePos().x - GetFuturePos().x < 0) { m_dir = DefaultDir * Reverse; }
-			else { m_dir = DefaultDir; }
-
-			if (m_pState->GetStateType() != enemyAttack)
-			{
-				SetAttackState();
-			}
 			return true;
 		}
-		else
+
+		if (ply->GetFuturePos().x - GetFuturePos().x < 0) { m_dir = DefaultDir * Reverse; }
+		else { m_dir = DefaultDir; }
+
+		if (m_pState->GetStateType() != enemyAttack)
 		{
-			float a = GetAngleDeg(GetFuturePos(), ply->GetFuturePos());
-			if (cos(DirectX::XMConvertToRadians(a)) < 0) { m_dir = DefaultDir * Reverse; }
-			else { m_dir = DefaultDir; }
-			m_move.x = RunSpeed * m_dir;
-			return true;
+			SetAttackState();
 		}
+		return true;
+	}
+	else
+	{
+		float a = GetAngleDeg(GetFuturePos(), ply->GetFuturePos());
+		if (cos(DirectX::XMConvertToRadians(a)) < 0) { m_dir = DefaultDir * Reverse; }
+		else { m_dir = DefaultDir; }
+		m_move.x = RunSpeed * m_dir;
+		return true;
 	}
 	return false;
 }

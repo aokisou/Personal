@@ -10,10 +10,10 @@
 #include "../../../Utility/Utility.h"
 
 #define WalkSpeed 1.5f			//•ú˜Q‚µ‚Ä‚é‚Æ‚«
-#define RunSpeed 3.f			//UŒ‚ó‘Ô‚Ì
+#define RunSpeed 5.0f			//UŒ‚ó‘Ô‚Ì
 #define Dmg 3					//UŒ‚‚Ìƒ_ƒ[ƒW
-#define AttackIntervalSec 2		//UŒ‚ŠÔŠu
-#define MaxHP 15				//‰ŠúHP
+#define AttackIntervalSec 1		//UŒ‚ŠÔŠu
+#define MaxHP 30				//‰ŠúHP
 
 void Wolf::Init(Math::Vector2 _pos)
 {

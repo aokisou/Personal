@@ -33,6 +33,7 @@ public:
 	void TutorialDraw();
 
 	void SetFalseEntry() { m_bEntry = false; }
+	void ResetScreenScale();
 
 	//クラスアドレス
 	Player* GetPlayer() { return m_player; }
@@ -89,7 +90,9 @@ private:
 	float m_tutorialAlpha = 0.0f;
 	int m_tutorialCutY = 0;
 	Math::Matrix m_tutorialMat = Math::Matrix::Identity;
+	Math::Matrix m_keyMat = Math::Matrix::Identity;
 	KdTexture m_tutorialTex;
+	KdTexture m_keyTex;
 
 	float m_arrowSizeAng = 0;
 	Math::Matrix m_arrowMat = Math::Matrix::Identity;
@@ -99,4 +102,6 @@ private:
 	Math::Vector2 startCut = {};
 	Math::Matrix m_enterMat = Math::Matrix::Identity;
 	KdTexture m_enterTex;
+
+	float m_scale = 0.0f;
 };

@@ -16,6 +16,7 @@ void EntryEnemy::Update()
 		{
 			m_animeNum = 0;
 			m_enemy->GetOwner()->SetFalseEntry();
+			m_enemy->GetOwner()->ResetScreenScale();
 			m_enemy->SetRunState();
 		}
 	}

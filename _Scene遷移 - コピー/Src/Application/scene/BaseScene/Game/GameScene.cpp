@@ -32,6 +32,7 @@
 #define CutRangeX 400		//ボス登場シーンの切取幅
 #define CutRangeY 400		//ボス登場シーンの切取幅
 #define CutScale 4.0f		//ボス登場シーンの拡大率
+#define KeyPosX 220			//画像の真ん中
 
 static bool m_bTutorialSkip = false;//実行1回目のみチュートリアル
 
@@ -126,16 +127,8 @@ void GameScene::Update()
 		if (m_shakeCnt > MaxShakeCnt) { ShakeReset(m_smallShake); }
 	}
 
-	if (m_bEntry)
-	{
-		m_mat = Math::Matrix::CreateScale(CutScale, CutScale, 1.0f) *
-			Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
-	}
-	else
-	{
-		m_mat = Math::Matrix::CreateScale(SCREEN::scale, SCREEN::scale, 1.0f) *
-			Math::Matrix::CreateTranslation(r, 0.0f, 0.0f);
-	}
+	m_mat = Math::Matrix::CreateScale(m_scale, m_scale, 1.0f) *
+			Math::Matrix::CreateTranslation(r + 0.0f, 0.0f, 0.0f);
 
 	if (m_enemy.size() <= 0)
 	{
@@ -228,6 +221,7 @@ void GameScene::Enemy()
 			}
 			if ((*it)->GetEnemyState()->GetStateType() == enemyBossEntry)
 			{
+				m_scale = CutScale;
 				m_bEntry = true;
 				startCut = { ((*it)->GetPos().x - m_scrollX) - CutRangeX / Half, (*it)->GetPos().y + (*it)->GetHalfSize() + CutRangeY / Half};
 			}
@@ -316,7 +310,8 @@ void GameScene::Init()
 	if (!m_bTutorialSkip)
 	{ 
 		m_nowMap = 0;
-		m_tutorialTex.Load("Texture/UI/tutorial.png");
+		m_tutorialTex.Load("Texture/UI/tutorial2.png");
+		m_keyTex.Load("Texture/UI/key.png");
 	}
 	else { m_nowMap = 1; }
 
@@ -344,12 +339,15 @@ void GameScene::Init()
 	m_map->SetOwner(this);
 	m_hit->SetOwner(this);
 	m_tutorialMat = Math::Matrix::CreateTranslation(SCREEN::width / Half - TutorialWidth / Half, SCREEN::height / Half - TutorialHeight, 0.0f);
+	m_keyMat = Math::Matrix::CreateScale(5,5,1) * 
+		Math::Matrix::CreateTranslation(KeyPosX, SCREEN::height / Half - TutorialHeight, 0.0f);
 
 	Reset();
 }
 
 void GameScene::Reset()
 {
+	m_scale = SCREEN::scale;
 	m_bEntry = false;
 	startCut = {};
 	m_bAction = true;
@@ -469,6 +467,14 @@ void GameScene::TutorialDraw()
 	Math::Color col = { 1.0f,1.0f,1.0f,sin(DirectX::XMConvertToRadians(m_tutorialAlpha)) };
 	SHADER.m_spriteShader.SetMatrix(m_tutorialMat);
 	SHADER.m_spriteShader.DrawTex(&m_tutorialTex, 0, 0, &src, &col);
+	src = { 0,m_tutorialCutY / TutorialHeight * 16,48,16 };
+	SHADER.m_spriteShader.SetMatrix(m_keyMat);
+	SHADER.m_spriteShader.DrawTex(&m_keyTex, 0, 0, &src, &col);
+}
+
+void GameScene::ResetScreenScale()
+{
+	m_scale = SCREEN::scale;
 }
 
 void GameScene::SetMap()
