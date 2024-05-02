@@ -59,6 +59,7 @@ void Scene::UpdateChangeScene()
 
 void Scene::Init()
 {
+	srand(timeGetTime());
 	bool bLoad;
 	m_bkeyFlg = false;
 

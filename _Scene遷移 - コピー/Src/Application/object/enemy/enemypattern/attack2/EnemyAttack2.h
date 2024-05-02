@@ -2,11 +2,11 @@
 
 #include "../EnemyPattern.h"
 
-class EnemyAttack :public EnemyPattern
+class EnemyAttack2 :public EnemyPattern
 {
 public:
-	EnemyAttack() {}
-	~EnemyAttack() { Release(); }
+	EnemyAttack2() {}
+	~EnemyAttack2() { Release(); }
 
 	void Update()override;
 

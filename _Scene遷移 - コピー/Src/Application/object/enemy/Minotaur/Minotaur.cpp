@@ -6,12 +6,14 @@
 #include "../EnemyPattern/Death/EnemyDeath.h"
 #include "../EnemyPattern/Run/EnemyRun.h"
 #include "../EnemyPattern/Attack/EnemyAttack.h"
+#include "../EnemyPattern/Attack2/EnemyAttack2.h"
 #include "../EnemyPattern/Boss/EntryBoss.h"
 #include "../../../UI/HP/Enemy/EnemyHPBar.h"
 #include "../../../Utility/Utility.h"
 
 #define RunSpeed 3.0f			//UŒ‚ó‘Ô‚ÌŽž
-#define Dmg 10					//UŒ‚Žž‚Ìƒ_ƒ[ƒW
+#define Dmg 10					//’ÊíUŒ‚Žž‚Ìƒ_ƒ[ƒW
+#define Dmg2 15					//‰ñ“]UŒ‚Žž‚Ìƒ_ƒ[ƒW
 #define AttackIntervalSec 3		//UŒ‚ŠÔŠu
 #define MaxHP 200				//‰ŠúHP
 
@@ -40,7 +42,7 @@ void Minotaur::Init(Math::Vector2 _pos)
 
 void Minotaur::Action()
 {
-	if (m_pState->GetStateType() >= enemyDeath && m_bAlive) { return; }
+	if (m_pState->GetStateType() >= enemyAttack && m_bAlive) { return; }
 	if (!m_bAlive) //æ‚Á‚©‚ê‚é‚æ‚¤‚É“–‚½‚è”»’è
 	{
 		Player* p = m_pOwner->GetPlayer();
@@ -151,7 +153,12 @@ bool Minotaur::Attack()
 
 		if (m_pState->GetStateType() != enemyAttack)
 		{
-			SetAttackState();
+			if (m_hp > MaxHP / Half) { SetAttackState(); }
+			else 
+			{
+				if (rand() % 2) { SetAttackState(); }
+				else { SetAttack2State(); }
+			}
 		}
 		return true;
 	}
@@ -191,19 +198,22 @@ void Minotaur::SetDeathState()
 
 void Minotaur::SetAttackState()
 {
+	m_dmg = Dmg;
 	m_pState = std::make_shared<EnemyAttack>();
 	m_pState->Init(this, m_fileName[enemyAttack]);
 }
 
-void Minotaur::SetEntryState()
+void Minotaur::SetAttack2State()
 {
-	m_pState = std::make_shared<EntryEnemy>();
+	m_dmg = Dmg2;
+	m_pState = std::make_shared<EnemyAttack2>();
 	m_pState->Init(this, m_fileName[enemyBossEntry]);
 }
 
-int Minotaur::GetDmg()
+void Minotaur::SetEntryState()
 {
-	return Dmg;
+	m_pState = std::make_shared<EnemyEntry>();
+	m_pState->Init(this, m_fileName[enemyBossEntry]);
 }
 
 void Minotaur::Release()

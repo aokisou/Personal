@@ -20,10 +20,10 @@
 #define StartPosY -100.0f	//開始Y座標
 #define MaxHP 50			//開始HP
 #define MaxDmgEfcCnt 20		//赤く光る時間
-#define ArrowCRX 30			//弾の出る位置を銃まで補正X座標
-#define ArrowCRY 6			//弾の出る位置を銃まで補正Y座標
+#define ArrowCRX 10			//弾の出る位置を弓まで補正X座標
+#define ArrowCRY 10			//弾の出る位置を弓まで補正Y座標
 #define ImgSize 100			//キャラ画像サイズ
-#define Scale 1.0f			//キャラ拡大率
+#define Scale 1.5f			//キャラ拡大率
 
 void Player::Init()
 {
@@ -168,8 +168,6 @@ void Player::Reset()
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
 	m_dir = DefaultDir;
-	m_size = ImgSize;
-	m_scale = Scale;
 	m_moveKnockBack = 0.f;
 	m_hp = MaxHP;
 	m_bJump = false;

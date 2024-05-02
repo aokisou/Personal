@@ -3,7 +3,7 @@
 //ボスとして登場させるものをinclude
 #include "../../Minotaur/Minotaur.h"
 
-void EntryEnemy::Update()
+void EnemyEntry::Update()
 {
 	const int MaxCoolCnt = 10;	//1画像アニメ時間
 	int AnimeNum = 9;			//画像数

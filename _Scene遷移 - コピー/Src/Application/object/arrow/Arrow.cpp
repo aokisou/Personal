@@ -7,6 +7,12 @@
 #define ArrowAccelelation 0.99f	//Œ¸‘¬—¦
 #define ArrowDown 0.6f			//‰Á‘¬“x‚ª‚±‚Ì’l‚Ü‚Å—ˆ‚½‚ç—Ž‚¿‚é
 
+float Arrow::GetDmg()
+{
+	if (m_accelerlation > 0.9f) { return abs(m_move.x) * 2; }
+	else { return abs(m_move.x); }
+}
+
 void Arrow::Init()
 {
 	m_pos = {  };

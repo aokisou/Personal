@@ -17,8 +17,6 @@ public:
 	int GetAnimeCnt() { return m_animeNum; }
 	virtual int GetStateType() = 0{}
 
-	virtual int GetMaxAnimeNum() = 0 { return 0; }
-
 	KdTexture* GetTex() { return &m_tex; }
 
 	void Release() { m_enemy = nullptr; }

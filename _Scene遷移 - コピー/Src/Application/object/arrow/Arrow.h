@@ -21,7 +21,7 @@ public:
 
 	bool GetContent()override { return true; }
 
-	float GetDmg() { return abs(m_move.x); }
+	float GetDmg();
 
 	int GetSpaceWidthImg(){ return (int)(2 * m_scale); }
 	int GetSpaceHeightImg(){ return (int)(6 * m_scale); }

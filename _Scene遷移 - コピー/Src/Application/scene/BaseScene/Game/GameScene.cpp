@@ -29,10 +29,11 @@
 #define EnterWidth 30		//エンターキーの文字幅
 #define EnterHeight 14		//エンターキーの文字幅
 #define StartAlpha 90.0f	//α値の初期値
-#define CutRangeX 400		//ボス登場シーンの切取幅
+#define CutRangeX 450		//ボス登場シーンの切取幅
 #define CutRangeY 400		//ボス登場シーンの切取幅
-#define CutScale 4.0f		//ボス登場シーンの拡大率
+#define CutScale 3.0f		//ボス登場シーンの拡大率
 #define KeyPosX 220			//画像の真ん中
+#define PlayerCRX 40		//画面端のプレイヤーの補正
 
 static bool m_bTutorialSkip = false;//実行1回目のみチュートリアル
 
@@ -89,17 +90,19 @@ void GameScene::Update()
 		if (m_scrollX < m_minScrollX)
 		{
 			m_scrollX = m_minScrollX;
-			if (m_player->GetPos().x - m_player->GetHalfSize() + m_player->GetSpaceWidthImg() < m_minScrollX - SCREEN::width / Half)
+			if (m_player->GetPos().x - m_player->GetHalfSize() + m_player->GetSpaceWidthImg() < m_minScrollX - SCREEN::width / Half + PlayerCRX)
 			{
-				m_player->MapHitX(m_minScrollX - SCREEN::width / Half + m_player->GetHalfSize() - m_player->GetSpaceWidthImg(), 0);
+				m_player->MapHitX(m_minScrollX - SCREEN::width / Half + m_player->GetHalfSize() - m_player->GetSpaceWidthImg() + PlayerCRX, 0);
 			}
 		}
 		if (m_scrollX > m_maxScrollX)
 		{
 			m_scrollX = m_maxScrollX;
-			if (m_player->GetPos().x + m_player->GetHalfSize() - m_player->GetSpaceWidthImg() > m_maxScrollX + SCREEN::width / Half)
+			int cr = 0;
+			if (m_nowMap >= MaxMap - 1) { cr = PlayerCRX; }
+			if (m_player->GetPos().x + m_player->GetHalfSize() - m_player->GetSpaceWidthImg() > m_maxScrollX + SCREEN::width / Half - cr)
 			{
-				m_player->MapHitX(m_maxScrollX + SCREEN::width / Half - m_player->GetHalfSize() + m_player->GetSpaceWidthImg(), 0);
+				m_player->MapHitX(m_maxScrollX + SCREEN::width / Half - m_player->GetHalfSize() + m_player->GetSpaceWidthImg() - cr, 0);
 				if (m_nowMap + 1 < MaxMap)
 				{
 					m_bTutorialSkip = true;

@@ -38,7 +38,7 @@ public:
 	void DrawChangeScene();
 
 	void SetTrueChangeScene() { m_bChangeScene = true; }
-
+	
 	void ChangeTitle();
 	void ChangeGame();
 	void ChangeResult(bool _b);

@@ -148,6 +148,9 @@
     <Filter Include="Src\Application\Object\Enemy\EnemyPattern\Boss">
       <UniqueIdentifier>{895d93a7-cfda-4020-a304-1498dbfd8dfa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Object\Enemy\EnemyPattern\Attack2">
+      <UniqueIdentifier>{2ec382cc-1a5b-4280-8852-75fc3f184ef8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -336,6 +339,9 @@
     <ClInclude Include="Src\Application\Object\Enemy\EnemyPattern\Boss\EntryBoss.h">
       <Filter>Src\Application\Object\Enemy\EnemyPattern\Boss</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Object\Enemy\EnemyPattern\attack2\EnemyAttack2.h">
+      <Filter>Src\Application\Object\Enemy\EnemyPattern\Attack2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -490,6 +496,9 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Object\Enemy\EnemyPattern\Boss\EntryBoss.cpp">
       <Filter>Src\Application\Object\Enemy\EnemyPattern\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Object\Enemy\EnemyPattern\attack2\EnemyAttack2.cpp">
+      <Filter>Src\Application\Object\Enemy\EnemyPattern\Attack2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

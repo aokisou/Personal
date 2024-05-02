@@ -22,7 +22,7 @@ void ResultScene::Update()
 		m_alphaAng -= AlphaAngRange;
 	}
 
-	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	if (GetAsyncKeyState(VK_UP) & 0x8000 && !m_bClear)
 	{
 		m_posY = ContinuePos;
 	}
@@ -55,7 +55,8 @@ void ResultScene::Update()
 	m_charMat[0] = Math::Matrix::CreateTranslation(0.0f, ContinuePos, 0.0f);
 	m_charMat[1] = Math::Matrix::CreateTranslation(0.0f, TitlePos, 0.0f);
 	m_charMat[2] = Math::Matrix::CreateTranslation(0.0f, MainPos, 0.0f);
-	m_mat = Math::Matrix::CreateScale(Back::scale, Back::scale, 1.0f) * Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
+	m_backMat = Math::Matrix::CreateScale(Back::scale, Back::scale, 1.0f) * Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
+	m_mat = Math::Matrix::CreateScale(SCREEN::scale, SCREEN::scale, 1.0f) * Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
 }
 
 void ResultScene::Draw(KdTexture* _pTex)
@@ -65,42 +66,56 @@ void ResultScene::Draw(KdTexture* _pTex)
 	if (!m_bClear) { col = { 1,0,0,1 }; }
 	for (int i = 0; i < BackNum; i++)
 	{
-		SHADER.m_spriteShader.SetMatrix(m_mat);
+		SHADER.m_spriteShader.SetMatrix(m_backMat);
 		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src, &col);
 	}
 
+	src = { 0,0,1280,720 };
+	col = { 1,1,1,1 };
+	SHADER.m_spriteShader.SetMatrix(m_mat);
+	SHADER.m_spriteShader.DrawTex(_pTex, 0, 0, &src, &col);
+}
+
+void ResultScene::DynamicDraw2D()
+{
+	Math::Rectangle src = { 0,0,0,0 };
+	Math::Color col = { 1,1,1,1 };
 	for (int i = 0; i < CharType::num; i++)
 	{
-		if (i == CharType::Continue)
-		{ 
+		switch (i)
+		{
+		case CharType::Continue:
+		{
+			if (m_bClear) { continue; }
 			src = { 0,0,ImgWidthMiddle,ImgHeight };
 			if (m_posY == ContinuePos) { col = { 1.0f,1.0f,1.0f,abs(sin(DirectX::XMConvertToRadians((float)m_alphaAng))) * AlphaRange + AlphaMin }; }
 			else { col = { 1, 1, 1, 1 }; }
+			break;
 		}
-		if (i == CharType::Title)
+		case CharType::Title:
 		{
 			src = { 0,0,ImgWidthShort,ImgHeight };
 			if (m_posY == TitlePos) { col = { 1.0f,1.0f,1.0f,abs(sin(DirectX::XMConvertToRadians((float)m_alphaAng))) * AlphaRange + AlphaMin }; }
 			else { col = { 1, 1, 1, 1 }; }
+			break;
 		}
-		if(i == CharType::Main)
+		case CharType::Main:
 		{
 			col = { 1,1,1,1 };
-			if(m_bClear)src = { 0,0,ImgWidthShort,ImgHeight };
-			if(!m_bClear)src = { 0,0,ImgWidthLong,ImgHeight };
+			if (m_bClear)src = { 0,0,ImgWidthShort,ImgHeight };
+			if (!m_bClear)src = { 0,0,ImgWidthLong,ImgHeight };
+			break;
+		}
 		}
 		SHADER.m_spriteShader.SetMatrix(m_charMat[i]);
 		SHADER.m_spriteShader.DrawTex(&m_charTex[i], 0, 0, &src, &col);
 	}
 }
 
-void ResultScene::DynamicDraw2D()
-{
-}
-
 void ResultScene::Init()
 {
-	m_posY = ContinuePos;
+	if (!m_bClear) { m_posY = ContinuePos; }
+	else { m_posY = TitlePos; }
 	m_alphaAng = 0;
 
 	for (int i = 0; i < Back::num; i++)
