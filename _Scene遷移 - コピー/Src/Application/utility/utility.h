@@ -31,6 +31,11 @@ enum StateType
 	enemyBossEntry,
 };
 
+enum Particle
+{
+	walk,
+};
+
 enum MapTile//IDÇ∆çáÇÌÇπÇÈ
 {
 	none = -1,

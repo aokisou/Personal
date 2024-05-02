@@ -6,6 +6,10 @@
 #define AlphaAngRange 360	//α値のループ範囲
 #define AlphaMin 0.3f		//α値の最小値
 #define AlphaRange 0.7f		//α値の範囲
+#define	TITLEWIDTH 848		//画像サイズ
+#define	TITLEHEIGHT 109		//画像サイズ
+#define STARTWIDTH 318		//画像サイズ
+#define STARTHEIGHT 109		//画像サイズ
 
 void TitleScene::Update()
 {
@@ -41,12 +45,12 @@ void TitleScene::Draw(KdTexture* _pTex)
 		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src);
 	}
 
-	src = { 0,0,210,80 };
+	src = { 0,0,STARTWIDTH,STARTHEIGHT };
 	Math::Color col = { 1.0f,1.0f,1.0f,abs(sin(DirectX::XMConvertToRadians((float)m_alphaAng))) * AlphaRange + AlphaMin };
 	SHADER.m_spriteShader.SetMatrix(m_startMat);
 	SHADER.m_spriteShader.DrawTex(&m_startTex, 0, 0, &src,&col);
 
-	src = { 0,0,400,128 };
+	src = { 0,0,TITLEWIDTH,TITLEHEIGHT };
 	SHADER.m_spriteShader.SetMatrix(m_titleMat);
 	SHADER.m_spriteShader.DrawTex(&m_titleTex, 0, 0, &src);
 }

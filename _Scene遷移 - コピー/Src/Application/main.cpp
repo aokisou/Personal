@@ -247,7 +247,7 @@ void Application::Execute()
 			count = 0;
 		}
 
-		std::string titleBar = "HUNTER" + std::to_string(m_fps);
+		std::string titleBar = "FOREST HUNTER" + std::to_string(m_fps);
 		SetWindowTextA(m_window.GetWndHandle(), titleBar.c_str());
 	}
 

@@ -9,6 +9,7 @@
 #include "PlayerPattern/Stand/PlayerStand.h"
 #include "PlayerPattern/Fall/PlayerFall.h"
 #include "../../UI/HP/Player/PlayerHPBar.h"
+#include "../../Particle/Walk/Walk.h"
 #include "../../utility/Utility.h"
 
 //プレイヤー
@@ -24,6 +25,7 @@
 #define ArrowCRY 10			//弾の出る位置を弓まで補正Y座標
 #define ImgSize 100			//キャラ画像サイズ
 #define Scale 1.5f			//キャラ拡大率
+#define ParticleNum 10		//パーティクルの数
 
 void Player::Init()
 {
@@ -139,6 +141,11 @@ void Player::Update(float _scrollX)
 		m_bAlive = false;
 	}
 
+	std::vector<std::shared_ptr<BaseParticle>>::iterator it = m_particle.begin();
+	while (it != m_particle.end())
+	{
+		(*it)->Update();
+	}
 	UpdateUI();
 
 	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0.0f) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0.0f);
@@ -151,6 +158,12 @@ void Player::Draw()
 	for (Arrow* i : m_arrow)
 	{
 		i->Draw();
+	}
+
+	std::vector<std::shared_ptr<BaseParticle>>::iterator it = m_particle.begin();
+	while (it != m_particle.end())
+	{
+		(*it)->Draw();
 	}
 
 	Math::Color col = { 1,1,1,1 };
@@ -202,6 +215,7 @@ void Player::SetRunState()
 {
 	m_pState = std::make_shared<PlayerRun>();
 	m_pState->Init(this, m_fileName[playerRun]);
+	CreateWalk();
 }
 
 void Player::SetDeathState()
@@ -325,6 +339,17 @@ void Player::ArrowDel()
 	{
 		delete* it;
 		it = m_arrow.erase(it);
+	}
+}
+
+void Player::CreateWalk()
+{
+	if ((int)m_particle.size() > ParticleNum) { return; }
+	for (int i = 0; i < ParticleNum; i++)
+	{
+		std::shared_ptr<BaseParticle> w = std::make_shared<Walk>();
+		w->Init(this, m_fileNameP[Particle::walk]);
+		m_particle.push_back(w);
 	}
 }
 

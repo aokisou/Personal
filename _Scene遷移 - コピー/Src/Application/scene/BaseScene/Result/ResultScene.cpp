@@ -7,12 +7,16 @@
 #define AlphaMin 0.3f		//α値の最小値
 #define AlphaRange 0.7f		//α値の範囲
 #define ContinuePos -100.0f	//continueの座標
-#define TitlePos -200.0f	//titleの座標
+#define TitlePos -250.0f	//titleの座標
 #define MainPos	200.0f		//メイン文字
-#define ImgHeight 80		//画像幅
-#define ImgWidthShort 210	//画像幅
-#define ImgWidthMiddle 300	//画像幅
-#define ImgWidthLong 340	//画像幅
+#define	GAMEOVERWIDTH 615	//画像サイズ
+#define	GAMEOVERHEIGHT 157	//画像サイズ
+#define CLEARWIDTH 318		//画像サイズ
+#define CLEARHEIGHT 109		//画像サイズ
+#define TITLEWIDTH 277		//画像サイズ
+#define TITLEHEIGHT 108		//画像サイズ
+#define CONTINUEWIDTH 544	//画像サイズ
+#define CONTINUEHEIGHT 109	//画像サイズ
 
 void ResultScene::Update()
 {
@@ -52,9 +56,6 @@ void ResultScene::Update()
 	}
 	else { m_pOwner->SetFalseKeyFlg(); }
 
-	m_charMat[0] = Math::Matrix::CreateTranslation(0.0f, ContinuePos, 0.0f);
-	m_charMat[1] = Math::Matrix::CreateTranslation(0.0f, TitlePos, 0.0f);
-	m_charMat[2] = Math::Matrix::CreateTranslation(0.0f, MainPos, 0.0f);
 	m_backMat = Math::Matrix::CreateScale(Back::scale, Back::scale, 1.0f) * Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
 	m_mat = Math::Matrix::CreateScale(SCREEN::scale, SCREEN::scale, 1.0f) * Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
 }
@@ -87,14 +88,14 @@ void ResultScene::DynamicDraw2D()
 		case CharType::Continue:
 		{
 			if (m_bClear) { continue; }
-			src = { 0,0,ImgWidthMiddle,ImgHeight };
+			src = { 0,0,CONTINUEWIDTH,CONTINUEHEIGHT };
 			if (m_posY == ContinuePos) { col = { 1.0f,1.0f,1.0f,abs(sin(DirectX::XMConvertToRadians((float)m_alphaAng))) * AlphaRange + AlphaMin }; }
 			else { col = { 1, 1, 1, 1 }; }
 			break;
 		}
 		case CharType::Title:
 		{
-			src = { 0,0,ImgWidthShort,ImgHeight };
+			src = { 0,0,TITLEWIDTH,TITLEHEIGHT };
 			if (m_posY == TitlePos) { col = { 1.0f,1.0f,1.0f,abs(sin(DirectX::XMConvertToRadians((float)m_alphaAng))) * AlphaRange + AlphaMin }; }
 			else { col = { 1, 1, 1, 1 }; }
 			break;
@@ -102,8 +103,8 @@ void ResultScene::DynamicDraw2D()
 		case CharType::Main:
 		{
 			col = { 1,1,1,1 };
-			if (m_bClear)src = { 0,0,ImgWidthShort,ImgHeight };
-			if (!m_bClear)src = { 0,0,ImgWidthLong,ImgHeight };
+			if (m_bClear)src = { 0,0,CLEARWIDTH,CLEARHEIGHT };
+			if (!m_bClear)src = { 0,0,GAMEOVERWIDTH,GAMEOVERHEIGHT };
 			break;
 		}
 		}
@@ -124,8 +125,12 @@ void ResultScene::Init()
 	}
 	m_charTex[CharType::Continue].Load("Texture/Result/continue.png");
 	m_charTex[CharType::Title].Load("Texture/Result/title.png");
-	if (m_bClear) { m_charTex[CharType::Main].Load("Texture/Result/clear.png"); }
+	if (m_bClear) { m_charTex[CharType::Main].Load("Texture/Result/clear2.png"); }
 	else{ m_charTex[CharType::Main].Load("Texture/Result/gameover.png"); }
+
+	m_charMat[0] = Math::Matrix::CreateTranslation(0.0f, ContinuePos, 0.0f);
+	m_charMat[1] = Math::Matrix::CreateTranslation(0.0f, TitlePos, 0.0f);
+	m_charMat[2] = Math::Matrix::CreateTranslation(0.0f, MainPos, 0.0f);
 }
 
 void ResultScene::Release()

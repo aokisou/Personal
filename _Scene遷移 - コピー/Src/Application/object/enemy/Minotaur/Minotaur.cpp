@@ -15,7 +15,7 @@
 #define Dmg 10					//’ÊíUŒ‚‚Ìƒ_ƒ[ƒW
 #define Dmg2 15					//‰ñ“]UŒ‚‚Ìƒ_ƒ[ƒW
 #define AttackIntervalSec 3		//UŒ‚ŠÔŠu
-#define MaxHP 200				//‰ŠúHP
+#define MaxHP 1				//‰ŠúHP
 
 void Minotaur::Init(Math::Vector2 _pos)
 {

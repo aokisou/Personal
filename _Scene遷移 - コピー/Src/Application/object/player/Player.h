@@ -5,6 +5,7 @@
 class Arrow;
 class PlayerPattern;
 class PlayerHPBar;
+class BaseParticle;
 
 class Player:public BaseObject
 {
@@ -54,6 +55,8 @@ private:
 	void ArrowDel();
 	void Release()override;
 
+	void CreateWalk();
+
 	int m_hp = 0;
 
 	float m_moveKnockBack = 0;
@@ -68,9 +71,11 @@ private:
 
 	std::shared_ptr<PlayerHPBar> m_hpBar;
 
+	std::vector<std::shared_ptr<BaseParticle>> m_particle;
+
 	KdTexture m_arrowTex;
 
 	const std::string m_fileName[7] = { "Texture/Player/Idle.png","Texture/Player/GetHit.png","Texture/Player/Death.png","Texture/Player/Jump.png",
-										"Texture/Player/Run.png","Texture/Player/Attack.png","Texture/Player/Fall.png" };
-public:
+										 "Texture/Player/Run.png","Texture/Player/Attack.png","Texture/Player/Fall.png" };
+	const std::string m_fileNameP[1] = { "Particle/Walk/walk.png" };
 };

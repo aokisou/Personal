@@ -151,6 +151,15 @@
     <Filter Include="Src\Application\Object\Enemy\EnemyPattern\Attack2">
       <UniqueIdentifier>{2ec382cc-1a5b-4280-8852-75fc3f184ef8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\Particle">
+      <UniqueIdentifier>{cce24ea8-8062-4802-aa1c-fc7ccbbf442b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Particle\Walk">
+      <UniqueIdentifier>{992255a5-c1b7-4f5c-8a29-64c83cbe7a27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\Particle\Base">
+      <UniqueIdentifier>{2e174205-b93e-488c-a3a3-d3c05d35ce2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -342,6 +351,12 @@
     <ClInclude Include="Src\Application\Object\Enemy\EnemyPattern\attack2\EnemyAttack2.h">
       <Filter>Src\Application\Object\Enemy\EnemyPattern\Attack2</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\Particle\Walk\Walk.h">
+      <Filter>Src\Application\Particle\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\Particle\BaseParticle.h">
+      <Filter>Src\Application\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -499,6 +514,12 @@
     </ClCompile>
     <ClCompile Include="Src\Application\Object\Enemy\EnemyPattern\attack2\EnemyAttack2.cpp">
       <Filter>Src\Application\Object\Enemy\EnemyPattern\Attack2</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Particle\Walk\Walk.cpp">
+      <Filter>Src\Application\Particle\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\Particle\BaseParticle.cpp">
+      <Filter>Src\Application\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
