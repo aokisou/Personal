@@ -74,6 +74,7 @@ void Player::Action()
 			{
 				SetRunState();
 			}
+			if (!m_bJump) { CreateWalk(); }
 			bAct = true;
 		}
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
@@ -84,6 +85,7 @@ void Player::Action()
 			{
 				SetRunState();
 			}
+			if (!m_bJump) { CreateWalk(); }
 			bAct = true;
 		}
 	}
@@ -144,7 +146,15 @@ void Player::Update(float _scrollX)
 	std::vector<std::shared_ptr<BaseParticle>>::iterator it = m_particle.begin();
 	while (it != m_particle.end())
 	{
-		(*it)->Update();
+		(*it)->Update(_scrollX);
+		if (!(*it)->GetAlive())
+		{
+			it = m_particle.erase(it);
+		}
+		else
+		{
+			it++;
+		}
 	}
 	UpdateUI();
 
@@ -164,6 +174,7 @@ void Player::Draw()
 	while (it != m_particle.end())
 	{
 		(*it)->Draw();
+		it++;
 	}
 
 	Math::Color col = { 1,1,1,1 };
@@ -215,7 +226,6 @@ void Player::SetRunState()
 {
 	m_pState = std::make_shared<PlayerRun>();
 	m_pState->Init(this, m_fileName[playerRun]);
-	CreateWalk();
 }
 
 void Player::SetDeathState()

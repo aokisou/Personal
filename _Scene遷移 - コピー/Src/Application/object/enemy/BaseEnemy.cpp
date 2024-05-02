@@ -3,7 +3,10 @@
 #include "EnemyPattern/Run/EnemyRun.h"
 #include "EnemyPattern/Attack/EnemyAttack.h"
 #include "../../UI/HP/Enemy/EnemyHPBar.h"
+#include "../../Particle/Walk/Walk.h"
 #include "../../Utility/Utility.h"
+
+#define ParticleNum 10		//パーティクルの数
 
 void BaseEnemy::Init()
 {
@@ -24,6 +27,7 @@ void BaseEnemy::Update(float _scrollX)
 void BaseEnemy::Draw()
 {
 	DrawUI();
+	ParticleDraw();
 	Math::Color col = { 1,1,1,1 };
 	if (m_bDmg)col = { 1,0,0,1 };
 	SHADER.m_spriteShader.SetMatrix(m_mat);
@@ -33,6 +37,44 @@ void BaseEnemy::Draw()
 
 void BaseEnemy::Reset()
 {
+}
+
+void BaseEnemy::CreateWalk()
+{
+	if ((int)m_particle.size() > ParticleNum) { return; }
+	for (int i = 0; i < ParticleNum; i++)
+	{
+		std::shared_ptr<BaseParticle> w = std::make_shared<Walk>();
+		w->Init(this, m_fileNameP[Particle::walk]);
+		m_particle.push_back(w);
+	}
+}
+
+void BaseEnemy::ParticleUpdate(float _scrollX)
+{
+	std::vector<std::shared_ptr<BaseParticle>>::iterator it = m_particle.begin();
+	while (it != m_particle.end())
+	{
+		(*it)->Update(_scrollX);
+		if (!(*it)->GetAlive())
+		{
+			it = m_particle.erase(it);
+		}
+		else
+		{
+			it++;
+		}
+	}
+}
+
+void BaseEnemy::ParticleDraw()
+{
+	std::vector<std::shared_ptr<BaseParticle>>::iterator it = m_particle.begin();
+	while (it != m_particle.end())
+	{
+		(*it)->Draw();
+		it++;
+	}
 }
 
 void BaseEnemy::SetDamage(float _dmg)

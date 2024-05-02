@@ -5,6 +5,7 @@
 class EnemyPattern;
 class GameScene;
 class EnemyHPBar;
+class BaseParticle;
 
 class BaseEnemy :public BaseObject
 {
@@ -36,6 +37,11 @@ public:
 
 	virtual int GetSpaceWidthImg() { return 40; }
 	virtual int GetSpaceHeightImg() { return 20; }
+
+	void CreateWalk();
+
+	void ParticleUpdate(float _scrollX);
+	void ParticleDraw();
 
 	void SetDamage(float _dmg);
 
@@ -70,8 +76,12 @@ protected:
 
 	std::shared_ptr<EnemyHPBar> m_pHPBar = nullptr;
 
+	std::vector<std::shared_ptr<BaseParticle>> m_particle;
+
 	KdTexture m_gaugeTex;
 	KdTexture m_barTex;
 
 	GameScene* m_pOwner = nullptr;
+
+	const std::string m_fileNameP[1] = { "Texture/Particle/Walk/walk.png" };
 };

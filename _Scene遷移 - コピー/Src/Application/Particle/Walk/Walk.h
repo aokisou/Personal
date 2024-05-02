@@ -8,6 +8,6 @@ public:
 	Walk(){}
 	~Walk(){}
 
-	void Update()override;
+	void Update(float _scrollX)override;
 	void Draw()override;
 };

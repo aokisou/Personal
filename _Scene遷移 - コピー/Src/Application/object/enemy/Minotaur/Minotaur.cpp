@@ -120,10 +120,11 @@ void Minotaur::Update(float _scrollX)
 		}
 
 		m_pos += m_move;
+		ParticleUpdate(_scrollX);
+		UpdateUI(_scrollX);
 	}
 
 	m_pState->Update();
-	UpdateUI(_scrollX);
 
 	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0.0f) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }
@@ -168,9 +169,9 @@ bool Minotaur::Attack()
 		if (cos(DirectX::XMConvertToRadians(a)) < 0) { m_dir = DefaultDir * Reverse; }
 		else { m_dir = DefaultDir; }
 		m_move.x = RunSpeed * m_dir;
+		CreateWalk();
 		return true;
 	}
-	return false;
 }
 
 void Minotaur::UpdateUI(float _scrollX)

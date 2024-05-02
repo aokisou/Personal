@@ -41,9 +41,10 @@ void Slime::Action()
 
 	m_move = { 0,m_move.y - Gravity };
 
+	CreateWalk();
 	if (Attack()) { return; }
 
-	m_move.x = WalkSpeed * -m_dir;
+	m_move.x = WalkSpeed * m_dir;
 
 	if (m_pos.x > m_startPos.x + m_moveRange && m_move.x > 0) { m_dir *= Reverse; }
 	if (m_pos.x < m_startPos.x - m_moveRange && m_move.x < 0) { m_dir *= Reverse; }
@@ -73,10 +74,11 @@ void Slime::Update(float _scrollX)
 		}
 
 		m_pos += m_move;
+		ParticleUpdate(_scrollX);
+		UpdateUI(_scrollX);
 	}
 
 	m_pState->Update();
-	UpdateUI(_scrollX);
 
 	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }
@@ -99,8 +101,8 @@ bool Slime::Attack()
 		{
 			float a = GetAngleDeg(GetFuturePos(), ply->GetFuturePos());
 			m_move.x = cos(DirectX::XMConvertToRadians(a)) * RunSpeed;
-			if (m_move.x > 0) { m_dir = DefaultDir; }
-			else { m_dir = DefaultDir * Reverse; }
+			if (m_move.x > 0) { m_dir = DefaultDir * Reverse; }
+			else { m_dir = DefaultDir; }
 			Math::Vector2 v = ply->GetFuturePos() - GetFuturePos();
 			if (v.Length() < ply->GetHalfSize() - ply->GetSpaceWidthImg() + GetHalfSize() - GetSpaceWidthImg())
 			{

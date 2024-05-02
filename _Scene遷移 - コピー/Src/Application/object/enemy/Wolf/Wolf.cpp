@@ -50,7 +50,8 @@ void Wolf::Action()
 		return;
 	}
 
-	m_move.x = WalkSpeed * -m_dir;
+	CreateWalk();
+	m_move.x = WalkSpeed * m_dir;
 
 	if (m_pos.x > m_startPos.x + m_moveRange && m_move.x > 0) { m_dir *= Reverse; }
 	if (m_pos.x < m_startPos.x - m_moveRange && m_move.x < 0) { m_dir *= Reverse; }
@@ -80,10 +81,11 @@ void Wolf::Update(float _scrollX)
 		}
 
 		m_pos += m_move;
+		ParticleUpdate(_scrollX);
+		UpdateUI(_scrollX);
 	}
 
 	m_pState->Update();
-	UpdateUI(_scrollX);
 
 	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0.0f) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }
@@ -109,8 +111,8 @@ bool Wolf::Attack()
 			{
 				return true;
 			}
-			if (ply->GetFuturePos().x - GetFuturePos().x < 0) { m_dir = DefaultDir; }
-			else { m_dir = DefaultDir * Reverse; }
+			if (ply->GetFuturePos().x - GetFuturePos().x < 0) { m_dir = DefaultDir * Reverse; }
+			else { m_dir = DefaultDir; }
 			if (m_pState->GetStateType() != enemyAttack)
 			{
 				SetAttackState();
@@ -120,9 +122,10 @@ bool Wolf::Attack()
 		if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_lookRange || m_hp < MaxHP)
 		{
 			float a = GetAngleDeg(GetFuturePos(), ply->GetFuturePos());
-			if (cos(DirectX::XMConvertToRadians(a)) < 0) { m_dir = DefaultDir; }
-			else { m_dir = DefaultDir * Reverse; }
-			m_move.x = RunSpeed * -m_dir;
+			if (cos(DirectX::XMConvertToRadians(a)) < 0) { m_dir = DefaultDir * Reverse; }
+			else { m_dir = DefaultDir; }
+			m_move.x = RunSpeed * m_dir;
+			CreateWalk();
 			return true;
 		}
 	}

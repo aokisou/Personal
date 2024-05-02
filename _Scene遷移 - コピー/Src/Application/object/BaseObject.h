@@ -18,6 +18,7 @@ public:
 	Math::Vector2 GetFuturePos() { return m_pos + m_move; }
 	Math::Vector2 GetMovePow() { return m_move; }
 	float GetHalfSize();
+	int GetDir() { return m_dir; }
 
 	//画像のスペース
 	virtual int GetSpaceWidthImg() { return 0; }

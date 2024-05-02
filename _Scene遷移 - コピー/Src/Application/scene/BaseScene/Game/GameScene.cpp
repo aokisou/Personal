@@ -15,7 +15,7 @@
 #include<vector>
 
 #define MaxMap 3			//ç≈ëÂÉXÉeÅ[ÉW
-#define MaxShakeCnt 10		//óhÇÍÇÈéûä‘
+#define MaxShakeCnt 30		//óhÇÍÇÈéûä‘
 #define BigShakePow 20		//ëÂÇ´Ç¢óhÇÍ
 #define SmallShakePow 10	//è¨Ç≥Ç¢óhÇÍ
 #define OnePunch 2			//àÍî≠Ç≈ì|Ç≥ÇÍÇΩÇÁ
@@ -49,7 +49,7 @@ void GameScene::Update()
 {
 	PreUpdate();
 
-	if (!m_BigShake || !m_smallShake)
+	if (m_shakeCnt < 1)
 	{
 		if (!m_bEntry)
 		{
@@ -78,38 +78,38 @@ void GameScene::Update()
 		}
 
 		m_player->Update(m_scrollX);
+	}
 
-		for (auto& i : m_enemy)
+	for (auto& i : m_enemy)
+	{
+		i->Update(m_scrollX);
+	}
+	m_map->Update(m_mapRangeStart, m_mapRangeEnd, m_scrollX);
+
+	m_scrollX = m_player->GetPos().x;
+
+	if (m_scrollX < m_minScrollX)
+	{
+		m_scrollX = m_minScrollX;
+		if (m_player->GetPos().x - m_player->GetHalfSize() + m_player->GetSpaceWidthImg() < m_minScrollX - SCREEN::width / Half + PlayerCRX)
 		{
-			i->Update(m_scrollX);
+			m_player->MapHitX(m_minScrollX - SCREEN::width / Half + m_player->GetHalfSize() - m_player->GetSpaceWidthImg() + PlayerCRX, 0);
 		}
-		m_map->Update(m_mapRangeStart, m_mapRangeEnd, m_scrollX);
-
-		m_scrollX = m_player->GetPos().x;
-
-		if (m_scrollX < m_minScrollX)
+	}
+	if (m_scrollX > m_maxScrollX)
+	{
+		m_scrollX = m_maxScrollX;
+		int cr = 0;
+		if (m_nowMap >= MaxMap - 1) { cr = PlayerCRX; }
+		if (m_player->GetPos().x + m_player->GetHalfSize() - m_player->GetSpaceWidthImg() > m_maxScrollX + SCREEN::width / Half - cr)
 		{
-			m_scrollX = m_minScrollX;
-			if (m_player->GetPos().x - m_player->GetHalfSize() + m_player->GetSpaceWidthImg() < m_minScrollX - SCREEN::width / Half + PlayerCRX)
+			m_player->MapHitX(m_maxScrollX + SCREEN::width / Half - m_player->GetHalfSize() + m_player->GetSpaceWidthImg() - cr, 0);
+			if (m_nowMap + 1 < MaxMap)
 			{
-				m_player->MapHitX(m_minScrollX - SCREEN::width / Half + m_player->GetHalfSize() - m_player->GetSpaceWidthImg() + PlayerCRX, 0);
-			}
-		}
-		if (m_scrollX > m_maxScrollX)
-		{
-			m_scrollX = m_maxScrollX;
-			int cr = 0;
-			if (m_nowMap >= MaxMap - 1) { cr = PlayerCRX; }
-			if (m_player->GetPos().x + m_player->GetHalfSize() - m_player->GetSpaceWidthImg() > m_maxScrollX + SCREEN::width / Half - cr)
-			{
-				m_player->MapHitX(m_maxScrollX + SCREEN::width / Half - m_player->GetHalfSize() + m_player->GetSpaceWidthImg() - cr, 0);
-				if (m_nowMap + 1 < MaxMap)
-				{
-					m_bTutorialSkip = true;
-					m_pOwner->SetTrueChangeScene();
-					m_nowMap++;
-					return;
-				}
+				m_bTutorialSkip = true;
+				m_pOwner->SetTrueChangeScene();
+				m_nowMap++;
+				return;
 			}
 		}
 	}
@@ -131,7 +131,7 @@ void GameScene::Update()
 	}
 
 	m_mat = Math::Matrix::CreateScale(m_scale, m_scale, 1.0f) *
-			Math::Matrix::CreateTranslation(r + 0.0f, 0.0f, 0.0f);
+		Math::Matrix::CreateTranslation(r + 0.0f, 0.0f, 0.0f);
 
 	if (m_enemy.size() <= 0)
 	{
@@ -142,7 +142,7 @@ void GameScene::Update()
 
 	if (m_bEnter)
 	{
-		m_enterMat = Math::Matrix::CreateScale(EnterScale,EnterScale,1.0f) * 
+		m_enterMat = Math::Matrix::CreateScale(EnterScale, EnterScale, 1.0f) *
 			Math::Matrix::CreateTranslation(SCREEN::width / Half - EnterWidth * EnterScale, -SCREEN::height / Half + EnterHeight * EnterScale, 0.0f);
 	}
 
@@ -313,7 +313,7 @@ void GameScene::Init()
 	if (!m_bTutorialSkip)
 	{ 
 		m_nowMap = 0;
-		m_tutorialTex.Load("Texture/UI/tutorial2.png");
+		m_tutorialTex.Load("Texture/UI/tutorial.png");
 		m_keyTex.Load("Texture/UI/key.png");
 	}
 	else { m_nowMap = 1; }
@@ -342,7 +342,7 @@ void GameScene::Init()
 	m_map->SetOwner(this);
 	m_hit->SetOwner(this);
 	m_tutorialMat = Math::Matrix::CreateTranslation(SCREEN::width / Half - TutorialWidth / Half, SCREEN::height / Half - TutorialHeight, 0.0f);
-	m_keyMat = Math::Matrix::CreateScale(5,5,1) * 
+	m_keyMat = Math::Matrix::CreateScale(5.0f,5.0f,1.0f) * 
 		Math::Matrix::CreateTranslation(KeyPosX, SCREEN::height / Half - TutorialHeight, 0.0f);
 
 	Reset();
@@ -355,6 +355,8 @@ void GameScene::Reset()
 	startCut = {};
 	m_bAction = true;
 	EnemyErase();
+
+	m_shakeCnt = 0;
 
 	m_arrowSizeAng = 0;
 

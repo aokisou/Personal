@@ -1,10 +1,10 @@
 #include "Arrow.h"
 #include "../../Utility/Utility.h"
 
-#define ArrowSpeed 16			//矢の速度
+#define ArrowSpeed 20			//矢の速度
 #define ArrowSize 24			//矢画像サイズ
 #define ArrowScale 1			//矢拡大率
-#define ArrowAccelelation 0.99f	//減速率
+#define ArrowAccelelation 0.97f	//減速率
 #define ArrowDown 0.6f			//加速度がこの値まで来たら落ちる
 
 float Arrow::GetDmg()
@@ -34,7 +34,7 @@ void Arrow::Action()
 	m_accelerlation *= ArrowAccelelation;
 	if (m_accelerlation < ArrowDown)
 	{
-		m_move.y = -cos(m_accelerlation) * 1.5f;
+		m_move.y = -cos(m_accelerlation) * 2.f;
 		m_angle-= 0.01f;
 		if (m_angle < -1.0f)
 		{

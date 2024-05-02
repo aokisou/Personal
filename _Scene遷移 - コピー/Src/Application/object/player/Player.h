@@ -77,5 +77,5 @@ private:
 
 	const std::string m_fileName[7] = { "Texture/Player/Idle.png","Texture/Player/GetHit.png","Texture/Player/Death.png","Texture/Player/Jump.png",
 										 "Texture/Player/Run.png","Texture/Player/Attack.png","Texture/Player/Fall.png" };
-	const std::string m_fileNameP[1] = { "Particle/Walk/walk.png" };
+	const std::string m_fileNameP[1] = { "Texture/Particle/Walk/walk.png" };
 };
