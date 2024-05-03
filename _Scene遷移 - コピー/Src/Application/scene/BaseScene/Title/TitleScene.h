@@ -20,6 +20,10 @@ private:
 	KdTexture m_startTex;
 	Math::Matrix m_startMat = Math::Matrix::Identity;
 
+	Math::Vector2 m_backPos[5];
+	Math::Vector2 m_2ndBackPos[5];
+	Math::Matrix m_backMat[5];
+	Math::Matrix m_2ndBackMat[5];
 	KdTexture m_backTex[5];
 	std::string m_backName[5] = { "Texture/BackGround/1.png","Texture/BackGround/2.png","Texture/BackGround/3.png","Texture/BackGround/4.png",
 										"Texture/BackGround/5.png" };

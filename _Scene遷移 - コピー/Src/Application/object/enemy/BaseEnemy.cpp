@@ -6,7 +6,7 @@
 #include "../../Particle/Walk/Walk.h"
 #include "../../Utility/Utility.h"
 
-#define ParticleNum 10		//パーティクルの数
+#define PARTICLENUM 10		//パーティクルの数
 
 void BaseEnemy::Init()
 {
@@ -41,8 +41,8 @@ void BaseEnemy::Reset()
 
 void BaseEnemy::CreateWalk()
 {
-	if ((int)m_particle.size() > ParticleNum) { return; }
-	for (int i = 0; i < ParticleNum; i++)
+	if ((int)m_particle.size() > PARTICLENUM) { return; }
+	for (int i = 0; i < PARTICLENUM; i++)
 	{
 		std::shared_ptr<BaseParticle> w = std::make_shared<Walk>();
 		w->Init(this, m_fileNameP[Particle::walk]);

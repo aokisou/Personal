@@ -108,9 +108,9 @@ void Scene::ChangeGame()
 	ChangePreUpdate();
 }
 
-void Scene::ChangeResult(bool _b)
+void Scene::ChangeResult(bool _b, const int _minuets,const int _seconds)
 {
-	m_pNextScene = std::make_shared<ResultScene>(&APP.m_maxFps,_b);
+	m_pNextScene = std::make_shared<ResultScene>(&APP.m_maxFps,_b,_minuets,_seconds);
 	ChangePreUpdate();
 }
 

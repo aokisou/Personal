@@ -41,7 +41,6 @@ void Slime::Action()
 
 	m_move = { 0,m_move.y - Gravity };
 
-	CreateWalk();
 	if (Attack()) { return; }
 
 	m_move.x = WalkSpeed * m_dir;
@@ -74,11 +73,11 @@ void Slime::Update(float _scrollX)
 		}
 
 		m_pos += m_move;
-		ParticleUpdate(_scrollX);
-		UpdateUI(_scrollX);
 	}
 
 	m_pState->Update();
+	UpdateUI(_scrollX);
+	ParticleUpdate(_scrollX);
 
 	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }
@@ -134,6 +133,8 @@ void Slime::SetDeathState()
 {
 	m_pState = std::make_shared<EnemyDeath>();
 	m_pState->Init(this, m_fileName[slimeDeath]);
+	if (GetAttackHitCnt() <= 1) { m_pOwner->SetTrueBigShake(); }
+	else { m_pOwner->SetTrueSmallShake(); }
 }
 
 void Slime::Release()

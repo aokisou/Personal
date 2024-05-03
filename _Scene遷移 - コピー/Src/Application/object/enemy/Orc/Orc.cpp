@@ -81,11 +81,11 @@ void Orc::Update(float _scrollX)
 		}
 
 		m_pos += m_move;
-		ParticleUpdate(_scrollX);
-		UpdateUI(_scrollX);
 	}
 
 	m_pState->Update();
+	UpdateUI(_scrollX);
+	ParticleUpdate(_scrollX);
 
 	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0.0f) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }
@@ -154,6 +154,8 @@ void Orc::SetDeathState()
 {
 	m_pState = std::make_shared<EnemyDeath>();
 	m_pState->Init(this, m_fileName[enemyDeath]);
+	if (GetAttackHitCnt() <= 1) { m_pOwner->SetTrueBigShake(); }
+	else { m_pOwner->SetTrueSmallShake(); }
 }
 
 void Orc::SetAttackState()

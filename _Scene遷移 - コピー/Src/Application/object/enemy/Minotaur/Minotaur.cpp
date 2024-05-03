@@ -14,8 +14,8 @@
 #define RunSpeed 3.0f			//UŒ‚ó‘Ô‚ÌŽž
 #define Dmg 10					//’ÊíUŒ‚Žž‚Ìƒ_ƒ[ƒW
 #define Dmg2 15					//‰ñ“]UŒ‚Žž‚Ìƒ_ƒ[ƒW
-#define AttackIntervalSec 3		//UŒ‚ŠÔŠu
-#define MaxHP 1				//‰ŠúHP
+#define AttackIntervalSec 1		//UŒ‚ŠÔŠu
+#define MaxHP 200				//‰ŠúHP
 
 void Minotaur::Init(Math::Vector2 _pos)
 {
@@ -100,7 +100,7 @@ void Minotaur::Update(float _scrollX)
 {
 	if (!m_bAlive) { return; }
 
-	if (m_pState->GetStateType() <= enemyDeath)
+	if (m_pState->GetStateType() <= enemyDeath || m_pState->GetStateType() == enemyBossEntry)
 	{
 		if (m_bDmg)
 		{
@@ -120,11 +120,11 @@ void Minotaur::Update(float _scrollX)
 		}
 
 		m_pos += m_move;
-		ParticleUpdate(_scrollX);
-		UpdateUI(_scrollX);
 	}
 
 	m_pState->Update();
+	UpdateUI(_scrollX);
+	ParticleUpdate(_scrollX);
 
 	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0.0f) * Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }
@@ -195,6 +195,8 @@ void Minotaur::SetDeathState()
 {
 	m_pState = std::make_shared<EnemyDeath>();
 	m_pState->Init(this, m_fileName[enemyDeath]);
+	if (GetAttackHitCnt() <= 1) { m_pOwner->SetTrueBigShake(); }
+	else { m_pOwner->SetTrueSmallShake(); }
 }
 
 void Minotaur::SetAttackState()

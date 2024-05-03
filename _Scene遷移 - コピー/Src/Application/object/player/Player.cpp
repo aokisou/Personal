@@ -13,31 +13,30 @@
 #include "../../utility/Utility.h"
 
 //プレイヤー
-#define MovePow 5			//速度
-#define JumpPow 20			//ジャンプ力
-#define ShotInterval 6		//弾を打つ感覚(Maxfps/この数値)
-#define MoveRange -150.0f	//移動範囲
-#define StartPosX -600.0f	//開始X座標
-#define StartPosY -100.0f	//開始Y座標
-#define MaxHP 50			//開始HP
-#define MaxDmgEfcCnt 20		//赤く光る時間
-#define ArrowCRX 10			//弾の出る位置を弓まで補正X座標
-#define ArrowCRY 10			//弾の出る位置を弓まで補正Y座標
-#define ImgSize 100			//キャラ画像サイズ
-#define Scale 1.5f			//キャラ拡大率
-#define ParticleNum 10		//パーティクルの数
+#define MOVEPOW 5			//速度
+#define JUMPPOW 20			//ジャンプ力
+#define SHOTINTERVAL 6		//弾を打つ感覚(Maxfps/この数値)
+#define MOVERANGE -150.0f	//移動範囲
+#define STARTPOSX -600.0f	//開始X座標
+#define STARTPOSY -100.0f	//開始Y座標
+#define MAXHP 100			//開始HP
+#define ARROWCRX 10			//弾の出る位置を弓まで補正X座標
+#define ARROWCRY 10			//弾の出る位置を弓まで補正Y座標
+#define IMGSIZE 100			//キャラ画像サイズ
+#define SCALE 1.5f			//キャラ拡大率
+#define PARTICLENUM 10		//パーティクルの数
 
 void Player::Init()
 {
-	m_pos = { StartPosX,StartPosY };
+	m_pos = { STARTPOSX,STARTPOSY };
 	m_move = {};
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
 	m_dir = DefaultDir;
-	m_size = ImgSize;
-	m_scale = Scale;
+	m_size = IMGSIZE;
+	m_scale = SCALE;
 	m_moveKnockBack = 0.f;
-	m_hp = MaxHP;
+	m_hp = MAXHP;
 	m_bJump = false;
 	m_bDmg = false;
 	SetStandState();
@@ -68,7 +67,7 @@ void Player::Action()
 	{
 		if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 		{
-			m_move.x = -MovePow;
+			m_move.x = -MOVEPOW;
 			m_dir = -DefaultDir;
 			if (m_pState->GetStateType() != playerRun)
 			{
@@ -79,7 +78,7 @@ void Player::Action()
 		}
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 		{
-			m_move.x = MovePow;
+			m_move.x = MOVEPOW;
 			m_dir = DefaultDir;
 			if (m_pState->GetStateType() != playerRun)
 			{
@@ -94,7 +93,7 @@ void Player::Action()
 	{
 		if (!m_bJump)
 		{
-			m_move.y += JumpPow;
+			m_move.y += JUMPPOW;
 			if (m_pState->GetStateType() != playerAttack)
 			{
 				SetJumpState();
@@ -187,13 +186,13 @@ void Player::Draw()
 
 void Player::Reset()
 {
-	m_pos = { StartPosX,StartPosY };
+	m_pos = { STARTPOSX,STARTPOSY };
 	m_move = {};
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
 	m_dir = DefaultDir;
 	m_moveKnockBack = 0.f;
-	m_hp = MaxHP;
+	m_hp = MAXHP;
 	m_bJump = false;
 	m_bDmg = false;
 	SetStandState();
@@ -202,12 +201,12 @@ void Player::Reset()
 
 void Player::UpdateUI()
 {
-	m_hpBar->Update(&m_hp,MaxHP);
+	m_hpBar->Update(&m_hp,MAXHP);
 }
 
 void Player::DrawUI()
 {
-	m_hpBar->Draw(MaxHP);
+	m_hpBar->Draw(MAXHP);
 }
 
 void Player::SetStandState()
@@ -304,7 +303,7 @@ bool Player::ArrowShot()
 		{
 			Arrow* tmpArrow = new Arrow;
 
-			tmpArrow->SetPos({ m_pos.x + ArrowCRX * m_scale * m_dir, m_pos.y + ArrowCRY * m_scale });
+			tmpArrow->SetPos({ m_pos.x + ARROWCRX * m_scale * m_dir, m_pos.y + ARROWCRY * m_scale });
 			tmpArrow->SetScale(m_scale);
 			tmpArrow->SetDir(m_dir);
 			tmpArrow->SetTex(&m_arrowTex);
@@ -354,8 +353,7 @@ void Player::ArrowDel()
 
 void Player::CreateWalk()
 {
-	if ((int)m_particle.size() > ParticleNum) { return; }
-	for (int i = 0; i < ParticleNum; i++)
+	while ((int)m_particle.size() < PARTICLENUM)
 	{
 		std::shared_ptr<BaseParticle> w = std::make_shared<Walk>();
 		w->Init(this, m_fileNameP[Particle::walk]);

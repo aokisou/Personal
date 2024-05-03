@@ -21,6 +21,9 @@ public:
 	void DynamicDraw2D()override;
 	void UpdateBack();
 
+	void SetTrueBigShake() { m_bigShake = true; }
+	void SetTrueSmallShake() { m_smallShake = true; }
+
 	void CreateSlime(Math::Vector2 _pos);
 	void CreateWolf(Math::Vector2 _pos);
 	void CreateOrc(Math::Vector2 _pos);
@@ -28,7 +31,6 @@ public:
 	void CreateMinotaur(Math::Vector2 _pos);
 
 	void SetDrawTutorial(int _data);
-
 	void TutorialUpdate();
 	void TutorialDraw();
 
@@ -58,7 +60,6 @@ private:
 	float m_minScrollX = 0.0f;
 	float m_maxScrollX = 0.0f;
 
-	int m_nowMap = 0;
 	std::string m_mapName[3] = { "map/tutorial.csv","map/stage1.csv","map/boss.csv" };
 
 	Player* m_player = nullptr;
@@ -74,7 +75,7 @@ private:
 	int m_mapRangeEnd = 0;
 
 	int m_shakeCnt = 0;
-	bool m_BigShake = false;
+	bool m_bigShake = false;
 	bool m_smallShake = false;
 
 	const float m_backScrollSpeed[5] = { 0.0f, 0.1f, 0.2f, 0.3f, 0.4f };
@@ -99,9 +100,13 @@ private:
 	KdTexture m_arrowTex;//Ç±ÇÍÇÕçsêÊÇé¶Ç∑âÊëú
 
 	bool m_bEnter = false;
-	Math::Vector2 startCut = {};
+	Math::Vector2 m_startCut = {};
 	Math::Matrix m_enterMat = Math::Matrix::Identity;
 	KdTexture m_enterTex;
 
 	float m_scale = 0.0f;
+
+	int m_minuets = 0;
+	int m_seconds = 0;
+	int m_frame = 0;
 };

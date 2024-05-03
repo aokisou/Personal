@@ -36,7 +36,7 @@ void EnemyAttack2::Attack()
 	if (m_bAttack) { return; }
 	Player* p = m_enemy->GetOwner()->GetPlayer();
 	Math::Vector2 v = p->GetFuturePos() - m_enemy->GetFuturePos();
-	if (v.Length() < p->GetHalfSize() - p->GetSpaceWidthImg() + m_enemy->GetHalfSize() - m_enemy->GetSpaceWidthImg())
+	if (v.Length() < p->GetHalfSize() - p->GetSpaceWidthImg() + m_enemy->GetHalfSize())
 	{
 		if (p->GetFuturePos().x - m_enemy->GetFuturePos().x >= 0)
 		{
