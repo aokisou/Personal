@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "stage1.tmx",
+    "activeFile": "mapTile2.tsx",
     "expandedProjectPaths": [
         "."
     ],
@@ -12,8 +12,8 @@
             "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 748.4848484848485,
-                "y": 262.12121212121224
+                "x": 706.060606060606,
+                "y": 386.3636363636364
             }
         },
         "mapTile.tsx": {
@@ -28,21 +28,21 @@
             "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 3621.212121212121,
-                "y": 486.3636363636365
+                "x": 3706.060606060606,
+                "y": 922.7272727272726
             }
         },
         "tutorial.tmx": {
             "scale": 0.25,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 1444,
-                "y": 462
+                "x": 1440,
+                "y": 386
             }
         }
     },
     "last.exportedFilePath": "C:/2年/個人製作/Personal/_Scene遷移 - コピー/map",
-    "last.imagePath": "C:/2年/個人製作/Personal/_Scene遷移 - コピー/Texture/Map",
+    "last.imagePath": "C:/2年/個人製作/Personal/FOREST HUNTER/Texture/Map",
     "map.height": 12,
     "map.lastUsedExportFilter": "CSV ファイル (*.csv)",
     "map.lastUsedFormat": "tmx",
@@ -57,10 +57,10 @@
     ],
     "project": "map.tiled-project",
     "recentFiles": [
-        "mapTile2.tsx",
         "boss.tmx",
         "tutorial.tmx",
         "stage1.tmx",
+        "mapTile2.tsx",
         "mapTile.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
