@@ -38,7 +38,6 @@
 #define STAGENAMEHEIGHT 100	//画像サイズ
 
 static bool m_bTutorialSkip = false;//実行1回目のみチュートリアル
-static int m_nowMap = 0;
 
 void GameScene::PreUpdate()
 {
@@ -111,7 +110,7 @@ void GameScene::Update()
 			{
 				m_bTutorialSkip = true;
 				m_pOwner->SetTrueChangeScene();
-				m_nowMap++;
+				m_nextMap = m_nowMap + 1;
 				return;
 			}
 			if (m_bGoal)
@@ -137,18 +136,14 @@ void GameScene::Update()
 
 	if (m_enemy.size() <= 0)
 	{
-		m_arrowSizeAng += 3.0f;
-		m_arrowMat = Math::Matrix::CreateScale(1.0f + (float)sin(DirectX::XMConvertToRadians(m_arrowSizeAng)) * 0.2f, 1.0f + (float)sin(DirectX::XMConvertToRadians(m_arrowSizeAng)) * 0.2f, 1.0f) *
-			Math::Matrix::CreateTranslation(SCREEN::width / Half - ARROWWIDTH / Half, 0.0f, 0.0f);
+		ArrowUpdate();
 	}
 
 	if (m_bGoal)
 	{
 		m_goalMat = Math::Matrix::CreateScale(0.8f) * 
 			Math::Matrix::CreateTranslation(SCREEN::width / Half - GOALWIDTH / Half, GOALHEIGHT, 0.0f);
-		m_arrowSizeAng += 3.0f;
-		m_arrowMat = Math::Matrix::CreateScale(1.0f + (float)sin(DirectX::XMConvertToRadians(m_arrowSizeAng)) * 0.2f, 1.0f + (float)sin(DirectX::XMConvertToRadians(m_arrowSizeAng)) * 0.2f, 1.0f) *
-			Math::Matrix::CreateTranslation(SCREEN::width / Half - ARROWWIDTH / Half, 0.0f, 0.0f);
+		ArrowUpdate();
 	}
 
 	if (!m_player->GetAlive())
@@ -284,9 +279,15 @@ void GameScene::Draw(KdTexture* _pTex)
 
 	if (m_enemy.size() <= 0)
 	{
-		src = { 0,0,ARROWWIDTH,ARROWHEIGHT };
-		SHADER.m_spriteShader.SetMatrix(m_arrowMat);
-		SHADER.m_spriteShader.DrawTex(&m_arrowTex, 0, 0, &src);
+		ArrowDraw();
+	}
+
+	if (m_bGoal)
+	{
+		ArrowDraw();
+		src = { 0,0,GOALWIDTH,GOALHEIGHT };
+		SHADER.m_spriteShader.SetMatrix(m_goalMat);
+		SHADER.m_spriteShader.DrawTex(&m_goalTex, 0, 0, &src);
 	}
 
 	if (m_bEntry) { src = { (int)m_startCut.x + SCREEN::width / Half,(int)m_startCut.y,CUTRANGEX,CUTRANGEY }; }
@@ -294,7 +295,7 @@ void GameScene::Draw(KdTexture* _pTex)
 	SHADER.m_spriteShader.SetMatrix(m_mat);
 	SHADER.m_spriteShader.DrawTex(_pTex, 0, 0, &src);
 
-	if (m_bTutorialSkip)
+	if (m_nowMap > 0)
 	{
 		int m_num[5];
 		int tenm = 0, onem = 0, tens = 0, ones = 0;
@@ -315,17 +316,8 @@ void GameScene::Draw(KdTexture* _pTex)
 
 	TutorialDraw();
 
-	if (m_bGoal)
-	{
-		src = { 0,0,ARROWWIDTH,ARROWHEIGHT };
-		SHADER.m_spriteShader.SetMatrix(m_arrowMat);
-		SHADER.m_spriteShader.DrawTex(&m_arrowTex, 0, 0, &src);
-		src = { 0,0,GOALWIDTH,GOALHEIGHT };
-		SHADER.m_spriteShader.SetMatrix(m_goalMat);
-		SHADER.m_spriteShader.DrawTex(&m_goalTex, 0, 0, &src);
-	}
-
 	m_player->DrawUI();
+
 	if (m_bStart)
 	{
 		src = { 0,0,STAGENAMEWIDTH,STAGENAMEHEIGHT };
@@ -351,11 +343,11 @@ void GameScene::Init()
 
 	if (!m_bTutorialSkip)
 	{ 
-		m_nowMap = 0;
+		m_nextMap = 0;
 		m_tutorialTex.Load("Texture/UI/tutorial.png");
 		m_keyTex.Load("Texture/UI/key.png");
 	}
-	else { m_nowMap = 1; }
+	else { m_nextMap = 1; }
 
 	for (int i = 0; i < Back::num; i++)
 	{
@@ -403,7 +395,8 @@ void GameScene::Reset()
 {
 	m_bStart = true;
 	m_stageNameAlpha = 90;
-	m_stageMat = Math::Matrix::CreateTranslation(0.0f, ((m_nowMap + 1) / MAXMAP) * 300.0f, 0.0f);
+	m_stageMat = Math::Matrix::CreateTranslation(0.0f, ((m_nextMap + 1) / MAXMAP) * 300.0f, 0.0f);
+	m_nowMap = m_nextMap;
 	m_stageNameTex.Load(m_stageFileName[m_nowMap]);
 	m_scale = SCREEN::scale;
 	m_bEntry = false;
@@ -529,6 +522,20 @@ void GameScene::TutorialDraw()
 	SHADER.m_spriteShader.DrawTex(&m_keyTex, 0, 0, &src, &col);
 }
 
+void GameScene::ArrowUpdate()
+{
+	m_arrowSizeAng += 3.0f;
+	m_arrowMat = Math::Matrix::CreateScale(1.0f + (float)sin(DirectX::XMConvertToRadians(m_arrowSizeAng)) * 0.2f, 1.0f + (float)sin(DirectX::XMConvertToRadians(m_arrowSizeAng)) * 0.2f, 1.0f) *
+		Math::Matrix::CreateTranslation(SCREEN::width / Half - ARROWWIDTH / Half, 0.0f, 0.0f);
+}
+
+void GameScene::ArrowDraw()
+{
+	Math::Rectangle src = { 0,0,ARROWWIDTH,ARROWHEIGHT };
+	SHADER.m_spriteShader.SetMatrix(m_arrowMat);
+	SHADER.m_spriteShader.DrawTex(&m_arrowTex, 0, 0, &src);
+}
+
 void GameScene::ResetScreenScale()
 {
 	m_scale = SCREEN::scale;
@@ -538,20 +545,29 @@ void GameScene::SetMap()
 {
 	if (GetAsyncKeyState('1') & 0x8000)
 	{
-		m_nowMap = 0;
+		m_nextMap = 0;
 		m_bTutorialSkip = false;
 		m_pOwner->SetTrueChangeScene();
 	}
 	if (GetAsyncKeyState('2') & 0x8000)
 	{
-		m_nowMap = 1;
+		m_nextMap = 1;
 		m_bTutorialSkip = true;
 		m_pOwner->SetTrueChangeScene();
 	}
 	if (GetAsyncKeyState('3') & 0x8000)
 	{
-		m_nowMap = 2;
+		m_nextMap = 2;
 		m_bTutorialSkip = true;
 		m_pOwner->SetTrueChangeScene();
+	}
+	if (GetAsyncKeyState('0') & 0x8000)
+	{
+		std::vector<BaseEnemy*>::iterator it = m_enemy.begin();
+		while (it != m_enemy.end())
+		{
+			(*it)->SetDmg(10000);
+			it++;
+		}
 	}
 }

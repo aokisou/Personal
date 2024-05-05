@@ -78,7 +78,7 @@ void BaseEnemy::ParticleDraw()
 	}
 }
 
-void BaseEnemy::SetDamage(float _dmg)
+void BaseEnemy::SetDmg(float _dmg)
 {
 	m_bDmg = true;
 	m_hp -= _dmg;

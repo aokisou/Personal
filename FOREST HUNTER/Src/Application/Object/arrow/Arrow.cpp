@@ -6,10 +6,11 @@
 #define ARROWSCALE 1			//矢拡大率
 #define ARROWACCELERATION 0.97f	//減速率
 #define ARROWDOWN 0.6f			//加速度がこの値まで来たら落ちる
+#define DMG 2					//速度 * この値がダメージになる
 
 float Arrow::GetDmg()
 {
-	if (m_acceleration > 0.9f) { return abs(m_move.x) * 2; }
+	if (m_acceleration > 0.9f) { return abs(m_move.x) * DMG; }
 	else { return abs(m_move.x); }
 }
 

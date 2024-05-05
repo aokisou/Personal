@@ -43,7 +43,7 @@ public:
 	void ParticleUpdate(float _scrollX);
 	void ParticleDraw();
 
-	void SetDamage(float _dmg);
+	void SetDmg(float _dmg);
 
 	virtual int GetDmg() { return 0; }//UŒ‚ƒ‚[ƒVƒ‡ƒ“‚ª‚ ‚é“G‚Ì‚İ
 

@@ -30,8 +30,6 @@ public:
 	void CreateMinotaur(Math::Vector2 _pos);
 
 	void SetDrawTutorial(int _data);
-	void TutorialUpdate();
-	void TutorialDraw();
 
 	void SetFalseEntry() { m_bEntry = false; }
 	void ResetScreenScale();
@@ -44,14 +42,23 @@ private:
 	void Init()override;
 	void Release()override;
 	void Reset();
-	void SetMap();//デバグ用マップを変える
-
 	void MapRange();
+	void TutorialUpdate();
+	void TutorialDraw();
+
+	void ArrowUpdate();
+	void ArrowDraw();
 
 	void ShakeReset(bool& _b);
 
 	void Enemy();
 	void EnemyErase();
+
+	//デバグ用
+	void SetMap();
+
+	int m_nowMap = 0;
+	int m_nextMap = 0;
 
 	bool m_bEntry = false;
 

@@ -192,7 +192,6 @@ void Player::Reset()
 	m_bAlive = true;
 	m_dir = DefaultDir;
 	m_moveKnockBack = 0.f;
-	m_hp = MAXHP;
 	m_bJump = false;
 	m_bDmg = false;
 	SetStandState();
@@ -311,6 +310,11 @@ bool Player::ArrowShot()
 			m_arrow.push_back(tmpArrow);
 			b = true;
 		}
+	}
+	else
+	{
+		a = false;
+		b = false;
 	}
 
 	if (m_pState->GetAnimeNum() == m_pState->GetMaxAnimeNum())

@@ -20,7 +20,7 @@ void Hit::ArrEmyHit()
 
 			if (v.Length() < Dist)
 			{
-				emy->SetDamage((*it)->GetDmg());
+				emy->SetDmg((*it)->GetDmg());
 				(*it)->SetFalseAlive();
 				m_pOwner->SetTrueShake();
 				break;
