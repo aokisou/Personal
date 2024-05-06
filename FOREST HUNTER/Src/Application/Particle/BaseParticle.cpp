@@ -5,10 +5,10 @@
 void BaseParticle::Init(BaseObject* _obj, std::string _file)
 {
 	bool bLoad = false;
-	m_pos = {_obj->GetPos()};
+	m_pos = {_obj->GetFuturePos()};
 	m_move = { rand() % 3 + 1.5f * -_obj->GetDir(), (float)(rand() % 3)};
 	m_size = 1;
-	m_cnt = rand() % 40 + 10;
+	m_cnt = rand() % 30 + 10;
 	m_bAlive = true;
 	m_pOwner = _obj;
 	bLoad = m_tex.Load(_file);

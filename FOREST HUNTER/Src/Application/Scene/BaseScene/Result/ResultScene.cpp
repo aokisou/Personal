@@ -107,7 +107,7 @@ void ResultScene::Draw(KdTexture* _pTex)
 		SHADER.m_spriteShader.SetMatrix(m_backMat[i]);
 		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src, &col);
 		SHADER.m_spriteShader.SetMatrix(m_2ndBackMat[i]);
-		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src);
+		SHADER.m_spriteShader.DrawTex(&m_backTex[i], 0, 0, &src,&col);
 	}
 
 	src = { 0,0,SCREEN::width,SCREEN::height };

@@ -11,9 +11,9 @@ void PlayerHPBar::Update(int* _hp, int _maxHP)
 	if (m_hp == (*_hp))return;
 	m_hp = *_hp;
 	
-	m_gaugeMat = Math::Matrix::CreateTranslation(-SCREEN::width / Half + ImgWidth / Half, SCREEN::height / Half - ImgHeight / Half, 0.0f);
-	m_barMat = Math::Matrix::CreateTranslation(-SCREEN::width / Half + ImgWidth / Half - (ImgWidth - (m_hp * ((float)ImgWidth / _maxHP))) / Half,
-		SCREEN::height / Half - ImgHeight / Half, 0.0f);
+	m_gaugeMat = Math::Matrix::CreateTranslation(-SCREEN::width / HALF + ImgWidth / HALF, SCREEN::height / HALF - ImgHeight / HALF, 0.0f);
+	m_barMat = Math::Matrix::CreateTranslation(-SCREEN::width / HALF + ImgWidth / HALF - (ImgWidth - (m_hp * ((float)ImgWidth / _maxHP))) / HALF,
+		SCREEN::height / HALF - ImgHeight / HALF, 0.0f);
 }
 
 void PlayerHPBar::Draw(int _maxHP)

@@ -19,7 +19,7 @@ void Map::Init()
 	{
 		for (int j = 0; j < widthSize; j++)
 		{
-			m_pos[i][j] = { (float)(j * m_Size - SCREEN::width / Half),(float)((i * m_Size - SCREEN::height / Half) * Reverse) };
+			m_pos[i][j] = { (float)(j * m_Size - SCREEN::width / HALF),(float)((i * m_Size - SCREEN::height / HALF) * REVERSE) };
 			m_mat[i][j] = Math::Matrix::CreateTranslation(m_pos[i][j].x, m_pos[i][j].y, 0);
 			m_src[i][j] = Math::Rectangle((m_data[i][j] % MAXRECORD) * m_Size, (m_data[i][j] / MAXRECORD) * m_Size, m_Size, m_Size);
 
@@ -134,5 +134,5 @@ void Map::Release()
 
 int Map::GetHalfSize()
 {
-	return m_Size / Half;
+	return m_Size / HALF;
 }

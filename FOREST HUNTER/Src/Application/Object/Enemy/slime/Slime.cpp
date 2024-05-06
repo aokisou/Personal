@@ -24,7 +24,7 @@ void Slime::Init(Math::Vector2 _pos)
 	m_bAlive = true;
 	m_size = ImgSize;
 	m_scale = Scale;
-	m_dir = DefaultDir;
+	m_dir = DEFAULTDIR;
 	m_hp = MaxHP;
 	m_bDmg = false;
 	DmgEfcCnt = 0;
@@ -39,14 +39,14 @@ void Slime::Action()
 {
 	if (!m_bAlive || m_pState->GetStateType() == enemyDeath) { return; }
 
-	m_move = { 0,m_move.y - Gravity };
+	m_move = { 0,m_move.y - GRAVITY };
 
 	if (Attack()) { return; }
 
 	m_move.x = WalkSpeed * m_dir;
 
-	if (m_pos.x > m_startPos.x + m_moveRange && m_move.x > 0) { m_dir *= Reverse; }
-	if (m_pos.x < m_startPos.x - m_moveRange && m_move.x < 0) { m_dir *= Reverse; }
+	if (m_pos.x > m_startPos.x + m_moveRange && m_move.x > 0) { m_dir *= REVERSE; }
+	if (m_pos.x < m_startPos.x - m_moveRange && m_move.x < 0) { m_dir *= REVERSE; }
 }
 
 void Slime::Update(float _scrollX)
@@ -100,8 +100,8 @@ bool Slime::Attack()
 		{
 			float a = GetAngleDeg(GetFuturePos(), ply->GetFuturePos());
 			m_move.x = cos(DirectX::XMConvertToRadians(a)) * RunSpeed;
-			if (m_move.x > 0) { m_dir = DefaultDir * Reverse; }
-			else { m_dir = DefaultDir; }
+			if (m_move.x > 0) { m_dir = DEFAULTDIR * REVERSE; }
+			else { m_dir = DEFAULTDIR; }
 			Math::Vector2 v = ply->GetFuturePos() - GetFuturePos();
 			if (v.Length() < ply->GetHalfSize() - ply->GetSpaceWidthImg() + GetHalfSize() - GetSpaceWidthImg())
 			{

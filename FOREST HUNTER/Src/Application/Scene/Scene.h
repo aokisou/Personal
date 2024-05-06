@@ -41,7 +41,7 @@ public:
 	
 	void ChangeTitle();
 	void ChangeGame();
-	void ChangeResult(bool _b, const int _minuets, const int _seconds);
+	void ChangeResult(bool _b, const int _minuets = 0, const int _seconds = 0);
 
 	void ChangePreUpdate();//更新前の行列作成などのため一回Update
 

@@ -1,7 +1,10 @@
 #include "TitleScene.h"
+#include "../../../main.h"
 #include "../../Scene.h"
 #include "../../../Utility/utility.h"
 
+#define STARTPOS -100.f		//座標
+#define EXITPOS -250.f      //座標
 #define ALPHANGRANGE 360	//α値のループ範囲
 #define ALPHAMIN 0.3f		//α値の最小値
 #define ALPHARANGE 0.7f		//α値の範囲
@@ -9,6 +12,8 @@
 #define	TITLEHEIGHT 109		//画像サイズ
 #define STARTWIDTH 318		//画像サイズ
 #define STARTHEIGHT 109		//画像サイズ
+#define EXITWIDTH 246		//画像サイズ
+#define EXITHEIGHT 108		//画像サイズ
 #define ENTERWIDTH 30		//画像サイズ
 #define ENTERHEIGHT 14		//画像サイズ
 #define ENTERSCALE 3.0f		//エンターの拡大率
@@ -22,21 +27,40 @@ void TitleScene::Update()
 		m_alphaAng -= ALPHANGRANGE;
 	}
 
+	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	{
+		if (!(*m_pOwner->GetKeyFlg()))
+		{
+			m_posY = STARTPOS;
+		}
+	}
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	{
+		if (!(*m_pOwner->GetKeyFlg()))
+		{
+			m_posY = EXITPOS;
+		}
+	}
+
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
 		if (!(*m_pOwner->GetKeyFlg()))
 		{
-			m_pOwner->SetTrueKeyFlg();
-			m_pOwner->SetTrueChangeScene();
-			m_pOwner->ChangeGame();//こいつは最後
-			return;
+			if (m_posY == STARTPOS)
+			{
+				m_pOwner->SetTrueKeyFlg();
+				m_pOwner->SetTrueChangeScene();
+				m_pOwner->ChangeGame();//こいつは最後
+				return;
+			}
+			else
+			{
+				APP.End();
+				return;
+			}
 		}
 	}
 	else { m_pOwner->SetFalseKeyFlg(); }
-
-	m_titleMat = Math::Matrix::CreateTranslation(0.0f, 200.0f, 0.0f);
-	m_startMat = Math::Matrix::CreateScale(1.f) * Math::Matrix::CreateTranslation(0.0f, -160.0f, 0.0f);
-	m_mat = Math::Matrix::CreateScale(Back::scale) * Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
 
 	m_backPos[RIVER].x -= 0.1f;
 	m_2ndBackPos[RIVER].x = m_backPos[RIVER].x + Back::width * Back::scale;
@@ -57,9 +81,16 @@ void TitleScene::Draw(KdTexture* _pTex)
 	}
 
 	src = { 0,0,STARTWIDTH,STARTHEIGHT };
-	Math::Color col = { 1.0f,1.0f,1.0f,abs(sin(DirectX::XMConvertToRadians((float)m_alphaAng))) * ALPHARANGE + ALPHAMIN };
+	Math::Color col = { 1.0f,1.0f,1.0f,1.0f };
+	if (m_posY == STARTPOS) { col = { 1.0f,1.0f,1.0f,abs(sin(DirectX::XMConvertToRadians((float)m_alphaAng))) * ALPHARANGE + ALPHAMIN }; }
 	SHADER.m_spriteShader.SetMatrix(m_startMat);
 	SHADER.m_spriteShader.DrawTex(&m_startTex, 0, 0, &src,&col);
+
+	src = { 0,0,EXITWIDTH,EXITHEIGHT };
+	col = { 1.0f,1.0f,1.0f,1.0f };
+	if (m_posY == EXITPOS) { col = { 1.0f,1.0f,1.0f,abs(sin(DirectX::XMConvertToRadians((float)m_alphaAng))) * ALPHARANGE + ALPHAMIN }; }
+	SHADER.m_spriteShader.SetMatrix(m_exitMat);
+	SHADER.m_spriteShader.DrawTex(&m_exitTex, 0, 0, &src, &col);
 
 	src = { 0,0,TITLEWIDTH,TITLEHEIGHT };
 	SHADER.m_spriteShader.SetMatrix(m_titleMat);
@@ -76,6 +107,7 @@ void TitleScene::DynamicDraw2D()
 
 void TitleScene::Init()
 {
+	m_posY = STARTPOS;
 	m_alphaAng = 0;
 	for (int i = 0; i < Back::num; i++)
 	{
@@ -87,9 +119,15 @@ void TitleScene::Init()
 	}
 	m_startTex.Load("Texture/Title/start.png");
 	m_titleTex.Load("Texture/Title/title.png");
+	m_exitTex.Load("Texture/Title/exit.png");
 
-	m_enterMat = Math::Matrix::CreateScale(ENTERSCALE,ENTERSCALE,1.0f) * Math::Matrix::CreateTranslation(SCREEN::width / Half - ENTERWIDTH * ENTERSCALE / Half, -SCREEN::height / Half + ENTERHEIGHT * ENTERSCALE / Half, 0.0f);
+	m_enterMat = Math::Matrix::CreateScale(ENTERSCALE,ENTERSCALE,1.0f) * Math::Matrix::CreateTranslation(SCREEN::width / HALF - ENTERWIDTH * ENTERSCALE / HALF, -SCREEN::height / HALF + ENTERHEIGHT * ENTERSCALE / HALF, 0.0f);
 	m_enterTex.Load("Texture/UI/enter.png");
+
+	m_titleMat = Math::Matrix::CreateTranslation(0.0f, 200.0f, 0.0f);
+	m_startMat = Math::Matrix::CreateScale(1.f) * Math::Matrix::CreateTranslation(0.0f, STARTPOS, 0.0f);
+	m_exitMat = Math::Matrix::CreateScale(1.f) * Math::Matrix::CreateTranslation(0.0f, EXITPOS, 0.0f);
+	m_mat = Math::Matrix::CreateScale(Back::scale) * Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);
 }
 
 void TitleScene::Release()

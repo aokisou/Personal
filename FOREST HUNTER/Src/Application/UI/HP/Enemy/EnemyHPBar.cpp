@@ -17,7 +17,7 @@ void EnemyHPBar::Update(float* _hp, int _maxHP, Math::Vector2 _pos)
 	m_gaugeMat = Math::Matrix::CreateScale(Scale, Scale, 1.0f) *
 		Math::Matrix::CreateTranslation(_pos.x, _pos.y, 0);
 	m_barMat = Math::Matrix::CreateScale(Scale, Scale, 1.0f) *
-		Math::Matrix::CreateTranslation(_pos.x - (ImgWidth * Scale - (m_hp * (ImgWidth * Scale / _maxHP))) / Half, _pos.y, 0.0f);
+		Math::Matrix::CreateTranslation(_pos.x - (ImgWidth * Scale - (m_hp * (ImgWidth * Scale / _maxHP))) / HALF, _pos.y, 0.0f);
 }
 
 void EnemyHPBar::Draw(int _maxHP)

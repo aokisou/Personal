@@ -15,7 +15,7 @@
 #define Dmg 10					//’ÊíUŒ‚Žž‚Ìƒ_ƒ[ƒW
 #define Dmg2 15					//‰ñ“]UŒ‚Žž‚Ìƒ_ƒ[ƒW
 #define AttackIntervalSec 1		//UŒ‚ŠÔŠu
-#define MaxHP 500				//‰ŠúHP
+#define MaxHP 100				//‰ŠúHP
 
 void Minotaur::Init(Math::Vector2 _pos)
 {
@@ -28,7 +28,7 @@ void Minotaur::Init(Math::Vector2 _pos)
 	m_bAlive = true;
 	m_size = ImgSize;
 	m_scale = Scale;
-	m_dir = DefaultDir * Reverse;
+	m_dir = DEFAULTDIR * REVERSE;
 	m_hp = MaxHP;
 	m_bDmg = false;
 	DmgEfcCnt = 0;
@@ -56,10 +56,10 @@ void Minotaur::Action()
 		const float plyNextTop		= p->GetFuturePos().y + p->GetHalfSize() - p->GetSpaceHeightImg();
 		const float plyNextBottom	= p->GetFuturePos().y - p->GetHalfSize() + p->GetSpaceHeightImg();
 
-		const float emyRight	= GetPos().x + GetHalfSize() - GetDeadSpaceRightImg() * abs((m_dir - 1) / Half)
-															 - GetDeadSpaceLeftImg() * abs((m_dir + 1) / Half);
-		const float emyLeft		= GetPos().x - GetHalfSize() + GetDeadSpaceRightImg() * abs((m_dir + 1) / Half)
-															 + GetDeadSpaceLeftImg() * abs((m_dir - 1) / Half);
+		const float emyRight	= GetPos().x + GetHalfSize() - GetDeadSpaceRightImg() * abs((m_dir - 1) / HALF)
+															 - GetDeadSpaceLeftImg() * abs((m_dir + 1) / HALF);
+		const float emyLeft		= GetPos().x - GetHalfSize() + GetDeadSpaceRightImg() * abs((m_dir + 1) / HALF)
+															 + GetDeadSpaceLeftImg() * abs((m_dir - 1) / HALF);
 		const float emyTop		= GetPos().y + GetHalfSize() - GetDeadSpaceTopImg();
 		const float emyBottom	= GetPos().y - GetHalfSize() + GetDeadSpaceBottomImg();
 
@@ -88,7 +88,7 @@ void Minotaur::Action()
 		return;
 	}
 
-	m_move = { 0,m_move.y - Gravity };
+	m_move = { 0,m_move.y - GRAVITY };
 
 	if (Attack())
 	{
@@ -149,15 +149,15 @@ bool Minotaur::Attack()
 			return true;
 		}
 
-		if (ply->GetFuturePos().x - GetFuturePos().x < 0) { m_dir = DefaultDir * Reverse; }
-		else { m_dir = DefaultDir; }
+		if (ply->GetFuturePos().x - GetFuturePos().x < 0) { m_dir = DEFAULTDIR * REVERSE; }
+		else { m_dir = DEFAULTDIR; }
 
 		if (m_pState->GetStateType() != enemyAttack)
 		{
-			if (m_hp > MaxHP / Half) { SetAttackState(); }
+			if (m_hp > MaxHP / HALF) { SetAttackState(); }
 			else 
 			{
-				if (rand() % 2) { SetAttackState(); }
+				if (rand() % 4 < 1) { SetAttackState(); }
 				else { SetAttack2State(); }
 			}
 		}
@@ -166,8 +166,8 @@ bool Minotaur::Attack()
 	else
 	{
 		float a = GetAngleDeg(GetFuturePos(), ply->GetFuturePos());
-		if (cos(DirectX::XMConvertToRadians(a)) < 0) { m_dir = DefaultDir * Reverse; }
-		else { m_dir = DefaultDir; }
+		if (cos(DirectX::XMConvertToRadians(a)) < 0) { m_dir = DEFAULTDIR * REVERSE; }
+		else { m_dir = DEFAULTDIR; }
 		m_move.x = RunSpeed * m_dir;
 		CreateWalk();
 		return true;

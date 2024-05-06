@@ -44,5 +44,5 @@ void BaseObject::Release()
 
 float BaseObject::GetHalfSize()
 {
-	return (m_size * m_scale) / Half;
+	return (m_size * m_scale) / HALF;
 }

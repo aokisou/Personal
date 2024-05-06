@@ -32,7 +32,7 @@ void Player::Init()
 	m_move = {};
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
-	m_dir = DefaultDir;
+	m_dir = DEFAULTDIR;
 	m_size = IMGSIZE;
 	m_scale = SCALE;
 	m_moveKnockBack = 0.f;
@@ -48,7 +48,7 @@ void Player::Action()
 {
 	if (m_pState->GetStateType() == playerDeath || m_bDmg)//矢の処理と移動速度をリセットして帰る
 	{
-		m_move = { 0,m_move.y - Gravity };
+		m_move = { 0,m_move.y - GRAVITY };
 		for (Arrow* i : m_arrow)
 		{
 			i->Action();
@@ -59,7 +59,7 @@ void Player::Action()
 	bool bAct = false;
 	const float a = -1.f;//この値まで行ったらFall状態にする
 
-	m_move = { 0,m_move.y - Gravity };//リセットと重力をかける
+	m_move = { 0,m_move.y - GRAVITY };//リセットと重力をかける
 
 	bAct = ArrowShot();
 
@@ -68,7 +68,7 @@ void Player::Action()
 		if (GetAsyncKeyState(VK_LEFT) & 0x8000)
 		{
 			m_move.x = -MOVEPOW;
-			m_dir = -DefaultDir;
+			m_dir = -DEFAULTDIR;
 			if (m_pState->GetStateType() != playerRun)
 			{
 				SetRunState();
@@ -79,7 +79,7 @@ void Player::Action()
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
 		{
 			m_move.x = MOVEPOW;
-			m_dir = DefaultDir;
+			m_dir = DEFAULTDIR;
 			if (m_pState->GetStateType() != playerRun)
 			{
 				SetRunState();
@@ -137,7 +137,7 @@ void Player::Update(float _scrollX)
 	m_move.x += m_moveKnockBack;
 	m_pos += m_move;
 
-	if (m_pos.y - GetHalfSize() < -(SCREEN::height / Half))
+	if (m_pos.y - GetHalfSize() < -(SCREEN::height / HALF))
 	{
 		m_bAlive = false;
 	}
@@ -190,7 +190,7 @@ void Player::Reset()
 	m_move = {};
 	m_mat = Math::Matrix::Identity;
 	m_bAlive = true;
-	m_dir = DefaultDir;
+	m_dir = DEFAULTDIR;
 	m_moveKnockBack = 0.f;
 	m_bJump = false;
 	m_bDmg = false;

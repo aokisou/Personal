@@ -52,7 +52,7 @@ void Arrow::Update(float _scrollX)
 {
 	if (!m_bAlive) { return; }
 	m_pos += m_move;
-	if (m_pos.y - m_size * m_scale < -(SCREEN::height / Half))m_bAlive = false;
+	if (m_pos.y - m_size * m_scale < -(SCREEN::height / HALF))m_bAlive = false;
 	m_mat = Math::Matrix::CreateScale(m_scale * m_dir, m_scale, 0) * Math::Matrix::CreateRotationZ(m_angle * m_dir) 
 		* Math::Matrix::CreateTranslation(m_pos.x - _scrollX, m_pos.y, 0);
 }

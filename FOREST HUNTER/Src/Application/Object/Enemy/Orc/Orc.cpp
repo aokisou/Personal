@@ -26,7 +26,7 @@ void Orc::Init(Math::Vector2 _pos)
 	m_bAlive = true;
 	m_size = ImgSize;
 	m_scale = Scale;
-	m_dir = DefaultDir;
+	m_dir = DEFAULTDIR;
 	m_hp = MaxHP;
 	m_bDmg = false;
 	DmgEfcCnt = 0;
@@ -43,7 +43,7 @@ void Orc::Action()
 {
 	if (!m_bAlive || m_pState->GetStateType() == enemyDeath) { return; }
 
-	m_move = { 0,m_move.y - Gravity };
+	m_move = { 0,m_move.y - GRAVITY };
 
 	if (Attack())
 	{
@@ -53,8 +53,8 @@ void Orc::Action()
 	CreateWalk();
 	m_move.x = WalkSpeed * m_dir;
 
-	if (m_pos.x > m_startPos.x + m_moveRange && m_move.x > 0) { m_dir *= Reverse; }
-	if (m_pos.x < m_startPos.x - m_moveRange && m_move.x < 0) { m_dir *= Reverse; }
+	if (m_pos.x > m_startPos.x + m_moveRange && m_move.x > 0) { m_dir *= REVERSE; }
+	if (m_pos.x < m_startPos.x - m_moveRange && m_move.x < 0) { m_dir *= REVERSE; }
 }
 
 void Orc::Update(float _scrollX)
@@ -112,8 +112,8 @@ bool Orc::Attack()
 				return true; 
 			}
 
-			if (ply->GetFuturePos().x - GetFuturePos().x < 0) { m_dir = DefaultDir * Reverse; }
-			else { m_dir = DefaultDir; }
+			if (ply->GetFuturePos().x - GetFuturePos().x < 0) { m_dir = DEFAULTDIR * REVERSE; }
+			else { m_dir = DEFAULTDIR; }
 
 			if (m_pState->GetStateType() != enemyAttack)
 			{
@@ -124,8 +124,8 @@ bool Orc::Attack()
 		if (abs(ply->GetFuturePos().x - GetFuturePos().x) < m_lookRange || m_hp < MaxHP)
 		{
 			float a = GetAngleDeg(GetFuturePos(), ply->GetFuturePos());
-			if (cos(DirectX::XMConvertToRadians(a)) < 0) { m_dir = DefaultDir * Reverse; }
-			else { m_dir = DefaultDir; }
+			if (cos(DirectX::XMConvertToRadians(a)) < 0) { m_dir = DEFAULTDIR * REVERSE; }
+			else { m_dir = DEFAULTDIR; }
 			m_move.x = RunSpeed * m_dir;
 			CreateWalk();
 			return true;

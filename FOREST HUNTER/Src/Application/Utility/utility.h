@@ -1,11 +1,11 @@
 #pragma once
 
 //定義
-#define Gravity 1		//重力
-#define DefaultDir 1	//通常の向き
+#define GRAVITY 1		//重力
+#define DEFAULTDIR 1	//通常の向き
 
-#define Half 2			//半分にしたいとき使う
-#define Reverse -1		//反転
+#define HALF 2			//半分にしたいとき使う
+#define REVERSE -1		//反転
 
 const std::string m_numFileName[10] = { "Texture/time/0.png","Texture/time/1.png", "Texture/time/2.png", "Texture/time/3.png",
 "Texture/time/4.png", "Texture/time/5.png", "Texture/time/6.png", "Texture/time/7.png",

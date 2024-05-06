@@ -5,7 +5,7 @@
 void Walk::Update(float _scrollX)
 {
 	m_pos += m_move;
-	m_size *= 0.99f;
+	m_size *= 0.98f;
 	m_cnt--;
 	if (m_cnt < 0) 
 	{

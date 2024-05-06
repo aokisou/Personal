@@ -42,8 +42,7 @@ void BaseEnemy::Reset()
 
 void BaseEnemy::CreateWalk()
 {
-	if ((int)m_particle.size() > PARTICLENUM) { return; }
-	for (int i = 0; i < PARTICLENUM; i++)
+	for (int i = m_particle.size(); i < PARTICLENUM; i++)
 	{
 		std::shared_ptr<BaseParticle> w = std::make_shared<Walk>();
 		w->Init(this, m_fileNameP[Particle::walk]);

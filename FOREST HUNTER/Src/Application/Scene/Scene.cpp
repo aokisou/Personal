@@ -6,7 +6,7 @@
 #include "BaseScene/Result/ResultScene.h"
 #include "../Utility/Utility.h"
 
-#define OneTimeChangeScene 180
+#define ONETIMECHANGESCENE 180
 
 void Scene::Draw2D()
 {
@@ -27,7 +27,7 @@ void Scene::Update()
 
 void Scene::DrawChangeScene()
 {
-	Math::Rectangle src = { 0,0,1280,720 };
+	Math::Rectangle src = { 0,0,SCREEN::width,SCREEN::height };
 	Math::Color col = { 1,1,1,abs(sin(DirectX::XMConvertToRadians((float)m_sceneChageAlpha)))};
 	SHADER.m_spriteShader.SetMatrix(m_sceneChangeMat);
 	SHADER.m_spriteShader.DrawTex(&m_sceneChangeTex, 0, 0, &src, &col);
@@ -36,7 +36,7 @@ void Scene::DrawChangeScene()
 void Scene::UpdateChangeScene()
 {
 	m_sceneChageAlpha += 5;
-	if (m_sceneChageAlpha == OneTimeChangeScene / Half)
+	if (m_sceneChageAlpha == ONETIMECHANGESCENE / HALF)
 	{
 		if (m_pNextScene != nullptr)
 		{
@@ -49,9 +49,9 @@ void Scene::UpdateChangeScene()
 		}
 	}
 
-	if (m_sceneChageAlpha > OneTimeChangeScene)
+	if (m_sceneChageAlpha > ONETIMECHANGESCENE)
 	{
-		m_sceneChageAlpha -= OneTimeChangeScene;
+		m_sceneChageAlpha -= ONETIMECHANGESCENE;
 		m_bChangeScene = false;
 	}
 	m_sceneChangeMat = Math::Matrix::CreateTranslation(0.0f, 0.0f, 0.0f);

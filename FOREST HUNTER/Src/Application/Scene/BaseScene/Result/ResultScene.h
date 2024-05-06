@@ -5,7 +5,7 @@
 class ResultScene :public BaseScene
 {
 public:
-	ResultScene(int* _fps, bool _b,const int _minuets,const int _seconds) { m_maxFps = _fps; m_bClear = _b; Init(_minuets,_seconds); }
+	ResultScene(int* _fps, bool _b,const int _minuets = 0,const int _seconds = 0) { m_maxFps = _fps; m_bClear = _b; Init(_minuets,_seconds); }
 	~ResultScene() { Release(); }
 
 	void Update()override;
