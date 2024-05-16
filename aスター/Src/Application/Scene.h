@@ -34,6 +34,8 @@ private:
 	std::vector<std::shared_ptr<ANode>> m_minScoreNode;
 	std::shared_ptr<ANode> m_nowMinScoreNode;
 
+	Math::Vector2 m_goalNum;
+
 	Math::Matrix m_pmat;
 	Math::Vector2 m_ppos;
 	Math::Vector2 m_pmove;

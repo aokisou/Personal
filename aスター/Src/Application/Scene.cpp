@@ -75,7 +75,15 @@ void Scene::Update()
 
 	if (GetAsyncKeyState(VK_RETURN) & 0x8000)
 	{
-		Reset();
+		if (!m_bKey)
+		{
+			Reset();
+			m_bKey = true;
+		}
+	}
+	else
+	{
+		m_bKey = false;
 	}
 
 	m_pmat = Math::Matrix::CreateTranslation(m_ppos.x, m_ppos.y, 0);
@@ -85,25 +93,19 @@ void Scene::Update()
 
 std::shared_ptr<ANode> Scene::SearchMinScoreNode()
 {
-	int f = 0;
 	// 最小スコア
-
 	int min = 99999999;
 	// 最小実コスト
 	int minCost = 99999999;
 	std::shared_ptr<ANode> minNode = m_nowMinScoreNode;
+
 	OpenNodeState(minNode);
+
 	for (std::vector<std::shared_ptr<ANode>> oneRaneNode : m_nodeList)
 	{
 		for (std::shared_ptr<ANode> node : oneRaneNode)
 		{
-			f++;
 			int score = node->score;
-			if (node->pos == minNode->pos)
-			{
-				node->state = State::close;
-				continue;
-			}
 			if (node->state != State::open) { continue; }
 
 			if (score > min) {
@@ -147,7 +149,7 @@ void Scene::OpenNodeState(std::shared_ptr<ANode> _node)
 		{
 			if (node->pos == _node->pos)
 			{
-				node->state = State::close;
+				_node->state = State::close;
 				//上の列
 				if (i - 1 >= 0 && j - 1 >= 0)
 				{
@@ -247,14 +249,14 @@ void Scene::OpenNodeState(std::shared_ptr<ANode> _node)
 				if (node->cost == 0)
 				{
 					float dx, dy;
-					dx = abs(m_nodeList[m_nodeList.size() - 1][m_nodeList[0].size() - 1]->num.x - node->num.x);
-					dy = abs(m_nodeList[m_nodeList.size() - 1][m_nodeList[0].size() - 1]->num.y - node->num.y);
+					dx = abs(m_nodeList[(int)m_goalNum.x][(int)m_goalNum.y]->num.x - node->num.x);
+					dy = abs(m_nodeList[(int)m_goalNum.x][(int)m_goalNum.y]->num.y - node->num.y);
 
 					if (node->rootNode != nullptr)
 					{
 						node->cost = node->rootNode->cost + 1;
 					}
-					if (dx <= dy)
+					if (dx >= dy)
 					{
 						node->h = dx;
 					}
@@ -328,6 +330,7 @@ void Scene::Reset()
 			if (n->data != 1)n->state = State::none;
 			else n->state = State::close;
 			n->rootNode = nullptr;
+			if (n->data == 2)m_goalNum = { (float)i,(float)j };
 			_n.push_back(n);
 			j++;
 		}
@@ -339,8 +342,8 @@ void Scene::Reset()
 	m_nowMinScoreNode = m_nodeList[m_num.x][m_num.y];
 	m_nodeList[m_num.x][m_num.y]->state = State::open;
 	float dx, dy;
-	dx = m_nodeList[m_nodeList.size() - 1][m_nodeList[0].size() - 1]->num.x - m_nodeList[m_num.x][m_num.y]->num.x;
-	dy = m_nodeList[m_nodeList.size() - 1][m_nodeList[0].size() - 1]->num.y - m_nodeList[m_num.x][m_num.y]->num.y;
+	dx = m_nodeList[m_goalNum.x][m_goalNum.y]->num.x - m_nodeList[m_num.x][m_num.y]->num.x;
+	dy = m_nodeList[m_goalNum.x][m_goalNum.y]->num.y - m_nodeList[m_num.x][m_num.y]->num.y;
 
 	if (dx <= dy)
 	{
@@ -383,6 +386,7 @@ void Scene::Init()
 			if (n->data != 1)n->state = State::none;
 			else n->state = State::close;
 			n->rootNode = nullptr;
+			if (n->data == 2)m_goalNum = { (float)i,(float)j };
 			_n.push_back(n);
 			j++;
 		}
@@ -401,7 +405,7 @@ void Scene::Init()
 	dx = m_nodeList[m_nodeList.size() - 1][m_nodeList[0].size() - 1]->num.x - m_nodeList[startX][startY]->num.x;
 	dy = m_nodeList[m_nodeList.size() - 1][m_nodeList[0].size() - 1]->num.y - m_nodeList[startX][startY]->num.y;
 
-	if (dx <= dy)
+	if (dx >= dy)
 	{
 		m_nodeList[startX][startY]->h = dx;
 		m_nodeList[startX][startY]->score = dx;
@@ -425,7 +429,7 @@ void Scene::Release()
 
 void Scene::ImGuiUpdate()
 {
-	return;
+	//return;
 
 	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_Once);

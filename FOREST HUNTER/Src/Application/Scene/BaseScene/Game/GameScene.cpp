@@ -343,7 +343,8 @@ void GameScene::Init()
 
 	if (!m_bTutorialSkip)
 	{ 
-		m_nextMap = 0;
+		m_bTutorialSkip = true;
+		m_nextMap = 2;
 		m_tutorialTex.Load("Texture/UI/tutorial.png");
 		m_keyTex.Load("Texture/UI/key.png");
 	}
@@ -385,7 +386,7 @@ void GameScene::Init()
 
 	for (int i = 0; i < PlayTime::ptnum; i++)
 	{
-		m_numMat[i] = Math::Matrix::CreateScale(0.8f) * Math::Matrix::CreateTranslation(SCREEN::width / HALF - 300.0f + NUMSLIDEPOS * i,SCREEN::height / HALF - 50.0f, 0.0f);
+		m_numMat[i] = Math::Matrix::CreateScale(0.8f) * Math::Matrix::CreateTranslation(SCREEN::width / HALF - 300.0f + NUMSLIDEPOS * i,-SCREEN::height / HALF + 50.0f, 0.0f);
 	}
 
 	Reset();
