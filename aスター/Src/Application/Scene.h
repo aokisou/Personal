@@ -26,6 +26,7 @@ private:
 	std::shared_ptr<ANode> SearchMinScoreNode();
 	std::vector<std::shared_ptr<ANode>> GetPath(std::shared_ptr<ANode> _node);
 	void OpenNodeState(std::shared_ptr<ANode> _node);
+	void SetScore(int _i, int _j);
 	void Move(std::shared_ptr<ANode> _node);
 	float GetAngleDeg(Math::Vector2 src, Math::Vector2 dest);
 	void Reset();

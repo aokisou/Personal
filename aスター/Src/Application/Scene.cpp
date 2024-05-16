@@ -159,6 +159,7 @@ void Scene::OpenNodeState(std::shared_ptr<ANode> _node)
 						if (m_nodeList[i - 1][j - 1]->rootNode == nullptr)
 						{
 							m_nodeList[i - 1][j - 1]->rootNode = _node;
+							SetScore(i - 1, j - 1);
 						}
 					}
 				}
@@ -170,6 +171,7 @@ void Scene::OpenNodeState(std::shared_ptr<ANode> _node)
 						if (m_nodeList[i - 1][j]->rootNode == nullptr)
 						{
 							m_nodeList[i - 1][j]->rootNode = _node;
+							SetScore(i - 1, j);
 						}
 					}
 				}
@@ -181,6 +183,7 @@ void Scene::OpenNodeState(std::shared_ptr<ANode> _node)
 						if (m_nodeList[i - 1][j + 1]->rootNode == nullptr)
 						{
 							m_nodeList[i - 1][j + 1]->rootNode = _node;
+							SetScore(i - 1, j + 1);
 						}
 					}
 				}
@@ -194,6 +197,7 @@ void Scene::OpenNodeState(std::shared_ptr<ANode> _node)
 						if (m_nodeList[i][j - 1]->rootNode == nullptr)
 						{
 							m_nodeList[i][j - 1]->rootNode = _node;
+							SetScore(i, j - 1);
 						}
 					}
 				}
@@ -205,6 +209,7 @@ void Scene::OpenNodeState(std::shared_ptr<ANode> _node)
 						if (m_nodeList[i][j + 1]->rootNode == nullptr)
 						{
 							m_nodeList[i][j + 1]->rootNode = _node;
+							SetScore(i, j + 1);
 						}
 					}
 				}
@@ -218,6 +223,7 @@ void Scene::OpenNodeState(std::shared_ptr<ANode> _node)
 						if (m_nodeList[i + 1][j - 1]->rootNode == nullptr)
 						{
 							m_nodeList[i + 1][j - 1]->rootNode = _node;
+							SetScore(i + 1, j - 1);
 						}
 					}
 				}
@@ -229,6 +235,7 @@ void Scene::OpenNodeState(std::shared_ptr<ANode> _node)
 						if (m_nodeList[i + 1][j]->rootNode == nullptr)
 						{
 							m_nodeList[i + 1][j]->rootNode = _node;
+							SetScore(i + 1, j);
 						}
 					}
 				}
@@ -240,37 +247,39 @@ void Scene::OpenNodeState(std::shared_ptr<ANode> _node)
 						if (m_nodeList[i + 1][j + 1]->rootNode == nullptr)
 						{
 							m_nodeList[i + 1][j + 1]->rootNode = _node;
+							SetScore(i + 1, j + 1);
 						}
 					}
-				}
-			}
-			if (node->state == State::open)
-			{
-				if (node->cost == 0)
-				{
-					float dx, dy;
-					dx = abs(m_nodeList[(int)m_goalNum.x][(int)m_goalNum.y]->num.x - node->num.x);
-					dy = abs(m_nodeList[(int)m_goalNum.x][(int)m_goalNum.y]->num.y - node->num.y);
-
-					if (node->rootNode != nullptr)
-					{
-						node->cost = node->rootNode->cost + 1;
-					}
-					if (dx >= dy)
-					{
-						node->h = dx;
-					}
-					else
-					{
-						node->h = dy;
-					}
-					node->score = node->h + node->cost;
 				}
 			}
 			j++;
 		}
 		i++;
 		j = 0;
+	}
+}
+
+void Scene::SetScore(int _i, int _j)
+{
+	if (m_nodeList[_i][_j]->cost == 0)
+	{
+		float dx, dy;
+		dx = abs(m_nodeList[(int)m_goalNum.x][(int)m_goalNum.y]->num.x - m_nodeList[_i][_j]->num.x);
+		dy = abs(m_nodeList[(int)m_goalNum.x][(int)m_goalNum.y]->num.y - m_nodeList[_i][_j]->num.y);
+
+		if (m_nodeList[_i][_j]->rootNode != nullptr)
+		{
+			m_nodeList[_i][_j]->cost = m_nodeList[_i][_j]->rootNode->cost + 1;
+		}
+		if (dx >= dy)
+		{
+			m_nodeList[_i][_j]->h = dx;
+		}
+		else
+		{
+			m_nodeList[_i][_j]->h = dy;
+		}
+		m_nodeList[_i][_j]->score = m_nodeList[_i][_j]->h + m_nodeList[_i][_j]->cost;
 	}
 }
 
@@ -342,8 +351,8 @@ void Scene::Reset()
 	m_nowMinScoreNode = m_nodeList[m_num.x][m_num.y];
 	m_nodeList[m_num.x][m_num.y]->state = State::open;
 	float dx, dy;
-	dx = m_nodeList[m_goalNum.x][m_goalNum.y]->num.x - m_nodeList[m_num.x][m_num.y]->num.x;
-	dy = m_nodeList[m_goalNum.x][m_goalNum.y]->num.y - m_nodeList[m_num.x][m_num.y]->num.y;
+	dx = abs(m_nodeList[m_goalNum.x][m_goalNum.y]->num.x - m_nodeList[m_num.x][m_num.y]->num.x);
+	dy = abs(m_nodeList[m_goalNum.x][m_goalNum.y]->num.y - m_nodeList[m_num.x][m_num.y]->num.y);
 
 	if (dx <= dy)
 	{
@@ -402,8 +411,8 @@ void Scene::Init()
 	m_ppos = m_nodeList[startX][startY]->pos;
 	m_nodeList[startX][startY]->state = State::open;
 	float dx, dy;
-	dx = m_nodeList[m_nodeList.size() - 1][m_nodeList[0].size() - 1]->num.x - m_nodeList[startX][startY]->num.x;
-	dy = m_nodeList[m_nodeList.size() - 1][m_nodeList[0].size() - 1]->num.y - m_nodeList[startX][startY]->num.y;
+	dx = abs(m_nodeList[m_goalNum.x][m_goalNum.y]->num.x - m_nodeList[startX][startY]->num.x);
+	dy = abs(m_nodeList[m_goalNum.x][m_goalNum.y]->num.y - m_nodeList[startX][startY]->num.y);
 
 	if (dx >= dy)
 	{
@@ -431,13 +440,21 @@ void Scene::ImGuiUpdate()
 {
 	//return;
 
-	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiSetCond_Once);
-	ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_Once);
+	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_Once);
+	ImGui::SetNextWindowSize(ImVec2(240, 1200), ImGuiSetCond_Once);
 
 	// デバッグウィンドウ
 	if (ImGui::Begin("Debug Window"))
 	{
-		ImGui::Text("FPS : %d", APP.m_fps);
+		for (int i = 0; i < m_nodeList.size();i++)
+		{
+			for (int j = 0; j < m_nodeList[0].size(); j++)
+			{
+				ImGui::Text("[%d][%d]cost : %d h : %d score : %d",i,j, m_nodeList[i][j]->cost, m_nodeList[i][j]->h,m_nodeList[i][j]->score);
+			}
+		}
 	}
+	ImGui::Text("%d",m_nowMinScoreNode->data);
+
 	ImGui::End();
 }
